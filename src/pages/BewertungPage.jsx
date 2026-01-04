@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SEO from '../components/SEO';
 import vehicleData from '../data/vehicleData.json';
+import { CheckIcon, LightningIcon, TruckIcon } from '../components/Icons';
 import './BewertungPage.css';
 
 function BewertungPage() {
@@ -341,21 +342,27 @@ function BewertungPage() {
       <section className="section bewertung-benefits-section">
         <div className="container">
           <h2 className="section-title">Warum unsere Bewertung?</h2>
-          <div className="grid-3">
-            <div className="feature-card">
-              <div className="feature-icon">✓</div>
-              <h3>Kostenlos</h3>
-              <p>Nutzen Sie unsere Bewertung völlig kostenlos und unverbindlich</p>
+          <div className="bewertung-features-grid">
+            <div className="bewertung-feature-card">
+              <div className="bewertung-feature-icon-wrapper">
+                <CheckIcon className="bewertung-feature-icon" />
+              </div>
+              <h3 className="bewertung-feature-title">Kostenlos</h3>
+              <p className="bewertung-feature-description">Nutzen Sie unsere Bewertung völlig kostenlos und unverbindlich</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon">⚡</div>
-              <h3>Schnell & Bequem</h3>
-              <p>Sofortige Bewertung - bei Verkauf holen wir Ihr Auto bei Ihnen ab</p>
+            <div className="bewertung-feature-card">
+              <div className="bewertung-feature-icon-wrapper">
+                <LightningIcon className="bewertung-feature-icon" />
+              </div>
+              <h3 className="bewertung-feature-title">Schnell & Bequem</h3>
+              <p className="bewertung-feature-description">Sofortige Bewertung - bei Verkauf holen wir Ihr Auto bei Ihnen ab</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon">🚚</div>
-              <h3>Wir kommen zu Ihnen</h3>
-              <p>Keine Anfahrt nötig - kostenlose Abholung deutschlandweit</p>
+            <div className="bewertung-feature-card">
+              <div className="bewertung-feature-icon-wrapper">
+                <TruckIcon className="bewertung-feature-icon" />
+              </div>
+              <h3 className="bewertung-feature-title">Wir kommen zu Ihnen</h3>
+              <p className="bewertung-feature-description">Keine Anfahrt nötig - kostenlose Abholung deutschlandweit</p>
             </div>
           </div>
         </div>
