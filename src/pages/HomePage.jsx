@@ -79,7 +79,7 @@ function HomePage() {
       </section>
 
       {/* Services Section */}
-      <section className="section section-white">
+      <section className="section services-section">
         <div className="container">
           <h2 className="section-title">Ihr Autoverkauf - bequem und stressfrei</h2>
           <p className="section-subtitle">
@@ -173,7 +173,7 @@ function HomePage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="section section-white">
+      <section className="section benefits-section">
         <div className="container">
           <h2 className="section-title">Autoankauf Deutschland - Ihre Vorteile</h2>
           <p className="section-subtitle">
@@ -216,7 +216,7 @@ function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="section section-white testimonials-section">
+      <section className="section testimonials-section">
         <div className="container">
           <h2 className="section-title">Was unsere Kunden sagen</h2>
           <p className="section-subtitle">

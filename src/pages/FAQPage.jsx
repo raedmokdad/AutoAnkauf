@@ -124,7 +124,7 @@ function FAQPage() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section faq-main-section">
         <div className="container">
           <div className="faq-content">
             {faqs.map((category, categoryIndex) => (
@@ -157,7 +157,7 @@ function FAQPage() {
         </div>
       </section>
 
-      <section className="section section-gray">
+      <section className="section faq-cta-section">
         <div className="container">
           <div className="faq-cta">
             <h2>Noch Fragen?</h2>

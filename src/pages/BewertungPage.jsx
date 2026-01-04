@@ -119,7 +119,7 @@ function BewertungPage() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section bewertung-form-section">
         <div className="container">
           <div className="bewertung-content">
             <div className="bewertung-form-container">
@@ -258,7 +258,7 @@ function BewertungPage() {
         </div>
       </section>
 
-      <section className="section section-gray">
+      <section className="section bewertung-benefits-section">
         <div className="container">
           <h2 className="section-title">Warum unsere Bewertung?</h2>
           <div className="grid-3">

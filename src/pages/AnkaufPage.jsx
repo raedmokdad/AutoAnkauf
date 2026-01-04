@@ -37,7 +37,7 @@ function AnkaufPage() {
         </div>
       </section>
 
-      <section className="section section-white intro-section">
+      <section className="section ankauf-intro-section">
         <div className="container">
           <div className="ankauf-intro">
             <div className="intro-icon">🤝</div>
@@ -53,13 +53,13 @@ function AnkaufPage() {
         </div>
       </section>
 
-      <section className="section section-gray">
+      <section className="section ankauf-form-section">
         <div className="container">
           <VehicleForm />
         </div>
       </section>
 
-      <section className="section section-white service-details-section">
+      <section className="section ankauf-service-section">
         <div className="container">
           <h2 className="section-title">💼 Unser Service im Detail</h2>
           <p className="section-subtitle">Professioneller Autoankauf mit Rundum-Service</p>
@@ -114,7 +114,7 @@ function AnkaufPage() {
         </div>
       </section>
 
-      <section className="section section-white documents-section">
+      <section className="section ankauf-documents-section">
         <div className="container">
           <h2 className="section-title">Benötigte Unterlagen</h2>
           <p className="section-subtitle">

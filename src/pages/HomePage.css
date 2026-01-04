@@ -254,7 +254,7 @@
 
 /* Social Proof Bar */
 .social-proof-bar {
-  background: white;
+  background: linear-gradient(180deg, #fefefe 0%, #f9fafb 100%);
   padding: 48px 20px;
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -659,7 +659,7 @@
 
 /* Testimonials Section */
 .testimonials-section {
-  background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+  background: linear-gradient(180deg, #fdfefe 0%, #f0f4f8 100%);
   padding: var(--spacing-3xl) var(--spacing-lg);
 }
 

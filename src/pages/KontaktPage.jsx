@@ -62,7 +62,7 @@ function KontaktPage() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section kontakt-content-section">
         <div className="container">
           <div className="kontakt-content">
             <div className="kontakt-info">

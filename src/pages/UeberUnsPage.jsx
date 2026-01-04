@@ -30,7 +30,7 @@ function UeberUnsPage() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section ueber-about-section">
         <div className="container">
           <div className="about-content">
             <div className="about-text">
@@ -62,7 +62,7 @@ function UeberUnsPage() {
         </div>
       </section>
 
-      <section className="section section-gray">
+      <section className="section ueber-values-section">
         <div className="container">
           <h2 className="section-title">Unsere Werte</h2>
           <div className="grid-4">
@@ -109,7 +109,7 @@ function UeberUnsPage() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section ueber-advantages-section">
         <div className="container">
           <h2 className="section-title">Warum uns wählen?</h2>
           <div className="grid-2">
@@ -170,7 +170,7 @@ function UeberUnsPage() {
         </div>
       </section>
 
-      <section className="section section-gray">
+      <section className="section ueber-stats-section">
         <div className="container">
           <h2 className="section-title">Unsere Erfolgsgeschichte in Zahlen</h2>
           <div className="stats-grid">
