@@ -5,8 +5,18 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all var(--transition-base);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-bottom: 1px solid var(--gray-100);
+}
+
+.header-scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-bottom-color: transparent;
+}
+
+.header-scrolled .header-content {
+  padding: 14px 0;
 }
 
 .header-content {

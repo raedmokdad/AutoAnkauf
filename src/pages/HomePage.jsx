@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import StructuredData from '../components/StructuredData';
+import { TruckIcon, MoneyIcon, LightningIcon, ChartIcon, CarIcon } from '../components/Icons';
 import './HomePage.css';
 
 function HomePage() {
@@ -26,15 +27,15 @@ function HomePage() {
           </p>
           <div className="hero-features">
             <div className="hero-feature">
-              <span className="feature-icon">🚚</span>
+              <TruckIcon className="feature-icon" />
               <span>Wir holen ab</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">💰</span>
+              <MoneyIcon className="feature-icon" />
               <span>Faire Preise</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">⚡</span>
+              <LightningIcon className="feature-icon" />
               <span>Sofort-Auszahlung</span>
             </div>
           </div>
@@ -49,6 +50,34 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Social Proof Bar */}
+      <section className="social-proof-bar">
+        <div className="container">
+          <div className="proof-grid">
+            <div className="proof-item">
+              <div className="proof-stars">★★★★★</div>
+              <div className="proof-text">4.8/5 Bewertung</div>
+              <div className="proof-subtext">auf Google</div>
+            </div>
+            <div className="proof-item">
+              <div className="proof-number">24h</div>
+              <div className="proof-text">Reaktionszeit</div>
+              <div className="proof-subtext">Schnelle Antwort</div>
+            </div>
+            <div className="proof-item">
+              <div className="proof-number">100%</div>
+              <div className="proof-text">Kostenlos</div>
+              <div className="proof-subtext">Bewertung & Abholung</div>
+            </div>
+            <div className="proof-item">
+              <div className="proof-number">5.000+</div>
+              <div className="proof-text">Zufriedene Kunden</div>
+              <div className="proof-subtext">Seit 2020</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section className="section section-white">
         <div className="container">
@@ -58,7 +87,9 @@ function HomePage() {
           </p>
           <div className="grid-2">
             <div className="service-card">
-              <div className="service-icon">📊</div>
+              <div className="service-icon">
+                <ChartIcon className="icon-svg" />
+              </div>
               <h3 className="service-title">Kostenlose Fahrzeugbewertung Online</h3>
               <p className="service-description">
                 Ermitteln Sie den aktuellen Marktwert Ihres Gebrauchtwagens mit unserer kostenlosen Online-Bewertung. 
@@ -77,7 +108,9 @@ function HomePage() {
             </div>
 
             <div className="service-card">
-              <div className="service-icon">🚗</div>
+              <div className="service-icon">
+                <CarIcon className="icon-svg" />
+              </div>
               <h3 className="service-title">Gebrauchtwagen Ankauf mit Abholservice</h3>
               <p className="service-description">
                 Der große Unterschied: Sie müssen nicht zu uns fahren - wir kommen zu Ihnen! Verkaufen Sie Ihr 
