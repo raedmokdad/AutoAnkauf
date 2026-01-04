@@ -1,5 +1,6 @@
 import React from 'react';
 import SEO from '../components/SEO';
+import { TruckIcon, MoneyIcon, LightningIcon, ShieldCheckIcon, DocumentIcon, CheckIcon } from '../components/Icons';
 import VehicleForm from '../components/VehicleForm';
 import './AnkaufPage.css';
 
@@ -21,15 +22,15 @@ function AnkaufPage() {
           </p>
           <div className="hero-features">
             <div className="hero-feature">
-              <span className="feature-icon">🚚</span>
+              <TruckIcon className="feature-icon" />
               <span>Wir holen ab</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">💰</span>
+              <MoneyIcon className="feature-icon" />
               <span>Sofort-Auszahlung</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">🏠</span>
+              <CheckIcon className="feature-icon" />
               <span>Bei Ihnen zu Hause</span>
             </div>
           </div>
@@ -64,7 +65,9 @@ function AnkaufPage() {
           <p className="section-subtitle">Professioneller Autoankauf mit Rundum-Service</p>
           <div className="grid-2">
             <div className="service-detail-card">
-              <div className="service-detail-icon">💰</div>
+              <div className="service-detail-icon">
+                <MoneyIcon className="icon-svg" />
+              </div>
               <h3>Faire Preise</h3>
               <p>
                 Wir bieten Ihnen einen fairen Preis basierend auf dem aktuellen Marktwert 
@@ -73,7 +76,9 @@ function AnkaufPage() {
             </div>
 
             <div className="service-detail-card">
-              <div className="service-detail-icon">🚚</div>
+              <div className="service-detail-icon">
+                <TruckIcon className="icon-svg" />
+              </div>
               <h3>Wir holen ab - Sie bleiben zu Hause</h3>
               <p>
                 Das ist unser Service: Wir kommen zu Ihnen! Keine Anfahrt zur Filiale nötig. 
@@ -83,7 +88,9 @@ function AnkaufPage() {
             </div>
 
             <div className="service-detail-card">
-              <div className="service-detail-icon">⚡</div>
+              <div className="service-detail-icon">
+                <LightningIcon className="icon-svg" />
+              </div>
               <h3>Schnell & Stressfrei</h3>
               <p>
                 Kein langes Warten, keine komplizierten Prozesse. Innerhalb von 24 Stunden 
@@ -93,7 +100,9 @@ function AnkaufPage() {
             </div>
 
             <div className="service-detail-card">
-              <div className="service-detail-icon">🔒</div>
+              <div className="service-detail-icon">
+                <ShieldCheckIcon className="icon-svg" />
+              </div>
               <h3>Sofortige Auszahlung vor Ort</h3>
               <p>
                 Wenn wir Ihr Fahrzeug abholen, erhalten Sie den Kaufpreis direkt ausgezahlt. 

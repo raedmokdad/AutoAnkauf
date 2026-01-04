@@ -126,7 +126,10 @@
 }
 
 .feature-icon {
-  font-size: 1.5em;
+  width: 24px;
+  height: 24px;
+  color: var(--primary-600);
+  flex-shrink: 0;
 }
 
 .faq-content {

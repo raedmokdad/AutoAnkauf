@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ClockIcon, CheckIcon, StarIcon, LightningIcon, MoneyIcon, ShieldCheckIcon } from '../components/Icons';
 import './UeberUnsPage.css';
 
 function UeberUnsPage() {
@@ -14,15 +15,15 @@ function UeberUnsPage() {
           </p>
           <div className="hero-features">
             <div className="hero-feature">
-              <span className="feature-icon">📅</span>
+              <ClockIcon className="feature-icon" />
               <span>15+ Jahre</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">👥</span>
+              <CheckIcon className="feature-icon" />
               <span>5.000+ Kunden</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">⭐</span>
+              <StarIcon className="feature-icon" filled />
               <span>4.8/5 Bewertung</span>
             </div>
           </div>
@@ -66,7 +67,9 @@ function UeberUnsPage() {
           <h2 className="section-title">Unsere Werte</h2>
           <div className="grid-4">
             <div className="value-card">
-              <div className="value-icon">🤝</div>
+              <div className="value-icon">
+                <ShieldCheckIcon className="icon-svg" />
+              </div>
               <h3>Vertrauen</h3>
               <p>
                 Transparenz und Ehrlichkeit sind die Grundlage unserer Arbeit. 
@@ -75,7 +78,9 @@ function UeberUnsPage() {
             </div>
 
             <div className="value-card">
-              <div className="value-icon">⚡</div>
+              <div className="value-icon">
+                <LightningIcon className="icon-svg" />
+              </div>
               <h3>Schnelligkeit</h3>
               <p>
                 Wir wissen, dass Ihre Zeit wertvoll ist. Deshalb wickeln wir 

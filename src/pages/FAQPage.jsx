@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LightningIcon, DocumentIcon, CheckIcon } from '../components/Icons';
 import './FAQPage.css';
 
 function FAQPage() {
@@ -108,15 +109,15 @@ function FAQPage() {
           </p>
           <div className="hero-features">
             <div className="hero-feature">
-              <span className="feature-icon">⚡</span>
+              <LightningIcon className="feature-icon" />
               <span>Schnelle Antworten</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">📋</span>
+              <DocumentIcon className="feature-icon" />
               <span>Übersichtlich</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">✓</span>
+              <CheckIcon className="feature-icon" />
               <span>Hilfreich</span>
             </div>
           </div>
