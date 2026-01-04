@@ -66,6 +66,18 @@ function BewertungPage() {
     }
   }, [prefilledData, makes]);
 
+  // Scroll to form when coming from HomePage
+  useEffect(() => {
+    if (prefilledData && prefilledData.marke) {
+      const formSection = document.getElementById('bewertung-form-section');
+      if (formSection) {
+        setTimeout(() => {
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      }
+    }
+  }, [prefilledData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -166,7 +178,7 @@ function BewertungPage() {
         </div>
       </section>
 
-      <section className="section bewertung-form-section">
+      <section id="bewertung-form-section" className="section bewertung-form-section">
         <div className="container">
           <div className="bewertung-content">
             <div className="bewertung-form-container">
