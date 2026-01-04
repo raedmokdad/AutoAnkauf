@@ -215,6 +215,77 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="section section-white testimonials-section">
+        <div className="container">
+          <h2 className="section-title">Was unsere Kunden sagen</h2>
+          <p className="section-subtitle">
+            Über 5.000 zufriedene Kunden vertrauen auf unseren Service
+          </p>
+          <div className="testimonials-grid">
+            <div className="testimonial-card">
+              <div className="testimonial-rating">
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+              </div>
+              <p className="testimonial-text">
+                "Absolut unkompliziert! Ich musste nirgendwo hinfahren - ARZ kam direkt zu mir nach Hause, 
+                hat mein Auto professionell bewertet und sofort bar ausgezahlt. Genau so soll Autoverkauf sein!"
+              </p>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <strong className="author-name">Michael S.</strong>
+                  <span className="author-location">Duisburg</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-card">
+              <div className="testimonial-rating">
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+              </div>
+              <p className="testimonial-text">
+                "Faire Bewertung, schnelle Abwicklung und vor allem: keine Anfahrt nötig! 
+                Das Team war pünktlich, freundlich und hat alles vor Ort erledigt. Top Service!"
+              </p>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <strong className="author-name">Sarah M.</strong>
+                  <span className="author-location">Moers</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="testimonial-card">
+              <div className="testimonial-rating">
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+                <span className="star">★</span>
+              </div>
+              <p className="testimonial-text">
+                "Ich war skeptisch, aber ARZ hat mich überzeugt. Transparente Preisgestaltung, 
+                keine versteckten Kosten und die Abholung war kostenlos. Sehr empfehlenswert!"
+              </p>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <strong className="author-name">Thomas K.</strong>
+                  <span className="author-location">Wesel</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="cta-section">
         <div className="container">
