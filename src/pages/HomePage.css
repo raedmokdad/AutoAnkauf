@@ -170,16 +170,19 @@
 .btn-hero-primary,
 .btn-hero-secondary {
   position: relative;
+  z-index: 1;
 }
 
+.btn-hero-primary,
 .btn-hero-primary > *,
+.btn-hero-secondary,
 .btn-hero-secondary > * {
   position: relative;
   z-index: 2;
+  text-decoration: none;
 }
 
 .btn-hero-primary {
-  position: relative;
   background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
   color: white !important;
   border: none;
