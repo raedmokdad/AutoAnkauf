@@ -2,6 +2,7 @@ import React from 'react';
 import SEO from '../components/SEO';
 import { TruckIcon, MoneyIcon, LightningIcon, ShieldCheckIcon, DocumentIcon, CheckIcon } from '../components/Icons';
 import VehicleForm from '../components/VehicleForm';
+import '../styles/shared-green-hero.css';
 import './AnkaufPage.css';
 
 function AnkaufPage() {
@@ -13,24 +14,24 @@ function AnkaufPage() {
         keywords="auto verkaufen mit abholung, autoankauf abholservice, fahrzeug verkaufen ohne anfahrt, auto abholen lassen, bequem auto verkaufen, autoankauf vor ort"
         canonical="https://www.autoankauf-deutschland.de/ankauf"
       />
-      <section className="ankauf-hero">
-        <div className="ankauf-hero-content">
-          <div className="hero-badge">⭐ Über 5.000 zufriedene Kunden</div>
-          <h1>Wir kommen zu Ihnen - Auto verkaufen leicht gemacht</h1>
-          <p className="hero-subtitle">
+      <section className="ankauf-hero-green">
+        <div className="ankauf-hero-container">
+          <div className="hero-badge-green">⭐ Über 5.000 zufriedene Kunden</div>
+          <h1 className="ankauf-hero-title">Wir kommen zu Ihnen - Auto verkaufen leicht gemacht</h1>
+          <p className="ankauf-hero-subtitle">
             Der stressfreie Weg, Ihr Auto zu verkaufen: Einfach Formular ausfüllen, Angebot erhalten und wir holen Ihr Fahrzeug kostenlos bei Ihnen zu Hause ab!
           </p>
-          <div className="hero-features">
-            <div className="hero-feature">
-              <TruckIcon className="feature-icon" />
-              <span>Wir holen ab</span>
+          <div className="ankauf-hero-features">
+            <div className="hero-feature-green">
+              <TruckIcon className="feature-icon-white" />
+              <span>Wir holen kostenlos ab</span>
             </div>
-            <div className="hero-feature">
-              <MoneyIcon className="feature-icon" />
+            <div className="hero-feature-green">
+              <MoneyIcon className="feature-icon-white" />
               <span>Sofort-Auszahlung</span>
             </div>
-            <div className="hero-feature">
-              <CheckIcon className="feature-icon" />
+            <div className="hero-feature-green">
+              <CheckIcon className="feature-icon-white" />
               <span>Bei Ihnen zu Hause</span>
             </div>
           </div>

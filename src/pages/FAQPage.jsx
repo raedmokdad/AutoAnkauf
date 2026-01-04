@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LightningIcon, DocumentIcon, CheckIcon } from '../components/Icons';
+import '../styles/shared-green-hero.css';
 import './FAQPage.css';
 
 function FAQPage() {
@@ -100,24 +101,24 @@ function FAQPage() {
 
   return (
     <div className="faq-page">
-      <section className="faq-hero">
-        <div className="faq-hero-content">
-          <div className="hero-badge">💡 Alle Antworten auf einen Blick</div>
-          <h1>Häufig gestellte Fragen</h1>
-          <p className="hero-subtitle">
+      <section className="faq-hero-green">
+        <div className="faq-hero-container">
+          <div className="hero-badge-green">💡 Alle Antworten auf einen Blick</div>
+          <h1 className="faq-hero-title">Häufig gestellte Fragen</h1>
+          <p className="faq-hero-subtitle">
             Finden Sie schnell Antworten auf die wichtigsten Fragen rund um den Autoverkauf - klar, verständlich und hilfreich
           </p>
-          <div className="hero-features">
-            <div className="hero-feature">
-              <LightningIcon className="feature-icon" />
+          <div className="faq-hero-features">
+            <div className="hero-feature-green">
+              <LightningIcon className="feature-icon-white" />
               <span>Schnelle Antworten</span>
             </div>
-            <div className="hero-feature">
-              <DocumentIcon className="feature-icon" />
+            <div className="hero-feature-green">
+              <DocumentIcon className="feature-icon-white" />
               <span>Übersichtlich</span>
             </div>
-            <div className="hero-feature">
-              <CheckIcon className="feature-icon" />
+            <div className="hero-feature-green">
+              <CheckIcon className="feature-icon-white" />
               <span>Hilfreich</span>
             </div>
           </div>

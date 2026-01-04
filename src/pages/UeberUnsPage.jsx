@@ -1,30 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ClockIcon, CheckIcon, StarIcon, LightningIcon, MoneyIcon, ShieldCheckIcon } from '../components/Icons';
+import '../styles/shared-green-hero.css';
 import './UeberUnsPage.css';
 
 function UeberUnsPage() {
   return (
     <div className="ueber-uns-page">
-      <section className="ueber-uns-hero">
-        <div className="ueber-uns-hero-content">
-          <div className="hero-badge">🏆 Seit 2009 Ihr Partner</div>
-          <h1>Über uns - Ihr vertrauensvoller Autoankauf</h1>
-          <p className="hero-subtitle">
+      <section className="ueber-uns-hero-green">
+        <div className="ueber-uns-hero-container">
+          <div className="hero-badge-green">🏆 Seit 2009 Ihr Partner</div>
+          <h1 className="ueber-hero-title">Über uns - Ihr vertrauensvoller Autoankauf</h1>
+          <p className="ueber-hero-subtitle">
             15 Jahre Erfahrung, über 5.000 zufriedene Kunden und faire Preise - Lernen Sie uns kennen
           </p>
-          <div className="hero-features">
-            <div className="hero-feature">
-              <ClockIcon className="feature-icon" />
-              <span>15+ Jahre</span>
+          <div className="ueber-hero-features">
+            <div className="hero-feature-green">
+              <ClockIcon className="feature-icon-white" />
+              <span>15+ Jahre Erfahrung</span>
             </div>
-            <div className="hero-feature">
-              <CheckIcon className="feature-icon" />
-              <span>5.000+ Kunden</span>
+            <div className="hero-feature-green">
+              <CheckIcon className="feature-icon-white" />
+              <span>5.000+ zufriedene Kunden</span>
             </div>
-            <div className="hero-feature">
-              <StarIcon className="feature-icon" filled />
-              <span>4.8/5 Bewertung</span>
+            <div className="hero-feature-green">
+              <StarIcon className="feature-icon-white" filled />
+              <span>4.8/5 Sterne</span>
             </div>
           </div>
         </div>

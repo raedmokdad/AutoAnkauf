@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ClockIcon, CheckIcon, TruckIcon } from '../components/Icons';
+import '../styles/shared-green-hero.css';
 import './KontaktPage.css';
 
 function KontaktPage() {
@@ -38,24 +39,24 @@ function KontaktPage() {
 
   return (
     <div className="kontakt-page">
-      <section className="kontakt-hero">
-        <div className="kontakt-hero-content">
-          <div className="hero-badge">✓ Wir sind für Sie da</div>
-          <h1>Kontaktieren Sie uns</h1>
-          <p className="hero-subtitle">
+      <section className="kontakt-hero-green">
+        <div className="kontakt-hero-container">
+          <div className="hero-badge-green">✓ Wir sind für Sie da</div>
+          <h1 className="kontakt-hero-title">Kontaktieren Sie uns</h1>
+          <p className="kontakt-hero-subtitle">
             Haben Sie Fragen? Unser Team steht Ihnen gerne zur Verfügung - per Telefon, E-Mail oder persönlich
           </p>
-          <div className="hero-features">
-            <div className="hero-feature">
-              <ClockIcon className="feature-icon" />
+          <div className="kontakt-hero-features">
+            <div className="hero-feature-green">
+              <ClockIcon className="feature-icon-white" />
               <span>24h Antwortzeit</span>
             </div>
-            <div className="hero-feature">
-              <CheckIcon className="feature-icon" />
+            <div className="hero-feature-green">
+              <CheckIcon className="feature-icon-white" />
               <span>Persönliche Beratung</span>
             </div>
-            <div className="hero-feature">
-              <TruckIcon className="feature-icon" />
+            <div className="hero-feature-green">
+              <TruckIcon className="feature-icon-white" />
               <span>Deutschlandweit</span>
             </div>
           </div>

@@ -352,6 +352,51 @@
   font-weight: 700;
 }
 
+/* Submit Button - Big & Green */
+.submit-btn-green {
+  width: 100%;
+  max-width: 600px;
+  margin: var(--spacing-2xl) auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 22px 48px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2d6a4f 0%, #40916c 50%, #52b788 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submit-btn-green:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.5);
+  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 50%, #40916c 100%);
+}
+
+.submit-btn-green:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-btn-green .btn-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.submit-btn-green:hover:not(:disabled) .btn-icon {
+  transform: translateX(6px);
+}
+
 /* Error States */
 .form-group.error input,
 .form-group.error select,

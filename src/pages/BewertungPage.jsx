@@ -154,41 +154,54 @@ function BewertungPage() {
         keywords="fahrzeugbewertung kostenlos, auto bewerten, autowert ermitteln, auto verkaufen mit abholung, gebrauchtwagen bewertung"
         canonical="https://www.autoankauf-deutschland.de/bewertung"
       />
-      <section className="bewertung-hero">
-        <div className="bewertung-hero-content">
-          <div className="hero-badge">✓ 100% Kostenlos & Unverbindlich</div>
-          <h1>Kostenlose KFZ-Bewertung Online</h1>
-          <p className="hero-subtitle">
-            Ermitteln Sie in nur 2 Minuten den aktuellen Marktwert Ihres Fahrzeugs - professionell, präzise und völlig kostenlos
-          </p>
-          <div className="hero-features">
-            <div className="hero-feature">
-              <span className="feature-icon">⚡</span>
-              <span>Sofort-Ergebnis</span>
-            </div>
-            <div className="hero-feature">
-              <span className="feature-icon">📊</span>
-              <span>Aktuelle Marktdaten</span>
-            </div>
-            <div className="hero-feature">
-              <span className="feature-icon">🔒</span>
-              <span>100% Kostenlos</span>
-            </div>
+      
+      {/* Hero with Form - Green Background Split Layout */}
+      <section className="bewertung-hero-green">
+        <div className="bewertung-split-container">
+          {/* Left Side - Info */}
+          <div className="bewertung-left-content">
+            <div className="hero-badge-green">✓ 100% Kostenlos & Unverbindlich</div>
+            <h1 className="bewertung-title-white">Kostenlose KFZ-Bewertung Online</h1>
+            <p className="bewertung-subtitle-white">
+              Ermitteln Sie in nur 2 Minuten den aktuellen Marktwert Ihres Fahrzeugs - professionell, präzise und völlig kostenlos
+            </p>
+            <ul className="bewertung-features-list">
+              <li>
+                <svg className="check-icon-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>Sofort-Ergebnis in 2 Minuten</span>
+              </li>
+              <li>
+                <svg className="check-icon-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>Aktuelle Marktdaten & faire Bewertung</span>
+              </li>
+              <li>
+                <svg className="check-icon-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>100% kostenlos & unverbindlich</span>
+              </li>
+              <li>
+                <svg className="check-icon-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>Bei Verkauf holen wir kostenlos ab</span>
+              </li>
+            </ul>
           </div>
-        </div>
-      </section>
 
-      <section id="bewertung-form-section" className="section bewertung-form-section">
-        <div className="container">
-          <div className="bewertung-content">
-            <div className="bewertung-form-container">
-              <div className="form-header">
-                <h2>🚗 Fahrzeugdaten eingeben</h2>
-                <p className="form-intro">Füllen Sie einfach die folgenden Felder aus und erhalten Sie sofort eine professionelle Bewertung</p>
-              </div>
-              <form onSubmit={calculateEstimation} className="bewertung-form">
-                <div className="form-group">
-                  <label htmlFor="makeId"><span className="label-icon">🏷️</span> Marke *</label>
+          {/* Right Side - Form */}
+          <div className="bewertung-right-form">
+            <div className="bewertung-form-box-white">
+              <h2 className="form-title-bewertung">Jetzt Auto bewerten</h2>
+              <p className="form-subtitle-bewertung">Alle Felder ausfüllen für genaue Bewertung</p>
+              
+              <form onSubmit={calculateEstimation} className="bewertung-compact-form">
+                <div className="form-group-bewertung">
+                  <label htmlFor="makeId">Marke *</label>
                   <select
                     id="makeId"
                     name="makeId"
@@ -205,8 +218,8 @@ function BewertungPage() {
                   </select>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="modelId"><span className="label-icon">🚙</span> Modell *</label>
+                <div className="form-group-bewertung">
+                  <label htmlFor="modelId">Modell *</label>
                   <select
                     id="modelId"
                     name="modelId"
@@ -224,8 +237,8 @@ function BewertungPage() {
                   </select>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="year"><span className="label-icon">📅</span> Erstzulassung *</label>
+                <div className="form-group-bewertung">
+                  <label htmlFor="year">Erstzulassung *</label>
                   <select
                     id="year"
                     name="year"
@@ -243,8 +256,8 @@ function BewertungPage() {
                   </select>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="mileage"><span className="label-icon">🛣️</span> Kilometerstand *</label>
+                <div className="form-group-bewertung">
+                  <label htmlFor="mileage">Kilometerstand *</label>
                   <select
                     id="mileage"
                     name="mileage"
@@ -253,16 +266,16 @@ function BewertungPage() {
                     required
                   >
                     <option value="">Bitte wählen</option>
-                    <option value="0-30000">Bis 30.000 km</option>
+                    <option value="0-30000">0 - 30.000 km</option>
                     <option value="30001-60000">30.001 - 60.000 km</option>
                     <option value="60001-100000">60.001 - 100.000 km</option>
                     <option value="100001-150000">100.001 - 150.000 km</option>
-                    <option value="150001-plus">Über 150.000 km</option>
+                    <option value="150001-plus">über 150.000 km</option>
                   </select>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="condition"><span className="label-icon">⭐</span> Zustand *</label>
+                <div className="form-group-bewertung">
+                  <label htmlFor="condition">Fahrzeugzustand *</label>
                   <select
                     id="condition"
                     name="condition"
@@ -271,51 +284,59 @@ function BewertungPage() {
                     required
                   >
                     <option value="">Bitte wählen</option>
-                    <option value="excellent">Sehr gut (Neuwertig)</option>
-                    <option value="good">Gut (Gepflegt)</option>
-                    <option value="fair">Durchschnittlich</option>
-                    <option value="poor">Reparaturbedürftig</option>
+                    <option value="excellent">Sehr gut (neuwertig)</option>
+                    <option value="good">Gut (gepflegt)</option>
+                    <option value="fair">Befriedigend (Gebrauchsspuren)</option>
+                    <option value="poor">Ausreichend (Reparaturbedarf)</option>
                   </select>
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-large">
-                  Jetzt bewerten
+                <button type="submit" className="btn-bewertung-orange">
+                  Jetzt kostenlos bewerten
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
                 </button>
               </form>
             </div>
-
-            {estimation && (
-              <div className="estimation-result">
-                <h2>Ihre Fahrzeugbewertung</h2>
-                <div className="estimation-value">
-                  <div className="estimation-main">
-                    <span className="estimation-label">Geschätzter Wert:</span>
-                    <span className="estimation-amount">{estimation.value.toLocaleString('de-DE')} €</span>
-                  </div>
-                  <div className="estimation-range">
-                    Preisspanne: {estimation.min.toLocaleString('de-DE')} € - {estimation.max.toLocaleString('de-DE')} €
-                  </div>
-                </div>
-                <div className="estimation-info">
-                  <p>
-                    <strong>Hinweis:</strong> Dies ist eine automatische Schätzung basierend auf Ihren Angaben. 
-                    Für ein verbindliches Angebot kontaktieren Sie uns - <strong>wir kommen zu Ihnen und holen 
-                    Ihr Auto kostenlos ab!</strong>
-                  </p>
-                </div>
-                <div className="estimation-actions">
-                  <Link to="/ankauf" className="btn btn-primary">
-                    Jetzt verkaufen
-                  </Link>
-                  <Link to="/kontakt" className="btn btn-secondary">
-                    Kontakt aufnehmen
-                  </Link>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
+
+      {/* Results Section */}
+      {estimation && (
+        <section className="section bewertung-form-section">
+          <div className="container">
+            <div className="estimation-result">
+              <h2>Ihre Fahrzeugbewertung</h2>
+              <div className="estimation-value">
+                <div className="estimation-main">
+                  <span className="estimation-label">Geschätzter Wert:</span>
+                  <span className="estimation-amount">{estimation.value.toLocaleString('de-DE')} €</span>
+                </div>
+                <div className="estimation-range">
+                  Preisspanne: {estimation.min.toLocaleString('de-DE')} € - {estimation.max.toLocaleString('de-DE')} €
+                </div>
+              </div>
+              <div className="estimation-info">
+                <p>
+                  <strong>Hinweis:</strong> Dies ist eine automatische Schätzung basierend auf Ihren Angaben. 
+                  Für ein verbindliches Angebot kontaktieren Sie uns - <strong>wir kommen zu Ihnen und holen 
+                  Ihr Auto kostenlos ab!</strong>
+                </p>
+              </div>
+              <div className="estimation-actions">
+                <Link to="/ankauf" className="btn btn-primary">
+                  Jetzt verkaufen
+                </Link>
+                <Link to="/kontakt" className="btn btn-secondary">
+                  Kontakt aufnehmen
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="section bewertung-benefits-section">
         <div className="container">
