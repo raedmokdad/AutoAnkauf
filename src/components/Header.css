@@ -173,6 +173,39 @@
   transform: rotate(-45deg) translate(8px, -8px);
 }
 
+/* Phone Button */
+.phone-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.phone-button svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.phone-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+}
+
+.phone-button:active {
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) {
   .mobile-menu-btn {
     display: flex;
@@ -212,9 +245,9 @@
     background-color: var(--primary-50);
   }
 
-  .nav-link-cta {
-    margin: 10px 20px;
-    text-align: center;
+  .phone-button {
+    margin: 16px 20px;
+    justify-content: center;
     width: calc(100% - 40px);
   }
 }
