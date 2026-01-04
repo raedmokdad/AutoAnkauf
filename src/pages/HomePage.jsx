@@ -1,11 +1,65 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import StructuredData from '../components/StructuredData';
 import { TruckIcon, MoneyIcon, LightningIcon, ChartIcon, CarIcon } from '../components/Icons';
+import carData from '../data/carData.js';
 import './HomePage.css';
 
 function HomePage() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    marke: '',
+    modell: '',
+    jahr: ''
+  });
+  
+  const [availableModels, setAvailableModels] = useState([]);
+  const [availableYears, setAvailableYears] = useState([]);
+
+  const handleMarkeChange = (e) => {
+    const selectedMarke = e.target.value;
+    setFormData({ marke: selectedMarke, modell: '', jahr: '' });
+    
+    if (selectedMarke && carData[selectedMarke]) {
+      setAvailableModels(Object.keys(carData[selectedMarke]));
+      setAvailableYears([]);
+    } else {
+      setAvailableModels([]);
+      setAvailableYears([]);
+    }
+  };
+
+  const handleModellChange = (e) => {
+    const selectedModell = e.target.value;
+    setFormData(prev => ({ ...prev, modell: selectedModell, jahr: '' }));
+    
+    if (formData.marke && selectedModell && carData[formData.marke][selectedModell]) {
+      const allYears = new Set();
+      carData[formData.marke][selectedModell].forEach(car => {
+        const years = car.year.split('-');
+        const startYear = parseInt(years[0]);
+        const endYear = years[1] === 'heute' ? new Date().getFullYear() : parseInt(years[1]);
+        
+        for (let y = startYear; y <= endYear; y++) {
+          allYears.add(y);
+        }
+      });
+      setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+    }
+  };
+
+  const handleJahrChange = (e) => {
+    setFormData(prev => ({ ...prev, jahr: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formData.marke && formData.modell && formData.jahr) {
+      navigate('/bewertung', { state: formData });
+    }
+  };
+
   return (
     <div className="home-page">
       <SEO
@@ -15,37 +69,92 @@ function HomePage() {
         canonical="https://www.autoankauf-deutschland.de"
       />
       <StructuredData />
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-badge">⭐ Über 5.000 zufriedene Kunden</div>
-          <h1 className="hero-title">
-            Auto verkaufen - Wir kommen zu Ihnen!
-          </h1>
-          <p className="hero-subtitle">
-            Verkaufen Sie Ihr Auto bequem von zu Hause aus. Wir holen Ihr Fahrzeug deutschlandweit kostenlos bei Ihnen ab - Sie müssen nirgendwo hinfahren!
-          </p>
-          <div className="hero-features">
-            <div className="hero-feature">
-              <TruckIcon className="feature-icon" />
-              <span>Wir holen ab</span>
-            </div>
-            <div className="hero-feature">
-              <MoneyIcon className="feature-icon" />
-              <span>Faire Preise</span>
-            </div>
-            <div className="hero-feature">
-              <LightningIcon className="feature-icon" />
-              <span>Sofort-Auszahlung</span>
+      
+      {/* Hero Section with Side Form */}
+      <section className="hero-with-form-section">
+        <div className="hero-form-container">
+          <div className="hero-left-content">
+            <div className="hero-badge-green">⭐ Über 5.000 zufriedene Kunden</div>
+            <h1 className="hero-title-white">
+              Auto verkaufen - Wir kommen zu Ihnen!
+            </h1>
+            <p className="hero-subtitle-white">
+              Verkaufen Sie Ihr Auto bequem von zu Hause aus. Wir holen Ihr Fahrzeug deutschlandweit kostenlos bei Ihnen ab - Sie müssen nirgendwo hinfahren!
+            </p>
+            <div className="hero-features-white">
+              <div className="hero-feature-white">
+                <TruckIcon className="feature-icon-white" />
+                <span>Wir holen ab</span>
+              </div>
+              <div className="hero-feature-white">
+                <MoneyIcon className="feature-icon-white" />
+                <span>Faire Preise</span>
+              </div>
+              <div className="hero-feature-white">
+                <LightningIcon className="feature-icon-white" />
+                <span>Sofort-Auszahlung</span>
+              </div>
             </div>
           </div>
-          <div className="hero-buttons">
-            <Link to="/bewertung" className="btn btn-primary btn-large btn-hero-primary">
-              Jetzt bewerten lassen
-            </Link>
-            <Link to="/ankauf" className="btn btn-secondary btn-large btn-hero-secondary">
-              Auto verkaufen
-            </Link>
+          
+          <div className="hero-right-form">
+            <div className="form-box-white">
+              <h2 className="form-title">Wie viel ist dein Auto wert?</h2>
+              <p className="form-subtitle">Kostenlose Bewertung in 3 Schritten</p>
+              
+              <form onSubmit={handleSubmit} className="inline-form">
+                <div className="form-group-vertical">
+                  <label>Von welcher Marke ist dein Auto?</label>
+                  <select
+                    value={formData.marke}
+                    onChange={handleMarkeChange}
+                    required
+                  >
+                    <option value="">Marke auswählen</option>
+                    {Object.keys(carData).map(marke => (
+                      <option key={marke} value={marke}>{marke}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group-vertical">
+                  <label>Welches Modell?</label>
+                  <select
+                    value={formData.modell}
+                    onChange={handleModellChange}
+                    disabled={!formData.marke}
+                    required
+                  >
+                    <option value="">Modell auswählen</option>
+                    {availableModels.map(modell => (
+                      <option key={modell} value={modell}>{modell}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group-vertical">
+                  <label>In welchem Jahr zugelassen?</label>
+                  <select
+                    value={formData.jahr}
+                    onChange={handleJahrChange}
+                    disabled={!formData.modell}
+                    required
+                  >
+                    <option value="">Jahr auswählen</option>
+                    {availableYears.map(jahr => (
+                      <option key={jahr} value={jahr}>{jahr}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <button type="submit" className="btn-form-submit">
+                  Bewertung ansehen
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </section>

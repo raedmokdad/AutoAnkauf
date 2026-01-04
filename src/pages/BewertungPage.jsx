@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SEO from '../components/SEO';
 import vehicleData from '../data/vehicleData.json';
 import './BewertungPage.css';
 
 function BewertungPage() {
+  const location = useLocation();
+  const prefilledData = location.state; // Daten von HomePage
+  
   const [formData, setFormData] = useState({
     makeId: '',
     modelId: '',
@@ -18,6 +21,50 @@ function BewertungPage() {
   const [estimation, setEstimation] = useState(null);
 
   const makes = vehicleData.makes || [];
+
+  // Prefill form with data from HomePage
+  useEffect(() => {
+    if (prefilledData && prefilledData.marke) {
+      // Find make by name
+      const selectedMake = makes.find(m => 
+        m.name.toLowerCase() === prefilledData.marke.toLowerCase()
+      );
+      
+      if (selectedMake) {
+        setFormData(prev => ({ ...prev, makeId: selectedMake.id.toString() }));
+        setAvailableModels(selectedMake.models || []);
+        
+        // Find model by name
+        if (prefilledData.modell) {
+          const selectedModel = selectedMake.models.find(m => 
+            m.name.toLowerCase() === prefilledData.modell.toLowerCase()
+          );
+          
+          if (selectedModel) {
+            setFormData(prev => ({ 
+              ...prev, 
+              makeId: selectedMake.id.toString(),
+              modelId: selectedModel.id.toString(),
+              year: prefilledData.jahr || ''
+            }));
+            
+            // Set available years
+            if (selectedModel.generations.length > 0) {
+              const allYears = new Set();
+              selectedModel.generations.forEach(gen => {
+                if (gen.yearBegin && gen.yearEnd) {
+                  for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+                    allYears.add(y);
+                  }
+                }
+              });
+              setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+            }
+          }
+        }
+      }
+    }
+  }, [prefilledData, makes]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
