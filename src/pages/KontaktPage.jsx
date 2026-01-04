@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ClockIcon, CheckIcon, TruckIcon } from '../components/Icons';
 import './KontaktPage.css';
 
 function KontaktPage() {
@@ -39,22 +40,22 @@ function KontaktPage() {
     <div className="kontakt-page">
       <section className="kontakt-hero">
         <div className="kontakt-hero-content">
-          <div className="hero-badge">📞 Wir sind für Sie da</div>
+          <div className="hero-badge">✓ Wir sind für Sie da</div>
           <h1>Kontaktieren Sie uns</h1>
           <p className="hero-subtitle">
             Haben Sie Fragen? Unser Team steht Ihnen gerne zur Verfügung - per Telefon, E-Mail oder persönlich
           </p>
           <div className="hero-features">
             <div className="hero-feature">
-              <span className="feature-icon">⏰</span>
+              <ClockIcon className="feature-icon" />
               <span>24h Antwortzeit</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">💬</span>
+              <CheckIcon className="feature-icon" />
               <span>Persönliche Beratung</span>
             </div>
             <div className="hero-feature">
-              <span className="feature-icon">🌍</span>
+              <TruckIcon className="feature-icon" />
               <span>Deutschlandweit</span>
             </div>
           </div>
