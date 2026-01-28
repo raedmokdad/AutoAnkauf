@@ -12,6 +12,7 @@ import AnkaufPage from './pages/AnkaufPage';
 import UeberUnsPage from './pages/UeberUnsPage';
 import FAQPage from './pages/FAQPage';
 import KontaktPage from './pages/KontaktPage';
+import AngebotPage from './pages/AngebotPage';
 // Marken-Seiten
 import BmwVerkaufenPage from './pages/marken/BmwVerkaufenPage';
 import MercedesVerkaufenPage from './pages/marken/MercedesVerkaufenPage';
@@ -46,6 +47,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/bewertung" element={<BewertungPage />} />
               <Route path="/ankauf" element={<AnkaufPage />} />
+              <Route path="/angebot" element={<AngebotPage />} />
               <Route path="/ueber-uns" element={<UeberUnsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/kontakt" element={<KontaktPage />} />

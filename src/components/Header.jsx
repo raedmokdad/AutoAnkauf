@@ -28,8 +28,21 @@ function Header() {
       <div className="container">
         <div className="header-content">
           <Link to="/" className="logo" onClick={handleLinkClick}>
-            <span className="logo-badge">ARZ</span>
-            <span className="logo-text">Automobile</span>
+            <div className="logo-icon-container">
+              <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo-icon-svg">
+                <rect width="64" height="64" rx="14" fill="#4CAF50"/>
+                <path d="M54 32L50 24C49 22 47 21 45 21H19C17 21 15 22 14 24L10 32V44C10 45.1 10.9 46 12 46H14C15.1 46 16 45.1 16 44V42H48V44C48 45.1 48.9 46 50 46H52C53.1 46 54 45.1 54 44V32Z" fill="none" stroke="white" strokeWidth="2.5"/>
+                <circle cx="18" cy="38" r="3" fill="none" stroke="white" strokeWidth="2"/>
+                <circle cx="46" cy="38" r="3" fill="none" stroke="white" strokeWidth="2"/>
+                <path d="M16 30L20 22H44L48 30" fill="none" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
+                <path d="M20 23C20 23 25 21 32 21C39 21 44 23 44 23" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="52" cy="12" r="6" fill="#52b788"/>
+              </svg>
+            </div>
+            <div className="logo-text-container">
+              <span className="logo-text-main">AutoHD</span>
+              <span className="logo-text-sub">Autoankauf Rheinberg</span>
+            </div>
           </Link>
 
           <button 
@@ -51,18 +64,18 @@ function Header() {
               Home
             </Link>
             <Link 
-              to="/bewertung" 
-              className={`nav-link ${isActive('/bewertung') ? 'active' : ''}`}
-              onClick={handleLinkClick}
-            >
-              Bewertung
-            </Link>
-            <Link 
               to="/ankauf" 
               className={`nav-link ${isActive('/ankauf') ? 'active' : ''}`}
               onClick={handleLinkClick}
             >
               Auto verkaufen
+            </Link>
+            <Link 
+              to="/bewertung" 
+              className={`nav-link ${isActive('/bewertung') ? 'active' : ''}`}
+              onClick={handleLinkClick}
+            >
+              Auto bewerten
             </Link>
             <Link 
               to="/ueber-uns" 

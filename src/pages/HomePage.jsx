@@ -1,62 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import StructuredData from '../components/StructuredData';
 import { TruckIcon, MoneyIcon, LightningIcon, ChartIcon, CarIcon } from '../components/Icons';
-import carData from '../data/carData.js';
+import vehicleData from '../data/vehicleData.json';
 import './HomePage.css';
 
 function HomePage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    marke: '',
-    modell: '',
-    jahr: ''
+    makeId: '',
+    modelId: '',
+    year: '',
+    mileage: '',
+    condition: '',
+    email: '',
+    phone: ''
   });
   
   const [availableModels, setAvailableModels] = useState([]);
   const [availableYears, setAvailableYears] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleMarkeChange = (e) => {
-    const selectedMarke = e.target.value;
-    setFormData({ marke: selectedMarke, modell: '', jahr: '' });
-    
-    if (selectedMarke && carData[selectedMarke]) {
-      setAvailableModels(Object.keys(carData[selectedMarke]));
+  const makes = vehicleData.makes || [];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    if (name === 'makeId' && value) {
+      const selectedMake = makes.find(m => m.id === parseInt(value));
+      setAvailableModels(selectedMake?.models || []);
+      setFormData(prev => ({ ...prev, modelId: '', year: '' }));
       setAvailableYears([]);
-    } else {
-      setAvailableModels([]);
-      setAvailableYears([]);
+    }
+
+    if (name === 'modelId' && value) {
+      const selectedModel = availableModels.find(m => m.id === parseInt(value));
+      if (selectedModel?.generations.length > 0) {
+        const allYears = new Set();
+        selectedModel.generations.forEach(gen => {
+          if (gen.yearBegin && gen.yearEnd) {
+            for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+              allYears.add(y);
+            }
+          }
+        });
+        setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+      }
     }
   };
 
-  const handleModellChange = (e) => {
-    const selectedModell = e.target.value;
-    setFormData(prev => ({ ...prev, modell: selectedModell, jahr: '' }));
-    
-    if (formData.marke && selectedModell && carData[formData.marke][selectedModell]) {
-      const allYears = new Set();
-      carData[formData.marke][selectedModell].forEach(car => {
-        const years = car.year.split('-');
-        const startYear = parseInt(years[0]);
-        const endYear = years[1] === 'heute' ? new Date().getFullYear() : parseInt(years[1]);
-        
-        for (let y = startYear; y <= endYear; y++) {
-          allYears.add(y);
-        }
-      });
-      setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
-    }
-  };
-
-  const handleJahrChange = (e) => {
-    setFormData(prev => ({ ...prev, jahr: e.target.value }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.marke && formData.modell && formData.jahr) {
-      navigate('/bewertung', { state: formData });
+    setIsSubmitting(true);
+    
+    try {
+      // Finde Marke und Modell Namen für die E-Mail
+      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
+      const selectedModel = selectedMake?.models.find(m => m.id === parseInt(formData.modelId));
+      
+      const formDataToSend = new FormData();
+      formDataToSend.append('makeId', formData.makeId);
+      formDataToSend.append('makeName', selectedMake?.name || '');
+      formDataToSend.append('modelId', formData.modelId);
+      formDataToSend.append('modelName', selectedModel?.name || '');
+      formDataToSend.append('year', formData.year);
+      formDataToSend.append('mileage', formData.mileage);
+      formDataToSend.append('condition', formData.condition);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+
+      const response = await fetch('/backend/bewertung.php', {
+        method: 'POST',
+        body: formDataToSend
+      });
+
+      // Prüfe ob Response OK ist
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('HTTP Error:', response.status, errorText);
+        throw new Error(`Server-Fehler: ${response.status} - ${errorText.substring(0, 100)}`);
+      }
+
+      // Versuche JSON zu parsen
+      let result;
+      try {
+        const text = await response.text();
+        console.log('Response:', text);
+        result = JSON.parse(text);
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        throw new Error('Ungültige Antwort vom Server. Bitte prüfen Sie, ob der PHP-Server läuft.');
+      }
+      
+      if (result.success) {
+        setSubmitted(true);
+        // Reset Formular
+        setFormData({
+          makeId: '',
+          modelId: '',
+          year: '',
+          mileage: '',
+          condition: '',
+          email: '',
+          phone: ''
+        });
+        setAvailableModels([]);
+        setAvailableYears([]);
+      } else {
+        alert('Fehler beim Senden: ' + (result.message || 'Unbekannter Fehler'));
+      }
+    } catch (error) {
+      console.error('Fehler:', error);
+      const errorMessage = error.message || 'Unbekannter Fehler';
+      alert(`Fehler beim Senden der Anfrage:\n\n${errorMessage}\n\nBitte:\n1. Prüfen Sie, ob der PHP-Server läuft (php -S localhost:8000 im backend-Ordner)\n2. Öffnen Sie die Browser-Konsole (F12) für mehr Details`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -74,25 +135,24 @@ function HomePage() {
       <section className="hero-with-form-section">
         <div className="hero-form-container">
           <div className="hero-left-content">
-            <div className="hero-badge-green">⭐ Über 5.000 zufriedene Kunden</div>
+            <div className="hero-badge-green">Dein Autoankauf in Rheinberg & Umgebung</div>
             <h1 className="hero-title-white">
-              Auto verkaufen - Wir kommen zu Ihnen!
+            Auto verkaufen in Rheinberg, Wesel, Moers & Umgebung.
             </h1>
             <p className="hero-subtitle-white">
-              Verkaufen Sie Ihr Auto bequem von zu Hause aus. Wir holen Ihr Fahrzeug deutschlandweit kostenlos bei Ihnen ab - Sie müssen nirgendwo hinfahren!
-            </p>
+            Verkaufe dein Auto ohne Aufwand & ohne Anfahrt. <br></br>Wir kommen zu dir!            </p>
             <div className="hero-features-white">
               <div className="hero-feature-white">
                 <TruckIcon className="feature-icon-white" />
-                <span>Wir holen ab</span>
+                <span>Bequem</span>
               </div>
               <div className="hero-feature-white">
                 <MoneyIcon className="feature-icon-white" />
-                <span>Faire Preise</span>
+                <span>Ohne versteckte Kosten</span>
               </div>
               <div className="hero-feature-white">
                 <LightningIcon className="feature-icon-white" />
-                <span>Sofort-Auszahlung</span>
+                <span>Sofortige Zahlung</span>
               </div>
             </div>
           </div>
@@ -103,52 +163,127 @@ function HomePage() {
               <p className="form-subtitle">Kostenlose Bewertung in 3 Schritten</p>
               
               <form onSubmit={handleSubmit} className="inline-form">
-                <div className="form-group-vertical">
-                  <label>Von welcher Marke ist dein Auto?</label>
-                  <select
-                    value={formData.marke}
-                    onChange={handleMarkeChange}
-                    required
-                  >
-                    <option value="">Marke auswählen</option>
-                    {Object.keys(carData).map(marke => (
-                      <option key={marke} value={marke}>{marke}</option>
-                    ))}
-                  </select>
+                <div className="home-form-grid">
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-makeId">Marke *</label>
+                    <select
+                      id="home-makeId"
+                      name="makeId"
+                      value={formData.makeId}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Bitte wählen</option>
+                      {makes.map(make => (
+                        <option key={make.id} value={make.id}>
+                          {make.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-modelId">Modell *</label>
+                    <select
+                      id="home-modelId"
+                      name="modelId"
+                      value={formData.modelId}
+                      onChange={handleChange}
+                      required
+                      disabled={!formData.makeId}
+                    >
+                      <option value="">Bitte wählen</option>
+                      {availableModels.map(model => (
+                        <option key={model.id} value={model.id}>
+                          {model.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-year">Erstzulassung *</label>
+                    <select
+                      id="home-year"
+                      name="year"
+                      value={formData.year}
+                      onChange={handleChange}
+                      required
+                      disabled={!formData.modelId || availableYears.length === 0}
+                    >
+                      <option value="">Bitte wählen</option>
+                      {availableYears.map(year => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-mileage">Kilometerstand *</label>
+                    <select
+                      id="home-mileage"
+                      name="mileage"
+                      value={formData.mileage}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Bitte wählen</option>
+                      <option value="0-30000">0 - 30.000 km</option>
+                      <option value="30001-60000">30.001 - 60.000 km</option>
+                      <option value="60001-100000">60.001 - 100.000 km</option>
+                      <option value="100001-150000">100.001 - 150.000 km</option>
+                      <option value="150001-plus">über 150.000 km</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-condition">Fahrzeugzustand *</label>
+                    <select
+                      id="home-condition"
+                      name="condition"
+                      value={formData.condition}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Bitte wählen</option>
+                      <option value="excellent">Sehr gut (neuwertig)</option>
+                      <option value="good">Gut (gepflegt)</option>
+                      <option value="fair">Befriedigend (Gebrauchsspuren)</option>
+                      <option value="poor">Ausreichend (Reparaturbedarf)</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-email">E-Mail-Adresse *</label>
+                    <input
+                      type="email"
+                      id="home-email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="ihre@email.de"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-phone">Telefonnummer *</label>
+                    <input
+                      type="tel"
+                      id="home-phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="0176 12345678"
+                      required
+                    />
+                  </div>
                 </div>
 
-                <div className="form-group-vertical">
-                  <label>Welches Modell?</label>
-                  <select
-                    value={formData.modell}
-                    onChange={handleModellChange}
-                    disabled={!formData.marke}
-                    required
-                  >
-                    <option value="">Modell auswählen</option>
-                    {availableModels.map(modell => (
-                      <option key={modell} value={modell}>{modell}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="form-group-vertical">
-                  <label>In welchem Jahr zugelassen?</label>
-                  <select
-                    value={formData.jahr}
-                    onChange={handleJahrChange}
-                    disabled={!formData.modell}
-                    required
-                  >
-                    <option value="">Jahr auswählen</option>
-                    {availableYears.map(jahr => (
-                      <option key={jahr} value={jahr}>{jahr}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <button type="submit" className="btn-form-submit">
-                  Bewertung ansehen
+                <button type="submit" className="btn-form-submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Wird gesendet...' : 'Jetzt kostenlos bewerten'}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -159,29 +294,59 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Success Section */}
+      {submitted && (
+        <section className="section" style={{ paddingTop: '40px' }}>
+          <div className="container">
+            <div style={{ background: 'white', borderRadius: '12px', padding: '2rem', textAlign: 'center', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+              <svg style={{ width: '64px', height: '64px', margin: '0 auto 1.5rem', color: '#4CAF50' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <h2 style={{ marginBottom: '1rem', fontSize: '1.8rem' }}>Vielen Dank für Ihre Anfrage!</h2>
+              <p style={{ fontSize: '1.1rem', marginBottom: '2rem', color: '#666' }}>
+                Wir haben Ihre Fahrzeugbewertungsanfrage erhalten. Unser Team wird Ihr Fahrzeug 
+                professionell bewerten und Ihnen die Bewertung <strong>per E-Mail</strong> zusenden.
+              </p>
+              <p style={{ fontSize: '1rem', marginBottom: '2rem', color: '#666' }}>
+                <strong>Sie erhalten Ihre Bewertung meist noch am selben Tag.</strong>
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link to="/ankauf" className="btn btn-primary">
+                  Auto verkaufen
+                </Link>
+                <Link to="/kontakt" className="btn btn-secondary">
+                  Kontakt aufnehmen
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Social Proof Bar */}
       <section className="social-proof-bar">
         <div className="container">
           <div className="proof-grid">
             <div className="proof-item">
-              <div className="proof-stars">★★★★★</div>
-              <div className="proof-text">4.8/5 Bewertung</div>
-              <div className="proof-subtext">auf Google</div>
+              <div className="proof-number">100%</div>
+              <div className="proof-text">Kostenlos</div>
+              <div className="proof-subtext">Bewertung, Abholung & Abmeldung inklusive</div>
+            </div>
+            <div className="proof-item">
+              <div className="proof-number">0 Km</div>
+              <div className="proof-text">Anfahrt</div>
+              <div className="proof-subtext">Wir kommen zu dir - im Umkreis von 100 km</div>
             </div>
             <div className="proof-item">
               <div className="proof-number">24h</div>
               <div className="proof-text">Reaktionszeit</div>
-              <div className="proof-subtext">Schnelle Antwort</div>
+              <div className="proof-subtext">Schnelle Rückmeldung - oft am selben Tag</div>
             </div>
+            
             <div className="proof-item">
-              <div className="proof-number">100%</div>
-              <div className="proof-text">Kostenlos</div>
-              <div className="proof-subtext">Bewertung & Abholung</div>
-            </div>
-            <div className="proof-item">
-              <div className="proof-number">5.000+</div>
-              <div className="proof-text">Zufriedene Kunden</div>
-              <div className="proof-subtext">Seit 2020</div>
+              <div className="proof-number">1</div>
+              <div className="proof-text">Ansprechpartner</div>
+              <div className="proof-subtext">Persönlich & auf Augenhöhe – kein Callcenter</div>
             </div>
           </div>
         </div>
@@ -190,29 +355,28 @@ function HomePage() {
       {/* Services Section */}
       <section className="section services-section">
         <div className="container">
-          <h2 className="section-title">Ihr Autoverkauf - bequem und stressfrei</h2>
+          <h2 className="section-title">Gebrauchtwagen verkaufen in Rheinberg & Umgebung</h2>
           <p className="section-subtitle">
-            Sie bleiben zu Hause, wir kümmern uns um alles - inklusive kostenloser Abholung vor Ihrer Haustür
+          Transparente Bewertung und faire Verhandlung – ohne Druck und ohne versteckte Kosten. 
+          Wir kommen zu dir (bis 100 km kostenfrei) oder du besuchst uns in Rheinberg.
           </p>
           <div className="grid-2">
             <div className="service-card">
               <div className="service-icon">
                 <ChartIcon className="icon-svg" />
               </div>
-              <h3 className="service-title">Kostenlose Fahrzeugbewertung Online</h3>
+              <h3 className="service-title">Kostenlose Autobewertung online oder am Telefon einholen</h3>
               <p className="service-description">
-                Ermitteln Sie den aktuellen Marktwert Ihres Gebrauchtwagens mit unserer kostenlosen Online-Bewertung. 
-                Einfach Marke, Modell, Baujahr und Kilometerstand eingeben - sofort erhalten Sie eine realistische 
-                Preiseinschätzung für Ihren PKW. Perfekt als Vorbereitung für den Autoverkauf.
+              Finde heraus, was dein Auto wert ist. Gib einfach deine Fahrzeugdaten ein und erhalte eine realistische Preiseinschätzung.
               </p>
               <ul className="service-features">
-                <li>✓ Kostenlos & unverbindlich</li>
-                <li>✓ Sofortiges Ergebnis</li>
-                <li>✓ Transparente Bewertung</li>
-                <li>✓ Ohne Registrierung</li>
+                <li>Schnelle Rückmeldung</li>
+                <li>Kostenlose Fahrzeugbewertung ohne Registrierung</li>
+                <li>Persönlicher Ansprechpartner von A-Z</li>
+                <li>Faires Kaufangebot, ohne versteckte Kosten</li>
               </ul>
               <Link to="/bewertung" className="btn btn-primary">
-                Jetzt bewerten
+              Jetzt Autobewertung starten
               </Link>
             </div>
 
@@ -220,20 +384,19 @@ function HomePage() {
               <div className="service-icon">
                 <CarIcon className="icon-svg" />
               </div>
-              <h3 className="service-title">Gebrauchtwagen Ankauf mit Abholservice</h3>
+              <h3 className="service-title">Autoankauf mit Abholservice in Rheinberg & Umgebung</h3>
               <p className="service-description">
-                Der große Unterschied: Sie müssen nicht zu uns fahren - wir kommen zu Ihnen! Verkaufen Sie Ihr 
-                Fahrzeug bequem von zu Hause aus. Nach Ihrer Zusage vereinbaren wir einen Wunschtermin und holen 
-                Ihr Auto deutschlandweit kostenlos ab. Faire Preise, sichere Abwicklung und sofortige Auszahlung vor Ort.
+              Wir erklären dir unser Angebot kurz und klar – du entscheidest in Ruhe. 
+              Kein Druck, keine Show – ein Gespräch auf Augenhöhe.
               </p>
               <ul className="service-features">
-                <li>✓ Wir kommen zu Ihnen nach Hause - bundesweit</li>
-                <li>✓ Kostenlose Abholung direkt vor Ihrer Haustür</li>
-                <li>✓ Sie sparen Zeit und Aufwand - kein Anfahrtsweg</li>
-                <li>✓ Sofortige Auszahlung bei Fahrzeugübergabe</li>
+                <li>Klarer Kaufvertrag – keine Überraschungen</li>
+                <li>Kostenfreie Abholung – direkt vor deiner Tür</li>
+                <li>Zahlung bei Übergabe – bar/Überweisung</li>
+                <li>Abmeldung inkl. Gebührenübernahme</li>
               </ul>
               <Link to="/ankauf" className="btn btn-primary">
-                Jetzt verkaufen
+                Jetzt Autoverkauf starten
               </Link>
             </div>
           </div>
@@ -243,38 +406,34 @@ function HomePage() {
       {/* How It Works Section */}
       <section className="section section-gray">
         <div className="container">
-          <h2 className="section-title">Auto verkaufen in 3 einfachen Schritten</h2>
+          <h2 className="section-title">So verkaufst du dein Auto in Rheinberg - ohne Stress</h2>
           <p className="section-subtitle">
-            Vom Gebrauchtwagen-Angebot bis zur Auszahlung - so einfach war Autoverkauf noch nie
+          Keine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig. 
           </p>
           <div className="grid-3">
             <div className="step-card">
               <div className="step-number">1</div>
-              <h3 className="step-title">KFZ-Daten online eingeben</h3>
+              <h3 className="step-title">Kostenloses Kaufangebot anfordern</h3>
               <p className="step-description">
-                Füllen Sie unser Online-Formular mit den wichtigsten Fahrzeugdaten aus: 
-                Marke, Modell, Baujahr, Kilometerstand und Zustand Ihres Gebrauchtwagens. 
-                Optional können Sie Fotos hochladen für eine präzisere Bewertung.
+                Gib deine Fahrzeugdaten ein (online oder am Telefon) und erfahren den Wert deine Autos.
               </p>
             </div>
 
             <div className="step-card">
               <div className="step-number">2</div>
-              <h3 className="step-title">Unverbindliches Ankaufs-Angebot</h3>
+              <h3 className="step-title">Termin vereinbaren & Besichtigung</h3>
               <p className="step-description">
-                Unsere KFZ-Gutachter prüfen Ihre Angaben und erstellen ein faires Ankaufsangebot 
-                basierend auf aktuellen Marktwerten. Sie erhalten innerhalb von 24 Stunden ein 
-                kostenloses und unverbindliches Kaufangebot für Ihr Fahrzeug.
+              Wir vereinbaren einen Termin an deinem Wunschort oder an unserem Standort in Rheinberg. 
+              Wir schauen uns das Auto in Ruhe an und beantworten deine Fragen.              
               </p>
             </div>
 
             <div className="step-card">
               <div className="step-number">3</div>
-              <h3 className="step-title">Wir holen ab & zahlen sofort</h3>
+              <h3 className="step-title">Verkauf abschließen – Zahlung bei Übergabe</h3>
               <p className="step-description">
-                Sie bleiben entspannt zu Hause: Wir kommen zum vereinbarten Termin zu Ihnen, 
-                holen Ihr Fahrzeug kostenlos ab und zahlen den Kaufpreis sofort aus. Keine Anfahrt 
-                zur Filiale nötig - maximale Bequemlichkeit für Sie!
+              Der Kaufvertrag wird unterschrieben und der Preis wird ausgezahlt (bar oder per Überweisung). 
+              Abholung und Abmeldung übernehmen wir kostenfrei.
               </p>
             </div>
           </div>
@@ -284,40 +443,40 @@ function HomePage() {
       {/* Benefits Section */}
       <section className="section benefits-section">
         <div className="container">
-          <h2 className="section-title">Autoankauf Deutschland - Ihre Vorteile</h2>
+          <h2 className="section-title">Deine Vorteile beim Autoverkauf in Rheinberg</h2>
           <p className="section-subtitle">
-            Warum über 5.000 Kunden uns beim Gebrauchtwagen-Verkauf vertrauen
-          </p>
+          Inhabergeführt heißt bei uns: (Du bekommst) persönliche Betreuung für dich– ohne Callcenter, ohne Standardabläufe.          </p>
           <div className="grid-4">
             <div className="benefit-card">
-              <div className="benefit-icon">⚡</div>
-              <h3 className="benefit-title">Schnell</h3>
+              <div className="benefit-icon">🤝</div>
+              <h3 className="benefit-title benefit-title-centered">Persönlich</h3>
               <p className="benefit-text">
-                Angebot innerhalb von 24 Stunden. Abwicklung in wenigen Tagen.
+              Ein fester Ansprechpartner von A bis Z – direkt erreichbar (Telefon, WhatsApp, E-Mail).
               </p>
             </div>
 
             <div className="benefit-card">
-              <div className="benefit-icon">💰</div>
-              <h3 className="benefit-title">Fair</h3>
+              <div className="benefit-icon">💎</div>
+              <h3 className="benefit-title benefit-title-centered">Ehrlich</h3>
               <p className="benefit-text">
-                Transparente Bewertung und faire Preise für Ihr Fahrzeug.
+                Transparente Bewertung und faire Preise – keine Tricks, keine versteckten Abzüge.
               </p>
             </div>
 
             <div className="benefit-card">
-              <div className="benefit-icon">🔒</div>
-              <h3 className="benefit-title">Sicher</h3>
+              <div className="benefit-icon">📍</div>
+              <h3 className="benefit-title benefit-title-centered">Lokal</h3>
               <p className="benefit-text">
-                Sichere Abwicklung mit sofortiger Auszahlung des Kaufpreises.
+              Fester Standort in Rheinberg – feste Adresse, statt nur Handy-Nummer.
+
               </p>
             </div>
 
             <div className="benefit-card">
-              <div className="benefit-icon">🚚</div>
-              <h3 className="benefit-title">Wir kommen zu Ihnen</h3>
+              <div className="benefit-icon">⏰</div>
+              <h3 className="benefit-title benefit-title-centered">Flexibel</h3>
               <p className="benefit-text">
-                Keine Anfahrt nötig - wir holen Ihr Auto kostenlos bei Ihnen ab.
+              Termine auch abends oder am Wochenende – bei dir oder bei uns in Rheinberg.
               </p>
             </div>
           </div>
@@ -327,9 +486,9 @@ function HomePage() {
       {/* Testimonials Section */}
       <section className="section testimonials-section">
         <div className="container">
-          <h2 className="section-title">Was unsere Kunden sagen</h2>
+          <h2 className="section-title">Das sagen unsere Kunden</h2>
           <p className="section-subtitle">
-            Über 5.000 zufriedene Kunden vertrauen auf unseren Service
+          Erfahrungen beim Autoverkauf mit AutoHD in Rheinberg und Umgebung
           </p>
           <div className="testimonials-grid">
             <div className="testimonial-card">
@@ -340,16 +499,11 @@ function HomePage() {
                 <span className="star">★</span>
                 <span className="star">★</span>
               </div>
+              <h3 className="testimonial-title">Guter Service</h3>
               <p className="testimonial-text">
-                "Absolut unkompliziert! Ich musste nirgendwo hinfahren - ARZ kam direkt zu mir nach Hause, 
-                hat mein Auto professionell bewertet und sofort bar ausgezahlt. Genau so soll Autoverkauf sein!"
+                "Ich bekam schnell eine Rückmeldung. Für mich war der Preis am wichtigsten – und ich war mehr als zufrieden. 
+                Guter Service, alles wurde direkt vor Ort erledigt. "
               </p>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <strong className="author-name">Michael S.</strong>
-                  <span className="author-location">Duisburg</span>
-                </div>
-              </div>
             </div>
 
             <div className="testimonial-card">
@@ -360,16 +514,12 @@ function HomePage() {
                 <span className="star">★</span>
                 <span className="star">★</span>
               </div>
+              <h3 className="testimonial-title">Kann ich weiterempfehlen</h3>
+
               <p className="testimonial-text">
-                "Faire Bewertung, schnelle Abwicklung und vor allem: keine Anfahrt nötig! 
-                Das Team war pünktlich, freundlich und hat alles vor Ort erledigt. Top Service!"
+                "Freundlich und pünktlich. Ich habe einen guten Preis bekommen und musste mich um nichts kümmern. 
+                Top – kann ich definitiv weiterempfehlen!"
               </p>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <strong className="author-name">Sarah M.</strong>
-                  <span className="author-location">Moers</span>
-                </div>
-              </div>
             </div>
 
             <div className="testimonial-card">
@@ -380,16 +530,11 @@ function HomePage() {
                 <span className="star">★</span>
                 <span className="star">★</span>
               </div>
+              <h3 className="testimonial-title">Absolut unkompliziert</h3>
               <p className="testimonial-text">
-                "Ich war skeptisch, aber ARZ hat mich überzeugt. Transparente Preisgestaltung, 
-                keine versteckten Kosten und die Abholung war kostenlos. Sehr empfehlenswert!"
+                "Absolut unkompliziert: Ich musste nirgendwo hinfahren. AutoHD kam zu uns nach Hause, 
+                hat das Auto professionell bewertet und direkt ausgezahlt. Genau so soll es sein!"
               </p>
-              <div className="testimonial-author">
-                <div className="author-info">
-                  <strong className="author-name">Thomas K.</strong>
-                  <span className="author-location">Wesel</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -413,23 +558,27 @@ function HomePage() {
       {/* Trust Section */}
       <section className="section section-white">
         <div className="container">
-          <h2 className="section-title">Vertrauen Sie uns</h2>
+          <h2 className="section-title">AutoHD – Autoankauf am Niederrhein</h2>
+          <p className="section-subtitle">
+          PKW-Ankauf aller Marken – auch ohne TÜV, mit Defekt, Unfall oder Finanzierung.<br></br>
+          Wir kaufen dein Auto und holen es am gesamten Niederrhein kostenlos ab.
+          </p>
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-number">5.000+</div>
-              <div className="stat-label">Zufriedene Kunden</div>
+              <div className="stat-number">Einfach</div>
+              <div className="stat-label">Fahrzeugdaten eingeben, fertig</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">4.8/5</div>
-              <div className="stat-label">Durchschnittliche Bewertung</div>
+              <div className="stat-number">Schnell</div>
+              <div className="stat-label">Faires Kaufangebot erhalten</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">24h</div>
-              <div className="stat-label">Reaktionszeit</div>
+              <div className="stat-number">Sicher</div>
+              <div className="stat-label">Zahlung direkt erhalten</div>
             </div>
             <div className="stat-card">
-              <div className="stat-number">100%</div>
-              <div className="stat-label">Kostenlose Abholung</div>
+              <div className="stat-number">Bequem</div>
+              <div className="stat-label">Kostenlose Abholung vereinbaren</div>
             </div>
           </div>
         </div>

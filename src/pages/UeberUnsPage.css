@@ -279,13 +279,15 @@
 
 /* Team Label - betont ohne Icon */
 .team-label {
-  font-size: 2em;
-  font-weight: 900;
+  font-size: 1.2em;
+  font-weight: 700;
   color: var(--primary-600);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+
 
 /* Stats Boxes */
 .stats-grid {
@@ -431,7 +433,7 @@
 
 @media (max-width: 768px) {
   .team-label {
-    font-size: 1.5em;
+    font-size: 1.1em;
   }
 
   .cta-buttons {

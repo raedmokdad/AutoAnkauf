@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
-import { TruckIcon, MoneyIcon, LightningIcon, ShieldCheckIcon, DocumentIcon, CheckIcon } from '../components/Icons';
+import { TruckIcon, MoneyIcon, LightningIcon, ShieldCheckIcon, DocumentIcon, CheckIcon, ChartIcon, ClockIcon } from '../components/Icons';
 import VehicleForm from '../components/VehicleForm';
 import '../styles/shared-green-hero.css';
 import './AnkaufPage.css';
@@ -16,14 +17,14 @@ function AnkaufPage() {
       />
       <section className="ankauf-hero-green">
         <div className="ankauf-hero-container">
-          <div className="hero-badge-green">⭐ Über 5.000 zufriedene Kunden</div>
+          <div className="hero-badge-green">Clever verkaufen statt endlos verhandeln</div>
           <h1 className="ankauf-hero-title">Wir kommen zu Ihnen - Auto verkaufen leicht gemacht</h1>
           <p className="ankauf-hero-subtitle">
             Der stressfreie Weg, Ihr Auto zu verkaufen: Einfach Formular ausfüllen, Angebot erhalten und wir holen Ihr Fahrzeug kostenlos bei Ihnen zu Hause ab!
           </p>
           <div className="ankauf-hero-features">
             <div className="hero-feature-green">
-              <TruckIcon className="feature-icon-white" />
+              <ShieldCheckIcon className="feature-icon-white" />
               <span>Wir holen kostenlos ab</span>
             </div>
             <div className="hero-feature-green">
@@ -38,22 +39,6 @@ function AnkaufPage() {
         </div>
       </section>
 
-      <section className="section ankauf-intro-section">
-        <div className="container">
-          <div className="ankauf-intro">
-            <div className="intro-icon">🤝</div>
-            <h2>Der bequeme Weg, Ihr Auto zu verkaufen - ohne Anfahrt!</h2>
-            <p>
-              <strong>Ihr Vorteil bei uns:</strong> Sie müssen nicht zu einer Filiale fahren - wir kommen direkt zu Ihnen nach Hause! 
-              Egal ob BMW, Mercedes, VW, Audi oder andere Marken, egal ob Limousine, Kombi, SUV oder Transporter - 
-              wir kaufen alle Fahrzeuge. Füllen Sie einfach unser Online-Formular aus, erhalten Sie innerhalb von 24 Stunden 
-              ein faires Angebot und wir vereinbaren einen Termin für die kostenlose Abholung vor Ihrer Haustür. 
-              <strong>Sie bleiben entspannt zu Hause - wir kümmern uns um den Rest!</strong>
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="section ankauf-form-section">
         <div className="container">
           <VehicleForm />
@@ -62,17 +47,42 @@ function AnkaufPage() {
 
       <section className="section ankauf-service-section">
         <div className="container">
-          <h2 className="section-title">💼 Unser Service im Detail</h2>
-          <p className="section-subtitle">Professioneller Autoankauf mit Rundum-Service</p>
+          <h2 className="section-title">So einfach verkaufst du dein Auto</h2>
+          <p className="section-subtitle">Keine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig.
+          <br></br><span className="steps-highlight">1 . 2 . 3 Dein Geld ist da! Das sind die Schritte.</span></p>
+
           <div className="grid-2">
+            <div className="service-detail-card">
+              <div className="service-detail-icon">
+                <ChartIcon className="icon-svg" />
+              </div>
+              <h3>1. Kostenlose Fahrzeugbewertung</h3>
+              <p>
+              Fülle das Formular in nur wenigen Minuten aus oder ruf uns an. Wir melden uns zeitnah mit einem fairen, 
+              marktgerechten Kaufangebot. <br></br><b>Unverbindlich und ohne Kaufdruck</b>.
+              </p>
+            </div>
+
+            <div className="service-detail-card">
+              <div className="service-detail-icon">
+                <ClockIcon className="icon-svg" />
+              </div>
+              <h3>2. Termin an deinem Wunschort</h3>
+              <p>
+              Wir vereinbaren zeitnah einen Termin und schauen uns dein Auto an – bei dir oder bei uns in Rheinberg. 
+              Wir beantworten deine Fragen. <b>Du entscheidest in Ruhe</b>.
+              </p>
+            </div>
+
             <div className="service-detail-card">
               <div className="service-detail-icon">
                 <MoneyIcon className="icon-svg" />
               </div>
-              <h3>Faire Preise</h3>
+              <h3>3. Verkauf & sofortige Auszahlung</h3>
               <p>
-                Wir bieten Ihnen einen fairen Preis basierend auf dem aktuellen Marktwert 
-                und dem Zustand Ihres Fahrzeugs. Transparente Bewertung ohne versteckte Kosten.
+              Wir wickeln den Verkauf transparent und rechtssicher mit schriftlichem Kaufvertrag ab. 
+              Auszahlung sofort – bar oder per Überweisung. 
+              <b> Schnell, sicher und unkompliziert</b>.
               </p>
             </div>
 
@@ -80,47 +90,45 @@ function AnkaufPage() {
               <div className="service-detail-icon">
                 <TruckIcon className="icon-svg" />
               </div>
-              <h3>Wir holen ab - Sie bleiben zu Hause</h3>
+              <h3>4. Abholung & Abmeldung – kostenfrei</h3>
               <p>
-                Das ist unser Service: Wir kommen zu Ihnen! Keine Anfahrt zur Filiale nötig. 
-                Wir holen Ihr Fahrzeug deutschlandweit kostenlos direkt bei Ihnen zu Hause ab. 
-                Maximale Bequemlichkeit für Sie!
+              Auf Wunsch holen wir dein Auto kostenlos ab und kümmern uns um die Abmeldung. 
+               <b> Kein Gang zur Zulassungsstelle, kein Papierkram, kein Stress</b>.
               </p>
-            </div>
-
-            <div className="service-detail-card">
-              <div className="service-detail-icon">
-                <LightningIcon className="icon-svg" />
-              </div>
-              <h3>Schnell & Stressfrei</h3>
-              <p>
-                Kein langes Warten, keine komplizierten Prozesse. Innerhalb von 24 Stunden 
-                erhalten Sie ein Angebot. Termin vereinbaren, wir kommen vorbei - fertig! 
-                Einfacher geht Autoverkauf nicht.
-              </p>
-            </div>
-
-            <div className="service-detail-card">
-              <div className="service-detail-icon">
-                <ShieldCheckIcon className="icon-svg" />
-              </div>
-              <h3>Sofortige Auszahlung vor Ort</h3>
-              <p>
-                Wenn wir Ihr Fahrzeug abholen, erhalten Sie den Kaufpreis direkt ausgezahlt. 
-                Bar, per Überweisung oder nach Wunsch - sicher und vertrauensvoll. 
-                Keine Verzögerungen, keine Unsicherheiten.
-              </p>
-            </div>
+            </div>  
           </div>
         </div>
       </section>
+
+
+      <section className="section ankauf-intro-section">
+        <div className="container">
+          <div className="ankauf-intro">
+            <div className="intro-icon">🤝</div>
+            <h2>Schnell verkauft. Sicher bezahlt. Einfach erledigt.</h2>
+            <p>
+            <strong>Auto verkaufen leicht gemacht:</strong> Kostenlose Bewertung, faires Kaufangebot und transparente 
+            Abwicklung mit Kaufvertrag vor Ort in Rheinberg & Umgebung. 
+            Sofortige Auszahlung und Abholung & KFZ-Abmeldung kostenfrei. 
+            <strong> Hol dir jetzt dein unverbindliches Angebot für deinen Autoverkauf!</strong>
+            </p>
+            <Link to="/bewertung" className="btn btn-primary ankauf-intro-btn">
+              Jetzt Auto bewerten
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="btn-icon">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      
 
       <section className="section ankauf-documents-section">
         <div className="container">
           <h2 className="section-title">Benötigte Unterlagen</h2>
           <p className="section-subtitle">
-            Bitte halten Sie folgende Dokumente für die Abwicklung bereit:
-          </p>
+          Fehlt ein Dokument? Sprich uns an – wir klären den Einzelfall.          </p>
           <div className="documents-grid">
             <div className="document-item">
               <div className="document-icon">📄</div>

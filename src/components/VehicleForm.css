@@ -170,17 +170,13 @@
 
 /* Image Upload Container - for Fahrzeugbilder */
 .image-upload-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3xl);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
   margin-top: var(--spacing-2xl);
 }
 
 .image-upload-group {
-  margin-bottom: var(--spacing-3xl);
-}
-
-.image-upload-group:last-child {
   margin-bottom: 0;
 }
 
@@ -529,6 +525,7 @@
   }
 
   .image-upload-container {
+    grid-template-columns: 1fr;
     gap: var(--spacing-2xl);
   }
 

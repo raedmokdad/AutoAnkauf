@@ -103,25 +103,11 @@ function FAQPage() {
     <div className="faq-page">
       <section className="faq-hero-green">
         <div className="faq-hero-container">
-          <div className="hero-badge-green">💡 Alle Antworten auf einen Blick</div>
-          <h1 className="faq-hero-title">Häufig gestellte Fragen</h1>
+          
+          <h1 className="faq-hero-title">Häufige Fragen zum Auto verkaufen</h1>
           <p className="faq-hero-subtitle">
-            Finden Sie schnell Antworten auf die wichtigsten Fragen rund um den Autoverkauf - klar, verständlich und hilfreich
+          Schnelle Antworten zu Bewertung, Ablauf und Zahlung beim Auto verkaufen
           </p>
-          <div className="faq-hero-features">
-            <div className="hero-feature-green">
-              <LightningIcon className="feature-icon-white" />
-              <span>Schnelle Antworten</span>
-            </div>
-            <div className="hero-feature-green">
-              <DocumentIcon className="feature-icon-white" />
-              <span>Übersichtlich</span>
-            </div>
-            <div className="hero-feature-green">
-              <CheckIcon className="feature-icon-white" />
-              <span>Hilfreich</span>
-            </div>
-          </div>
         </div>
       </section>
 
