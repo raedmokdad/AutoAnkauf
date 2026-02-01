@@ -71,3 +71,4 @@ Falls der Proxy nicht funktioniert:
 **Im PHP-Server-Terminal sollten Sie sehen:**
 - `[200]: POST /backend/bewertung.php`
 - Falls Fehler: PHP-Fehlermeldung wird angezeigt
+

@@ -14,7 +14,8 @@ function VehicleForm() {
     email: '',
     phone: '',
     price: '',
-    images: []
+    images: [],
+    acceptedPrivacy: false
   });
 
   const [availableModels, setAvailableModels] = useState([]);
@@ -88,10 +89,10 @@ function VehicleForm() {
   }, [formData.generationId, availableGenerations]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -161,7 +162,8 @@ function VehicleForm() {
           email: '',
           phone: '',
           price: '',
-          images: []
+          images: [],
+          acceptedPrivacy: false
         });
         setShowModal(false);
       } else {
@@ -185,7 +187,8 @@ function VehicleForm() {
       <form onSubmit={handleSubmit} className="vehicle-form">
         {/* Fahrzeugdetails */}
         <section className="form-section">
-          <h2>Fahrzeugdetails</h2>
+          <h2 style={{ marginBottom: '1.5rem' }}>Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.</h2>
+          
           <div className="form-grid">
             <div className="form-group">
               <label htmlFor="makeId">Automarke *</label>
@@ -306,10 +309,8 @@ function VehicleForm() {
 
         {/* Fahrzeugbilder */}
         <section className="form-section">
-          <h2>Fahrzeugbilder</h2>
-          <p className="section-subtitle">
-            Wähle bitte Bilder aus verschiedenen Perspektiven
-          </p>
+          <h2>Fotos hochladen (optional) – sie helfen uns bei der Bewertung.</h2>
+          
           <div className="image-upload-container">
             {[0, 1, 2].map(index => (
               <div key={index} className="image-upload-group">
@@ -344,12 +345,12 @@ function VehicleForm() {
           </div>
         </section>
 
-        {/* Persönliche Informationen */}
+        {/* Kontaktdaten für dein Ergebnis */}
         <section className="form-section">
-          <h2>Persönliche Informationen</h2>
-          <p className="section-subtitle">
-            Verwende eine permanente Adresse, an der du Post empfangen kannst.
-          </p>
+          <h2>Kontaktdaten für dein Ergebnis</h2>
+          <div style={{ textAlign: 'left', marginLeft: 0, paddingLeft: 0, marginBottom: '1.5rem', fontSize: '1.0rem', lineHeight: '1.4', display: 'block'}}>
+            Wir nutzen deine Kontaktdaten nur, um dir das Ergebnis der Wertermittlung zu senden und bei Rückfragen Kontakt aufzunehmen. Deine Daten werden nicht weitergegeben.
+          </div>
           <div className="form-grid">
             <div className="form-group">
               <label htmlFor="email">E-Mail Adresse *</label>
@@ -403,10 +404,23 @@ function VehicleForm() {
           </div>
         </section>
 
+        <div className="privacy-checkbox-group">
+          <label className="privacy-checkbox-label">
+            <input
+              type="checkbox"
+              name="acceptedPrivacy"
+              checked={formData.acceptedPrivacy}
+              onChange={handleChange}
+              required
+            />
+            <span>Ich akzeptiere die <a href="/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> *</span>
+          </label>
+        </div>
+
         <button
           type="submit"
           className="submit-btn submit-btn-green"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !formData.acceptedPrivacy}
         >
           {isSubmitting ? 'Wird gesendet...' : 'Jetzt Angebot erhalten'}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="btn-icon">

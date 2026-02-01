@@ -18,14 +18,14 @@ function AnkaufPage() {
       <section className="ankauf-hero-green">
         <div className="ankauf-hero-container">
           <div className="hero-badge-green">Clever verkaufen statt endlos verhandeln</div>
-          <h1 className="ankauf-hero-title">Wir kommen zu Ihnen - Auto verkaufen leicht gemacht</h1>
+          <h1 className="ankauf-hero-title">Jetzt Auto verkaufen</h1>
+
           <p className="ankauf-hero-subtitle">
-            Der stressfreie Weg, Ihr Auto zu verkaufen: Einfach Formular ausfüllen, Angebot erhalten und wir holen Ihr Fahrzeug kostenlos bei Ihnen zu Hause ab!
-          </p>
+Einfach Formular ausfüllen, Autobewertung bekommen und sofort Zahlung erhalten. <br></br>Wir holen dein Fahrzeug kostenlos bei dir ab!          </p>
           <div className="ankauf-hero-features">
             <div className="hero-feature-green">
               <ShieldCheckIcon className="feature-icon-white" />
-              <span>Wir holen kostenlos ab</span>
+              <span>Verkauf mit Vertrag</span>
             </div>
             <div className="hero-feature-green">
               <MoneyIcon className="feature-icon-white" />
@@ -33,7 +33,7 @@ function AnkaufPage() {
             </div>
             <div className="hero-feature-green">
               <CheckIcon className="feature-icon-white" />
-              <span>Bei Ihnen zu Hause</span>
+              <span>Bequem & ohne Anfahrt</span>
             </div>
           </div>
         </div>
@@ -45,11 +45,13 @@ function AnkaufPage() {
         </div>
       </section>
 
+
+      {/* So einfach verkaufst du dein Auto */}
       <section className="section ankauf-service-section">
         <div className="container">
           <h2 className="section-title">So einfach verkaufst du dein Auto</h2>
           <p className="section-subtitle">Keine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig.
-          <br></br><span className="steps-highlight">1 . 2 . 3 Dein Geld ist da! Das sind die Schritte.</span></p>
+          <br></br><span className="steps-highlight-black">1 . 2 . 3 Dein Geld ist da!</span> <span className="steps-highlight">Das sind die Schritte.</span></p>
 
           <div className="grid-2">
             <div className="service-detail-card">
@@ -100,7 +102,97 @@ function AnkaufPage() {
         </div>
       </section>
 
+            {/* So einfach verkaufst du dein Auto */}
+      <section className="section ankauf-service-section">
+        <div className="container">
+          <h2 className="section-title">So einfach verkaufst du dein Auto</h2>
+          <p className="section-subtitle">Keine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig.
+          <br></br><span className="steps-highlight-black">1 . 2 . 3 Dein Geld ist da!</span> <span className="steps-highlight">Das sind die Schritte.</span></p>
 
+          <div className="grid-2">
+            <div className="service-detail-card">
+              <div className="service-detail-icon">
+                <ChartIcon className="icon-svg" />
+              </div>
+              <h3>1. Kostenlose Fahrzeugbewertung</h3>
+              <p>
+              Fülle das Formular in nur wenigen Minuten aus oder ruf uns an. Wir melden uns zeitnah mit einem fairen, 
+              marktgerechten Kaufangebot. <br></br><b>Unverbindlich und ohne Kaufdruck</b>.
+              </p>
+            </div>
+
+            <div className="service-detail-card">
+              <div className="service-detail-icon">
+                <ClockIcon className="icon-svg" />
+              </div>
+              <h3>2. Termin an deinem Wunschort</h3>
+              <p>
+              Wir vereinbaren zeitnah einen Termin und schauen uns dein Auto an – bei dir oder bei uns in Rheinberg. 
+              Wir beantworten deine Fragen. <b>Du entscheidest in Ruhe</b>.
+              </p>
+            </div>
+
+            <div className="service-detail-card">
+              <div className="service-detail-icon">
+                <MoneyIcon className="icon-svg" />
+              </div>
+              <h3>3. Verkauf & sofortige Auszahlung</h3>
+              <p>
+              Wir wickeln den Verkauf transparent und rechtssicher mit schriftlichem Kaufvertrag ab. 
+              Auszahlung sofort – bar oder per Überweisung. 
+              <b> Schnell, sicher und unkompliziert</b>.
+              </p>
+            </div>
+
+            <div className="service-detail-card">
+              <div className="service-detail-icon">
+                <TruckIcon className="icon-svg" />
+              </div>
+              <h3>4. Abholung & Abmeldung – kostenfrei</h3>
+              <p>
+              Auf Wunsch holen wir dein Auto kostenlos ab und kümmern uns um die Abmeldung. 
+               <b> Kein Gang zur Zulassungsstelle, kein Papierkram, kein Stress</b>.
+              </p>
+            </div>  
+          </div>
+        </div>
+      </section>
+
+        {/* So einfach verkaufst du dein Auto */}
+        <section className="section bewertung-phone-section">
+            <div className="container">
+              <div className="bewertung-phone-content">
+                <h2 className="bewertung-phone-title">Lieber eine persönliche Beratung? <br></br>Ganz unverbindlich!  
+</h2>
+                <p className="bewertung-phone-text">
+              Wir sind dein direkter Ansprechpartner rund um den Autoverkauf. 
+                </p>
+                <a href="tel:+4917630339020" className="bewertung-phone-btn">
+                  <span className="phone-icon">📞</span>
+                  Kostenlos anrufen: 0176 30339020
+                </a>
+                <p className="bewertung-phone-subtext">
+                  Mo–Fr: 9–18 Uhr | Auch samstags erreichbar
+                </p>
+                <div className="bewertung-phone-features">
+                  <span className="phone-feature-item">
+                    <CheckIcon className="phone-feature-icon" />
+                    Sofortige Antworten
+                  </span>
+                  <span className="phone-feature-item">
+                    <CheckIcon className="phone-feature-icon" />
+                    Persönlicher Ansprechpartner
+                  </span>
+                  <span className="phone-feature-item">
+                    <CheckIcon className="phone-feature-icon" />
+                    Unverbindlich
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+      {/* Schnell verkauft. Sicher bezahlt. Einfach erledigt. */}
       <section className="section ankauf-intro-section">
         <div className="container">
           <div className="ankauf-intro">
@@ -123,7 +215,7 @@ function AnkaufPage() {
       </section>
 
       
-
+      {/* Benötigte Dokumente */}
       <section className="section ankauf-documents-section">
         <div className="container">
           <h2 className="section-title">Benötigte Unterlagen</h2>

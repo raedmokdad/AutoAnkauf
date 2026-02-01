@@ -143,3 +143,4 @@ Welche Option möchten Sie verwenden?
 2. **E-Mail-Service integrieren** - Ich kann SendGrid/Mailgun einrichten
 3. **Form-Service verwenden** - Ich kann Formspree integrieren
 4. **Aktuelles System testen** - Prüfen ob `mail()` auf Ihrem Server funktioniert
+

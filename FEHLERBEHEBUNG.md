@@ -71,3 +71,4 @@ header('Access-Control-Allow-Methods: POST');
 **PHP-Errors prüfen**:
 - PHP-Server zeigt Fehler direkt im Terminal
 - Oder `error_log` Datei prüfen
+

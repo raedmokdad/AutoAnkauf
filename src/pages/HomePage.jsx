@@ -15,7 +15,8 @@ function HomePage() {
     mileage: '',
     condition: '',
     email: '',
-    phone: ''
+    phone: '',
+    acceptedPrivacy: false
   });
   
   const [availableModels, setAvailableModels] = useState([]);
@@ -26,8 +27,8 @@ function HomePage() {
   const makes = vehicleData.makes || [];
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
 
     if (name === 'makeId' && value) {
       const selectedMake = makes.find(m => m.id === parseInt(value));
@@ -105,7 +106,8 @@ function HomePage() {
           mileage: '',
           condition: '',
           email: '',
-          phone: ''
+          phone: '',
+          acceptedPrivacy: false
         });
         setAvailableModels([]);
         setAvailableYears([]);
@@ -131,7 +133,7 @@ function HomePage() {
       />
       <StructuredData />
       
-      {/* Hero Section with Side Form */}
+      {/* Dein Autoankauf in Rheinberg & Umgebung */}
       <section className="hero-with-form-section">
         <div className="hero-form-container">
           <div className="hero-left-content">
@@ -263,7 +265,7 @@ function HomePage() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="ihre@email.de"
+                      placeholder="deine@email.de"
                       required
                     />
                   </div>
@@ -282,7 +284,20 @@ function HomePage() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn-form-submit" disabled={isSubmitting}>
+                <div className="privacy-checkbox-group">
+                  <label className="privacy-checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="acceptedPrivacy"
+                      checked={formData.acceptedPrivacy}
+                      onChange={handleChange}
+                      required
+                    />
+                    <span>Ich akzeptiere die <a href="/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> *</span>
+                  </label>
+                </div>
+
+                <button type="submit" className="btn-form-submit" disabled={isSubmitting || !formData.acceptedPrivacy}>
                   {isSubmitting ? 'Wird gesendet...' : 'Jetzt kostenlos bewerten'}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -323,39 +338,52 @@ function HomePage() {
         </section>
       )}
 
-      {/* Social Proof Bar */}
-      <section className="social-proof-bar">
+      {/* So verkaufst du dein Auto bei uns - in nur 3 Schritten */}
+      <section className="section section-gray">
         <div className="container">
-          <div className="proof-grid">
-            <div className="proof-item">
-              <div className="proof-number">100%</div>
-              <div className="proof-text">Kostenlos</div>
-              <div className="proof-subtext">Bewertung, Abholung & Abmeldung inklusive</div>
+          <p className="section-subtitle" style={{ marginBottom: '0.5rem' }}><strong>Verkaufe clever statt kompliziert</strong></p>
+          <h2 className="section-title">So verkaufst du dein Auto bei uns - in nur 3 Schritten</h2>
+          <p className="section-subtitle">
+          Keine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig. 
+          </p>
+          <div className="grid-3">
+            <div className="step-card">
+              <div className="step-number">1</div>
+              <h3 className="step-title"></h3>
+              <h3 className="step-title">Kostenloses Kaufangebot anfordern</h3>
+              <p className="step-description">
+                Gib deine Fahrzeugdaten ein (online oder am Telefon) und erfahren den Wert deine Autos.
+                Füge optional ein oder mehrere Fotos hinzu.
+              </p>
             </div>
-            <div className="proof-item">
-              <div className="proof-number">0 Km</div>
-              <div className="proof-text">Anfahrt</div>
-              <div className="proof-subtext">Wir kommen zu dir - im Umkreis von 100 km</div>
+
+            <div className="step-card">
+              <div className="step-number">2</div>
+              <h3 className="step-title"></h3>
+              <h3 className="step-title">Termin vereinbaren & Besichtigung</h3>
+              <p className="step-description">
+              Wir vereinbaren einen Termin an deinem Wunschort oder an unserem Standort in Rheinberg. 
+              Wir schauen uns das Auto in Ruhe an und beantworten deine Fragen.              
+              </p>
             </div>
-            <div className="proof-item">
-              <div className="proof-number">24h</div>
-              <div className="proof-text">Reaktionszeit</div>
-              <div className="proof-subtext">Schnelle Rückmeldung - oft am selben Tag</div>
-            </div>
-            
-            <div className="proof-item">
-              <div className="proof-number">1</div>
-              <div className="proof-text">Ansprechpartner</div>
-              <div className="proof-subtext">Persönlich & auf Augenhöhe – kein Callcenter</div>
+
+            <div className="step-card">
+              <div className="step-number">3</div>
+              <h3 className="step-title"></h3>              
+              <h3 className="step-title">Verkauf abschließen – Zahlung bei Übergabe</h3>
+              <p className="step-description">
+              Der Kaufvertrag wird unterschrieben und der Preis wird ausgezahlt (bar oder per Überweisung). 
+              Abholung und Abmeldung übernehmen wir kostenfrei.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Gebrauchtwagen verkaufen bei AutoHD Rheinberg */}
       <section className="section services-section">
         <div className="container">
-          <h2 className="section-title">Gebrauchtwagen verkaufen in Rheinberg & Umgebung</h2>
+          <h2 className="section-title">Gebrauchtwagen verkaufen bei AutoHD Rheinberg</h2>
           <p className="section-subtitle">
           Transparente Bewertung und faire Verhandlung – ohne Druck und ohne versteckte Kosten. 
           Wir kommen zu dir (bis 100 km kostenfrei) oder du besuchst uns in Rheinberg.
@@ -401,51 +429,14 @@ function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section>      
 
-      {/* How It Works Section */}
-      <section className="section section-gray">
-        <div className="container">
-          <h2 className="section-title">So verkaufst du dein Auto in Rheinberg - ohne Stress</h2>
-          <p className="section-subtitle">
-          Keine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig. 
-          </p>
-          <div className="grid-3">
-            <div className="step-card">
-              <div className="step-number">1</div>
-              <h3 className="step-title">Kostenloses Kaufangebot anfordern</h3>
-              <p className="step-description">
-                Gib deine Fahrzeugdaten ein (online oder am Telefon) und erfahren den Wert deine Autos.
-              </p>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">2</div>
-              <h3 className="step-title">Termin vereinbaren & Besichtigung</h3>
-              <p className="step-description">
-              Wir vereinbaren einen Termin an deinem Wunschort oder an unserem Standort in Rheinberg. 
-              Wir schauen uns das Auto in Ruhe an und beantworten deine Fragen.              
-              </p>
-            </div>
-
-            <div className="step-card">
-              <div className="step-number">3</div>
-              <h3 className="step-title">Verkauf abschließen – Zahlung bei Übergabe</h3>
-              <p className="step-description">
-              Der Kaufvertrag wird unterschrieben und der Preis wird ausgezahlt (bar oder per Überweisung). 
-              Abholung und Abmeldung übernehmen wir kostenfrei.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
+      {/* Deine Vorteile beim Autoverkauf in Rheinberg */}
       <section className="section benefits-section">
         <div className="container">
-          <h2 className="section-title">Deine Vorteile beim Autoverkauf in Rheinberg</h2>
+          <h3 className="section-title">Deine Vorteile beim Autoverkauf in Rheinberg</h3>
           <p className="section-subtitle">
-          Inhabergeführt heißt bei uns: (Du bekommst) persönliche Betreuung für dich– ohne Callcenter, ohne Standardabläufe.          </p>
+          AutoHD ist inhabergeführt und lokal am Niederrhein. Du bekommst persönliche Beratung und direkten Kontakt – ohne Callcenter, ohne Standardabläufe.          </p>
           <div className="grid-4">
             <div className="benefit-card">
               <div className="benefit-icon">🤝</div>
@@ -483,7 +474,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Das sagen unsere Kunden */}
       <section className="section testimonials-section">
         <div className="container">
           <h2 className="section-title">Das sagen unsere Kunden</h2>
@@ -540,22 +531,53 @@ function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Dein Autoankauf in Zahlen*/}
+      <section className="social-proof-bar">
+        <div className="container">
+          <h2 className="section-title">Dein Autoankauf in Zahlen</h2>
+          <div className="proof-grid">
+            <div className="proof-item">
+              <div className="proof-number">100%</div>
+              <div className="proof-text">Kostenlos</div>
+              <div className="proof-subtext">Bewertung, Abholung & Abmeldung inklusive</div>
+            </div>
+            <div className="proof-item">
+              <div className="proof-number">0 km</div>
+              <div className="proof-text">Anfahrt</div>
+              <div className="proof-subtext">Wir kommen zu dir - im Umkreis von 100 km</div>
+            </div>
+            <div className="proof-item">
+              <div className="proof-number">24h</div>
+              <div className="proof-text">Reaktionszeit</div>
+              <div className="proof-subtext">Schnelle Rückmeldung - oft am selben Tag</div>
+            </div>
+            
+            <div className="proof-item">
+              <div className="proof-number">1</div>
+              <div className="proof-text">Ansprechpartner</div>
+              <div className="proof-subtext">Persönlich & auf Augenhöhe – kein Callcenter</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Auto verkaufen ohne Stress? */}
       <section className="cta-section">
         <div className="container">
           <div className="cta-content">
             <h2 className="cta-title">Auto verkaufen ohne Stress?</h2>
             <p className="cta-text">
-              Lehnen Sie sich zurück - wir kommen zu Ihnen! Jetzt unverbindlich anfragen
+              Lehn dich zurück - wir kommen zu dir! Jetzt unverbindlich anfragen!
             </p>
             <Link to="/bewertung" className="btn btn-primary btn-large">
-              Kostenlos bewerten lassen
+              Kostenlos Auto bewerten
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Trust Section */}
+      {/* AutoHD – Autoankauf am Niederrhein */}
       <section className="section section-white">
         <div className="container">
           <h2 className="section-title">AutoHD – Autoankauf am Niederrhein</h2>

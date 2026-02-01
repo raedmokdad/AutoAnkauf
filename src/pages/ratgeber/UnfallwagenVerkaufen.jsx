@@ -163,7 +163,7 @@ function UnfallwagenVerkaufen() {
 
       <h3>Wirtschaftlicher Totalschaden</h3>
       <p>
-        Wenn Reparaturkosten > 70% des Zeitwerts:
+        Wenn Reparaturkosten &gt; 70% des Zeitwerts:
       </p>
       <ul>
         <li>Versicherung zahlt Wiederbeschaffungswert</li>

@@ -3,6 +3,18 @@
   background: linear-gradient(180deg, var(--gray-50) 0%, white 100%);
 }
 
+/* Abstand Header–Hero; mehr Abstand zwischen grünem Hero und Adresse (Adresse nach unten) */
+.kontakt-page .kontakt-hero-green {
+  padding-top: 80px;
+  padding-bottom: 96px;
+}
+.kontakt-page .section.kontakt-content-section {
+  padding-top: var(--spacing-2xl);
+}
+.kontakt-page .kontakt-content {
+  margin-top: 0;
+}
+
 .kontakt-hero {
   position: relative;
   background: linear-gradient(180deg, #f8fafb 0%, #ffffff 100%);
@@ -170,6 +182,110 @@
   letter-spacing: -0.01em;
 }
 
+.kontakt-adresse-block,
+.kontakt-kontakt-block {
+  margin-bottom: var(--spacing-xl);
+}
+
+.kontakt-adresse-block h3,
+.kontakt-kontakt-block h3 {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.kontakt-adresse-block p,
+.kontakt-kontakt-block p {
+  color: var(--gray-700);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-xs);
+}
+
+.kontakt-line {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.kontakt-note {
+  margin-top: var(--spacing-md);
+  font-size: 0.95rem;
+  color: var(--gray-600);
+  font-style: italic;
+}
+
+.opening-hours-section {
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 2px solid var(--gray-100);
+}
+
+.opening-hours-section h3 {
+  font-size: 1.5em;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-md);
+}
+
+.opening-hours-intro {
+  color: var(--gray-700);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-xl);
+}
+
+.opening-hours-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.opening-hours-box {
+  background: white;
+  border: 2px solid var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.opening-hours-box h4 {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-xs);
+}
+
+.opening-hours-sub {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+}
+
+.opening-hours-box .hours-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.opening-hours-box .hours-list li {
+  color: var(--gray-700);
+  line-height: 1.7;
+  padding: 2px 0;
+}
+
+.opening-hours-outro {
+  color: var(--gray-700);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .opening-hours-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .kontakt-methods {
   display: flex;
   flex-direction: column;
@@ -267,6 +383,13 @@
   color: var(--gray-900);
 }
 
+/* Gleiche Trennlinie wie vor Öffnungszeiten – zwischen Öffnungszeiten und Nachricht senden */
+.kontakt-form-container {
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 2px solid var(--gray-100);
+}
+
 .kontakt-form-section {
   background: white;
   border-radius: var(--radius-xl);
@@ -338,6 +461,47 @@
   width: 100%;
   padding: 16px 32px;
   font-size: 17px;
+}
+
+.kontakt-form .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.privacy-checkbox-group {
+  margin: 16px 0 8px 0;
+}
+
+.privacy-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--gray-800);
+  cursor: pointer;
+  user-select: none;
+}
+
+.privacy-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary-500);
+  flex-shrink: 0;
+}
+
+.privacy-checkbox-label .privacy-link,
+.privacy-checkbox-label a {
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.privacy-checkbox-label .privacy-link:hover,
+.privacy-checkbox-label a:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
 }
 
 .success-message {

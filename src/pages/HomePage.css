@@ -242,6 +242,40 @@
   height: 20px;
 }
 
+.privacy-checkbox-group {
+  margin: 16px 0 8px 0;
+}
+
+.privacy-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--gray-800);
+  cursor: pointer;
+  user-select: none;
+}
+
+.privacy-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary-500);
+  flex-shrink: 0;
+}
+
+.privacy-checkbox-label a {
+  color: var(--primary-500);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.privacy-checkbox-label a:hover {
+  color: var(--primary-600);
+  text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .hero-form-container {

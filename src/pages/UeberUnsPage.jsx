@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ClockIcon, CheckIcon, StarIcon, LightningIcon, MoneyIcon, ShieldCheckIcon } from '../components/Icons';
+import { ClockIcon, CheckIcon, StarIcon, LightningIcon, MoneyIcon, ShieldCheckIcon, DocumentIcon } from '../components/Icons';
 import '../styles/shared-green-hero.css';
 import './UeberUnsPage.css';
 
@@ -10,7 +10,7 @@ function UeberUnsPage() {
       <section className="ueber-uns-hero-green">
         <div className="ueber-uns-hero-container">
           <div className="hero-badge-green">Inhabergeführt · Autoankauf Rheinberg</div>
-          <h1 className="ueber-hero-title">Wir sind AutoHD <br></br><span className="ueber-hero-title-small">Vor Ort am Niederrhein</span></h1>
+          <h1 className="ueber-hero-title">Wir sind AutoHD <br></br><span className="ueber-hero-title-small">vor Ort am Niederrhein</span></h1>
           <p className="ueber-hero-subtitle">
           Dein zuverlässiger Partner für den Autoankauf – mit persönlicher Beratung statt Hotline.
           </p>
@@ -53,42 +53,81 @@ function UeberUnsPage() {
           <h2 className="section-title">Unsere Werte</h2>
           <div className="grid-4">
             <div className="value-card">
+              <div className="value-icon">❤️</div>
+              <h3>Kundennähe</h3>
+              <p>
+              Bei AutoHD zählt, dass du dich verstanden und fair behandelt fühlst. Wir hören zu und beraten dich so, wie wir selbst beraten werden wollen.
+              </p>
+            </div>
+
+            <div className="value-card">
+              <div className="value-icon">
+                <DocumentIcon className="icon-svg" />
+              </div>
+              <h3>Transparenz</h3>
+              <p>
+              Du bekommst bei uns klare Aussagen – ohne versteckte Bedingungen. 
+              Unsere Angebote sind nachvollziehbar und passen zur Marktlage und zum Zustand deines Autos.
+              </p>
+            </div>
+
+            <div className="value-card">
               <div className="value-icon">
                 <ShieldCheckIcon className="icon-svg" />
               </div>
               <h3>Vertrauen</h3>
               <p>
-                Transparenz und Ehrlichkeit sind die Grundlage unserer Arbeit. 
-                Bei uns gibt es keine versteckten Kosten oder böse Überraschungen.
+              Ehrlichkeit und Verlässlichkeit sind die Grundlage unserer Arbeit. Bei uns gibt es keine versteckten Kosten, 
+              keine unangenehmen Überraschungen, keinen Verkaufsdruck.
               </p>
             </div>
 
+            <div className="value-card">
+              <div className="value-icon">
+                <StarIcon className="icon-svg" filled />
+              </div>
+              <h3>Professionalität</h3>
+              <p>
+              Jahrelange Erfahrung und Fachwissen – kombiniert mit pünktlichem, höflichem und gepflegtem Service. 
+              Unser Ziel ist, dass du uns weiterempfiehlst und gerne wiederkommst.
+              </p>
+            </div>
+          </div>
+
+          <h2 className="ueber-values-subtitle">Unser Service-Versprechen</h2>
+          <div className="grid-4">
             <div className="value-card">
               <div className="value-icon">
                 <LightningIcon className="icon-svg" />
               </div>
               <h3>Schnelligkeit</h3>
               <p>
-                Wir wissen, dass Ihre Zeit wertvoll ist. Deshalb wickeln wir 
-                alles schnell und unkompliziert für Sie ab.
+                Wir wissen, dass deine Zeit wertvoll ist. Wir melden uns zeitnah und bringen den Verkauf schnell auf den Punkt. Und damit du noch mehr Zeit sparst, holen wir dein Auto auf Wunsch bei dir ab.
               </p>
             </div>
-
             <div className="value-card">
-              <div className="value-icon">💎</div>
+              <div className="value-icon">
+                <ClockIcon className="icon-svg" />
+              </div>
+              <h3>Flexibilität</h3>
+              <p>
+                Wir richten uns nach deinen Wünschen und finden individuelle Lösungen für jeden Kunden. Termine, Ablauf und Übergabe passen wir an deinen Alltag an – auch nach Feierabend und am Wochenende.
+              </p>
+            </div>
+            <div className="value-card">
+              <div className="value-icon">
+                <StarIcon className="icon-svg" filled />
+              </div>
               <h3>Qualität</h3>
               <p>
-                Höchste Standards bei der Fahrzeugbewertung und professionelle 
-                Abwicklung in allen Bereichen.
+                Bei uns erlebst du eine professionelle Abwicklung – von der ersten Kontaktaufnahme bis zur Fahrzeugübergabe. Saubere Abläufe, klare Kommunikation und hohe Standards in jedem Schritt.
               </p>
             </div>
-
             <div className="value-card">
-              <div className="value-icon">❤️</div>
-              <h3>Kundenzufriedenheit</h3>
+              <div className="value-icon">📍</div>
+              <h3>Fester Standort</h3>
               <p>
-                Ihre Zufriedenheit ist unser oberstes Ziel. Das zeigen auch 
-                unsere über 5.000 zufriedenen Kunden.
+                Wir sind persönlich erreichbar – an unserem festen Standort in Rheinberg am Niederrhein. Bei uns hast du direkten Kontakt zum Inhaber statt anonymer Hotline.
               </p>
             </div>
           </div>
@@ -97,11 +136,12 @@ function UeberUnsPage() {
 
       <section className="section ueber-advantages-section">
         <div className="container">
+          <p className="ueber-advantages-label">Autoankauf Rheinberg</p>
           <h2 className="section-title">So läuft dein Autoverkauf bei uns</h2>
           <div className="grid-2">
             <div className="advantage-card">
               <div className="advantage-number">01</div>
-              <h3>1. Klare Bewertung</h3>
+              <h3>Klare Bewertung</h3>
               <p>
               Du bekommst eine realistische Einschätzung am Markt – nachvollziehbar erklärt.
 
@@ -184,7 +224,7 @@ function UeberUnsPage() {
           <div className="cta-content">
             <h2 className="cta-title">Bereit für den stressfreien Autoverkauf?</h2>
             <p className="cta-text">
-              Lehnen Sie sich zurück - wir kommen zu Ihnen und holen Ihr Auto ab!
+            Lehn dich zurück - wir kommen zu dir und holen dein Auto ab!
             </p>
             <div className="cta-buttons">
               <Link to="/bewertung" className="btn btn-primary btn-large">

@@ -1,0 +1,83 @@
+.impressum-page {
+  min-height: 100vh;
+  background: white;
+  padding-top: 90px;
+}
+
+.impressum-section {
+  padding: var(--spacing-md) 0;
+}
+
+.impressum-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.impressum-main-title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.impressum-simple-block {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.impressum-simple-block h2 {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.impressum-simple-block h2.impressum-h2-normal {
+  font-weight: 400;
+}
+
+.impressum-simple-block p strong {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.impressum-simple-block p {
+  color: var(--gray-700);
+  line-height: 1.7;
+  margin-bottom: 4px;
+}
+
+.impressum-simple-block p:last-of-type {
+  margin-bottom: 0;
+}
+
+.impressum-simple-block a {
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-base);
+}
+
+.impressum-simple-block a:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .impressum-page {
+    padding-top: 70px;
+  }
+
+  .impressum-simple-block {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .impressum-simple-block h2 {
+    font-size: 1em;
+  }
+
+  .impressum-simple-block p {
+    font-size: 0.95rem;
+  }
+}

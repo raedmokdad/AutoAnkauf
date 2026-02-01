@@ -17,7 +17,8 @@ function BewertungPage() {
     mileage: '',
     condition: '',
     email: '',
-    phone: ''
+    phone: '',
+    acceptedPrivacy: false
   });
 
   const [availableModels, setAvailableModels] = useState([]);
@@ -85,8 +86,8 @@ function BewertungPage() {
   }, [prefilledData]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
 
     if (name === 'makeId' && value) {
       const selectedMake = makes.find(m => m.id === parseInt(value));
@@ -164,7 +165,8 @@ function BewertungPage() {
           mileage: '',
           condition: '',
           email: '',
-          phone: ''
+          phone: '',
+          acceptedPrivacy: false
         });
         setAvailableModels([]);
         setAvailableYears([]);
@@ -194,10 +196,10 @@ function BewertungPage() {
         <div className="bewertung-split-container">
           {/* Left Side - Info */}
           <div className="bewertung-left-content">
-            <div className="hero-badge-green">✓ 100% Kostenlos & Unverbindlich</div>
-            <h1 className="bewertung-title-white">Kostenlose KFZ-Bewertung Online</h1>
+            <div className="hero-badge-green">Online Autowert ermitteln</div>
+            <h1 className="bewertung-title-white">Autobewertung kostenlos & unverbindlich</h1>
             <p className="bewertung-subtitle-white">
-              Lassen Sie Ihr Fahrzeug professionell bewerten - unser Team erstellt eine individuelle Bewertung meist noch am selben Tag
+Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
             </p>
             <ul className="bewertung-features-list">
               <li>
@@ -231,7 +233,7 @@ function BewertungPage() {
           <div className="bewertung-right-form">
             <div className="bewertung-form-box-white">
               <h2 className="form-title-bewertung">Jetzt Auto bewerten</h2>
-              <p className="form-subtitle-bewertung">Alle Felder ausfüllen für genaue Bewertung</p>
+              <p className="form-subtitle-bewertung">Fahrinformationen eingeben & Bewertung anfordern.</p>
               
               <form onSubmit={handleSubmit} className="bewertung-compact-form">
                 <div className="bewertung-form-grid">
@@ -353,7 +355,20 @@ function BewertungPage() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn-bewertung-orange" disabled={isSubmitting}>
+                <div className="privacy-checkbox-group">
+                  <label className="privacy-checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="acceptedPrivacy"
+                      checked={formData.acceptedPrivacy}
+                      onChange={handleChange}
+                      required
+                    />
+                    <span>Ich akzeptiere die <a href="/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> *</span>
+                  </label>
+                </div>
+
+                <button type="submit" className="btn-bewertung-orange" disabled={isSubmitting || !formData.acceptedPrivacy}>
                   {isSubmitting ? 'Wird gesendet...' : 'Jetzt kostenlos bewerten'}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -457,6 +472,50 @@ function BewertungPage() {
         </div>
       </section>
 
+      <section className="section bewertung-service-section">
+        <div className="container">
+          <h1 className="bewertung-service-headline">Dein Autoverkauf bei AutoHD<br></br>mehr Service, weniger Aufwand</h1>
+          <p className="bewertung-service-subtitle">Weil unser Service wirklich den Unterschied macht.</p>
+          <div className="grid-4">
+            <div className="bewertung-advantage-card">
+              <h3>Kostenlose Autobewertung</h3>
+              <p>Erfahre den aktuellen Marktwert deines Autos – unverbindlich und ohne Kaufzwang.</p>
+            </div>
+            <div className="bewertung-advantage-card">
+              <h3>Schnelle Rückmeldung & Terminvergabe</h3>
+              <p>Wir melden uns zeitnah und finden schnell einen passenden Termin.</p>
+            </div>
+            <div className="bewertung-advantage-card">
+              <h3>Transparente & faire Preise</h3>
+              <p>Klare Einschätzung statt Spielchen – du bekommst ein nachvollziehbares Angebot.</p>
+            </div>
+            <div className="bewertung-advantage-card">
+              <h3>Kostenlose Abholung & Abmeldung</h3>
+              <p>Wir holen dein Auto kostenlos ab. Auf Wunsch übernehmen wir auch die Abmeldung und ihre Gebühren.</p>
+            </div>
+          </div>
+          <h1 className="bewertung-service-headline bewertung-service-headline-more">… und noch viel mehr.</h1>
+          <div className="grid-4">
+            <div className="bewertung-advantage-card">
+              <h3>Flexible Termine – auch nach Feierabend</h3>
+              <p>Damit der Verkauf in deinen Alltag passt – nicht umgekehrt.</p>
+            </div>
+            <div className="bewertung-advantage-card">
+              <h3>Persönlicher Ansprechpartner</h3>
+              <p>Du hast direkten Kontakt – ohne Callcenter und ohne Standardabläufe.</p>
+            </div>
+            <div className="bewertung-advantage-card">
+              <h3>Fester Standort – auch nach dem Verkauf für dich da</h3>
+              <p>Wir sind lokal erreichbar und bleiben bei Fragen ansprechbar – auch nach dem Abschluss.</p>
+            </div>
+            <div className="bewertung-advantage-card">
+              <h3>Wir kommen zu dir – du sparst Zeit</h3>
+              <p>Kein Anfahrtsstress: Wir kommen zu dir, damit du Zeit für Wichtiges hast.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="section faq-main-section">
         <div className="container">
           <h2 className="section-title">Häufige Fragen zur Autobewertung</h2>
@@ -468,7 +527,7 @@ function BewertungPage() {
                     className="faq-question"
                     onClick={() => setOpenFAQIndex(openFAQIndex === 0 ? null : 0)}
                   >
-                    <span>1) Ist die Autobewertung wirklich kostenlos & unverbindlich?</span>
+                    <span>Ist die Autobewertung wirklich kostenlos & unverbindlich?</span>
                     <span className="faq-icon">{openFAQIndex === 0 ? '−' : '+'}</span>
                   </button>
                   <div className={`faq-answer ${openFAQIndex === 0 ? 'show' : ''}`}>
@@ -481,7 +540,7 @@ function BewertungPage() {
                     className="faq-question"
                     onClick={() => setOpenFAQIndex(openFAQIndex === 1 ? null : 1)}
                   >
-                    <span>2) Wie schnell bekomme ich meinen Fahrzeugwert bzw. eine Rückmeldung?</span>
+                    <span>Wie schnell bekomme ich meinen Fahrzeugwert bzw. eine Rückmeldung?</span>
                     <span className="faq-icon">{openFAQIndex === 1 ? '−' : '+'}</span>
                   </button>
                   <div className={`faq-answer ${openFAQIndex === 1 ? 'show' : ''}`}>
@@ -494,7 +553,7 @@ function BewertungPage() {
                     className="faq-question"
                     onClick={() => setOpenFAQIndex(openFAQIndex === 2 ? null : 2)}
                   >
-                    <span>3) Welche Daten brauche ich für die Autobewertung?</span>
+                    <span>Welche Daten brauche ich für die Autobewertung?</span>
                     <span className="faq-icon">{openFAQIndex === 2 ? '−' : '+'}</span>
                   </button>
                   <div className={`faq-answer ${openFAQIndex === 2 ? 'show' : ''}`}>
@@ -507,7 +566,7 @@ function BewertungPage() {
                     className="faq-question"
                     onClick={() => setOpenFAQIndex(openFAQIndex === 3 ? null : 3)}
                   >
-                    <span>4) Wie wird der Marktwert meines Autos ermittelt?</span>
+                    <span>Wie wird der Marktwert meines Autos ermittelt?</span>
                     <span className="faq-icon">{openFAQIndex === 3 ? '−' : '+'}</span>
                   </button>
                   <div className={`faq-answer ${openFAQIndex === 3 ? 'show' : ''}`}>
@@ -520,7 +579,7 @@ function BewertungPage() {
                     className="faq-question"
                     onClick={() => setOpenFAQIndex(openFAQIndex === 4 ? null : 4)}
                   >
-                    <span>5) Muss ich nach der Bewertung verkaufen?</span>
+                    <span>Muss ich nach der Bewertung verkaufen?</span>
                     <span className="faq-icon">{openFAQIndex === 4 ? '−' : '+'}</span>
                   </button>
                   <div className={`faq-answer ${openFAQIndex === 4 ? 'show' : ''}`}>

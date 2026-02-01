@@ -1,0 +1,122 @@
+.datenschutz-page {
+  background: white;
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.datenschutz-section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.datenschutz-main-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.datenschutz-simple-block {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.datenschutz-simple-block h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+.datenschutz-simple-block h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.datenschutz-simple-block h4 {
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.datenschutz-simple-block p {
+  color: var(--gray-700);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-md);
+  font-size: 0.95rem;
+}
+
+.datenschutz-simple-block ul {
+  color: var(--gray-700);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-md);
+  margin-left: var(--spacing-lg);
+  font-size: 0.95rem;
+}
+
+.datenschutz-simple-block li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.datenschutz-simple-block a {
+  color: var(--primary-600);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.datenschutz-simple-block a:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+.datenschutz-wichtig {
+  background: var(--gray-50);
+  padding: var(--spacing-md);
+  border-left: 4px solid var(--primary-500);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+}
+
+.datenschutz-stand {
+  text-align: center;
+  font-style: italic;
+  color: var(--gray-600);
+  margin-top: var(--spacing-xl);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .datenschutz-page {
+    padding-top: 60px;
+  }
+
+  .datenschutz-section {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .datenschutz-main-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .datenschutz-simple-block h2 {
+    font-size: 1.3em;
+  }
+
+  .datenschutz-simple-block h3 {
+    font-size: 1.1em;
+  }
+
+  .datenschutz-simple-block ul {
+    margin-left: var(--spacing-md);
+  }
+}

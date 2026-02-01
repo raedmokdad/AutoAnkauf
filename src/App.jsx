@@ -12,6 +12,8 @@ import AnkaufPage from './pages/AnkaufPage';
 import UeberUnsPage from './pages/UeberUnsPage';
 import FAQPage from './pages/FAQPage';
 import KontaktPage from './pages/KontaktPage';
+import ImpressumPage from './pages/ImpressumPage';
+import DatenschutzPage from './pages/DatenschutzPage';
 import AngebotPage from './pages/AngebotPage';
 // Marken-Seiten
 import BmwVerkaufenPage from './pages/marken/BmwVerkaufenPage';
@@ -51,6 +53,8 @@ function App() {
               <Route path="/ueber-uns" element={<UeberUnsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/kontakt" element={<KontaktPage />} />
+              <Route path="/impressum" element={<ImpressumPage />} />
+              <Route path="/datenschutz" element={<DatenschutzPage />} />
               
               {/* Marken-Seiten */}
               <Route path="/marken/bmw-verkaufen" element={<BmwVerkaufenPage />} />

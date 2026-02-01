@@ -828,3 +828,12 @@
   letter-spacing: 0.1em;
   margin: 0 4px;
 }
+
+.steps-highlight-black {
+  display: inline-block;
+  font-size: 1.05em;
+  font-weight: 400;
+  color: var(--gray-900);
+  letter-spacing: 0.1em;
+  margin: 0 4px;
+}

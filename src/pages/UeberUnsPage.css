@@ -221,6 +221,17 @@
   font-size: 0.95rem;
 }
 
+.ueber-values-subtitle {
+  text-align: center;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-top: var(--spacing-3xl);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
 @media (max-width: 768px) {
   .ueber-uns-hero {
     padding: var(--spacing-2xl) var(--spacing-md);
@@ -352,6 +363,16 @@
   letter-spacing: 0.05em;
 }
 
+/* Label über „So läuft dein Autoverkauf bei uns“ – gleiche Größe wie Kachel-Titel (z. B. Klare Bewertung) */
+.ueber-advantages-label {
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: -0.01em;
+}
+
 /* Advantage Cards - Warum uns wählen */
 .advantage-card {
   background: white;
@@ -447,6 +468,10 @@
 }
 
 @media (max-width: 768px) {
+  .ueber-advantages-label {
+    font-size: 1.2em;
+  }
+
   .advantage-card {
     padding: var(--spacing-xl);
   }

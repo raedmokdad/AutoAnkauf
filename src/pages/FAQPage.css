@@ -3,6 +3,15 @@
   background: linear-gradient(180deg, var(--gray-50) 0%, white 100%);
 }
 
+/* Weniger Abstand zwischen Hero (Header) und FAQ-Fragen */
+.faq-page .faq-hero-green {
+  padding-bottom: 48px;
+}
+.faq-page .section.faq-main-section {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
 .faq-hero {
   position: relative;
   background: linear-gradient(180deg, #f8fafb 0%, #ffffff 100%);
@@ -183,7 +192,7 @@
   font-weight: 800;
   color: var(--gray-900);
   letter-spacing: -0.01em;
-  margin: 0;
+  margin: 0 0 var(--spacing-xl) 0;
 }
 
 .faq-list {
@@ -234,6 +243,10 @@
   color: var(--primary-600);
 }
 
+.faq-question span:first-of-type {
+  white-space: pre-line;
+}
+
 .faq-question-text {
   flex: 1;
   text-align: left;
@@ -280,6 +293,7 @@
 
 .faq-answer p {
   margin: 0;
+  white-space: pre-line;
 }
 
 .faq-answer-content {
@@ -317,8 +331,12 @@
 }
 
 /* CTA Section */
+.faq-cta-section {
+  padding-top: 0;
+}
+
 .faq-cta {
-  margin-top: var(--spacing-3xl);
+  margin-top: 0;
   background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
   border-radius: var(--radius-xl);
   padding: var(--spacing-2xl);

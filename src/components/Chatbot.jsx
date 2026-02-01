@@ -7,7 +7,7 @@ function Chatbot() {
   const [messages, setMessages] = useState([
     {
       type: 'bot',
-      text: 'Hallo! 👋 Ich bin Ihr Auto-Ankauf-Assistent.\n\nIch helfe Ihnen gerne bei:\n• 🚗 Fahrzeugbewertung (kostenlos)\n• 💰 Preisermittlung\n• 🚚 Abholung & Prozess\n• 📋 Fragen & Dokumente\n\nWie kann ich Ihnen helfen?'
+      text: 'Hallo! 👋 Ich bin dein Auto-Ankauf-Assistent von AutoHD.\n\nIch helfe dir gerne bei:\n• 🚗 Kostenlose Fahrzeugbewertung\n• 💰 Faire Preisermittlung\n• 🚚 Kostenlose Abholung & Abmeldung\n• 📋 Fragen zu Dokumenten & Ablauf\n\nWie kann ich dir helfen?'
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -33,86 +33,86 @@ function Chatbot() {
     // Unternehmensinformationen
     firma: {
       keywords: ['firma', 'unternehmen', 'wer seid ihr', 'über euch', 'geschichte', 'erfahrung', 'team'],
-      response: '🏢 ARZ Delivery & Automobile\n\n👨‍💼 Leitung: Hussein Hajj Sleiman\n📍 Standort: Rheinberg\n⏱️ Seit 2009 (15+ Jahre Erfahrung)\n⭐ 5.000+ zufriedene Kunden\n📊 4.8/5 Sterne Bewertung\n\nWir sind Ihr vertrauensvoller Partner für den stressfreien Autoverkauf - bundesweit mit kostenloser Abholung!'
+      response: '🏢 AutoHD - AutoAnkauf Rheinberg\n\n👨‍💼 Inhaber: Hussein Hajj Sleiman\n📍 Sauerfeldstraße 4, 47495 Rheinberg\n🌍 Service: Rheinberg & Umkreis 100 km\n⭐ Persönlicher Service direkt vom Inhaber\n💎 Faire Preise & transparente Abwicklung\n\nDein zuverlässiger Partner für den Autoankauf in Rheinberg und am gesamten Niederrhein!'
     },
     
-    // Verkaufsprozess (3 Schritte)
+    // Verkaufsprozess (4 Schritte)
     prozess: {
       keywords: ['prozess', 'ablauf', 'wie funktioniert', 'schritte', 'vorgang', 'wie läuft', 'verkaufsablauf'],
-      response: '✅ So einfach verkaufen Sie Ihr Auto:\n\n1️⃣ BEWERTUNG (2 Min.)\nOnline-Formular ausfüllen mit Fahrzeugdaten\n\n2️⃣ ANGEBOT (24h)\nFaires Angebot innerhalb von 24 Stunden\n\n3️⃣ ABHOLUNG & ZAHLUNG\n• Wir kommen zu Ihnen (kostenlos!)\n• Vor-Ort-Besichtigung\n• Sofort-Auszahlung\n• Fertig!\n\nSie müssen nirgendwo hinfahren! 🚗✨'
+      response: '✅ 1 . 2 . 3 Dein Geld ist da! Das sind die Schritte:\n\n1️⃣ KOSTENLOSE FAHRZEUGBEWERTUNG\nFülle das Formular in wenigen Minuten aus oder ruf uns an. Wir melden uns zeitnah mit einem fairen Kaufangebot.\n\n2️⃣ TERMIN AN DEINEM WUNSCHORT\nWir vereinbaren einen Termin und schauen uns dein Auto an – bei dir oder bei uns in Rheinberg.\n\n3️⃣ VERKAUF & SOFORTIGE AUSZAHLUNG\nTransparenter Verkauf mit Kaufvertrag. Auszahlung sofort – bar oder per Überweisung.\n\n4️⃣ ABHOLUNG & ABMELDUNG – KOSTENFREI\nAuf Wunsch holen wir dein Auto kostenlos ab (Umkreis 100 km) und kümmern uns um die Abmeldung.\n\nKeine Inserate • Kein Hin- und her • Einfach verkaufen. Fertig.'
     },
 
     // Bewertung & Preis
     bewertung: {
       keywords: ['bewert', 'schätz', 'einschätz', 'berechnen', 'ermittel', 'preis ermittlung'],
-      response: '📊 KOSTENLOSE FAHRZEUGBEWERTUNG\n\n✓ Dauer: Nur 2 Minuten\n✓ Ergebnis: Sofort\n✓ Kosten: 100% kostenlos\n✓ Bindung: Unverbindlich\n\n🔍 Wir berücksichtigen:\n• Marke & Modell\n• Baujahr & Kilometerstand\n• Zustand (innen & außen)\n• Ausstattung\n• Scheckheftpflege\n• Aktueller Marktwert\n\n👉 Jetzt starten: Klicken Sie unten auf "Jetzt bewerten"!'
+      response: '📊 KOSTENLOSE AUTOBEWERTUNG\n\n✓ Schnell: Wenige Minuten\n✓ Unverbindlich: Ohne Kaufzwang\n✓ Kostenlos: Kompletter Service kostenfrei\n✓ Fair: Marktgerechte Preise\n\n🔍 Wir berücksichtigen:\n• Marke, Modell & Baujahr\n• Kilometerstand\n• Fahrzeugzustand\n• Ausstattung & Sonderausstattung\n• Scheckheftpflege\n• Aktuelle Nachfrage\n\n👉 Jetzt starten: Klick unten auf "Jetzt bewerten"!'
     },
 
     preisfaktoren: {
       keywords: ['preis berechnung', 'preisfaktoren', 'was beeinflusst', 'preis zusammensetzung', 'bewertungsfaktoren'],
-      response: '💰 PREISERMITTLUNG - Das fließt ein:\n\n📋 Hauptfaktoren:\n• Marke & Modell (Beliebtheit)\n• Alter / Baujahr\n• Kilometerstand\n• Allgemeiner Zustand\n\n⭐ Wertsteigernd:\n• Scheckheftgepflegt\n• Sonderausstattung (Navi, Leder, etc.)\n• Unfallfrei\n• 1. Hand\n• Vollausstattung\n\n📉 Wertmindernd:\n• Unfallschäden\n• Hoher Kilometerstand\n• Fehlende Wartung\n• Rost oder Lackschäden\n\nWir bieten faire Preise basierend auf aktuellen Marktdaten!'
+      response: '💰 PREISERMITTLUNG - Diese Faktoren beeinflussen den Preis:\n\n📋 Hauptfaktoren:\n• Alter des Fahrzeugs\n• Kilometerstand\n• Zustand (innen & außen)\n• Scheckheftpflege\n• Ausstattung\n• Aktuelle Marktnachfrage\n• Eventuelle Schäden oder Mängel\n\n⭐ Wertsteigernd:\n• Hochwertige Sonderausstattung (Ledersitze, Schiebedach)\n• Scheckheftgepflegt\n• Unfallfrei\n• Gepflegter Zustand\n\n📉 Wertmindernd:\n• Unfallschäden\n• Hoher Kilometerstand\n• Fehlende Wartungsnachweise\n• Technische Mängel\n\nFaire Bewertung basierend auf aktuellen Marktdaten!'
     },
 
     // Abholung & Transport
     abholung: {
       keywords: ['abhol', 'komm', 'bring', 'transport', 'liefern', 'hinfahren', 'zu mir', 'vor ort'],
-      response: '🚚 KOSTENLOSE BUNDESWEITE ABHOLUNG!\n\n✅ Unser Service:\n• Wir kommen zu Ihnen nach Hause\n• Deutschlandweit (überall!)\n• 100% kostenlos\n• Flexibler Wunschtermin\n• Keine Filiale nötig\n\n⏱️ Zeitrahmen:\n• Termin: 2-5 Werktage nach Zusage\n• Sie bestimmen den Tag\n• Auch am Wochenende möglich\n\n📍 Abholorte:\n• Zu Hause\n• Arbeitsstelle\n• Wunschort nach Vereinbarung\n\nMaximale Bequemlichkeit für Sie!'
+      response: '🚚 KOSTENLOSE ABHOLUNG & ABTRANSPORT!\n\n✅ Unser Service:\n• Wir kommen zu dir (im Umkreis 100 km)\n• 100% kostenlos - keine Anfahrtskosten\n• Flexibler Wunschtermin\n• Auch am Wochenende möglich\n• Nicht verkehrstüchtige Autos werden ebenso kostenfrei abtransportiert\n\n📍 Service-Gebiet:\n• Rheinberg & Umgebung\n• Moers, Wesel, Dinslaken, Duisburg\n• Gesamter Niederrhein\n• Umkreis 100 km rund um Rheinberg\n\n⏱️ Ablauf:\n• Termin vereinbaren\n• Wir kommen zu dir\n• Besichtigung vor Ort\n• Sofortige Auszahlung\n\nMaximale Bequemlichkeit für dich!'
     },
 
     standort: {
       keywords: ['standort', 'adresse', 'wo seid', 'stadt', 'rheinberg', 'nähe', 'region', 'filiale'],
-      response: '📍 ARZ Delivery & Automobile\n\n🏢 Hauptsitz: Rheinberg, NRW\n\n🚚 ABER: Wir holen DEUTSCHLANDWEIT ab!\n\nEgal wo Sie sind:\n• Berlin\n• München\n• Hamburg\n• Köln\n• Alle anderen Städte\n\n→ Sie müssen NICHT zu uns kommen!\n→ Wir kommen zu Ihnen - kostenlos!\n\nKeine Anfahrt, kein Stress. Alles bequem von zu Hause aus!'
+      response: '📍 AutoHD - AutoAnkauf Rheinberg\n\n🏢 Unser Standort:\nSauerfeldstraße 4\n47495 Rheinberg\n\n🌍 Service-Gebiet:\n• Rheinberg & Umkreis 100 km\n• Moers, Wesel, Dinslaken\n• Duisburg & Umgebung\n• Gesamter Niederrhein\n\n🚚 Kostenlose Abholung:\nIm Umkreis von 100 km rund um Rheinberg holen wir dein Auto kostenlos ab!\n\n✅ Du kannst auch zu uns kommen:\nTermin vereinbaren und direkt zu uns nach Rheinberg kommen.\n\nFester Standort = Persönlicher Ansprechpartner!'
     },
 
     // Kosten
     kosten: {
       keywords: ['kostenlos', 'gratis', 'umsonst', 'gebühr', 'bezahl', 'kosten', 'geld ausgeben', 'teuer'],
-      response: '💯 ALLES 100% KOSTENLOS!\n\n✅ Kostenfrei für Sie:\n• Online-Bewertung\n• Telefonische Beratung\n• Angebotserstellung\n• Vor-Ort-Besichtigung\n• Bundesweite Abholung\n• Fahrzeugprüfung\n• Alle Formalitäten\n• Kaufvertrag\n\n❌ KEINE:\n• Versteckten Kosten\n• Bearbeitungsgebühren\n• Abholkosten\n• Sonstige Gebühren\n\nSie zahlen NICHTS - wir zahlen SIE! 💰'
+      response: '💯 ALLES 100% KOSTENLOS!\n\n✅ Kostenfrei für dich:\n• Kostenlose Autobewertung\n• Unverbindliches Angebot\n• Besichtigung vor Ort\n• Abholung (Umkreis 100 km)\n• Abtransport (auch nicht verkehrstüchtig)\n• Abmeldung bei der Zulassungsstelle\n• Alle Abmeldegebühren\n• Kaufvertrag & Formalitäten\n\n❌ KEINE:\n• Versteckten Kosten\n• Bearbeitungsgebühren\n• Abholkosten\n• Sonstige Gebühren\n\nDu zahlst NICHTS - wir zahlen DICH! 💰'
     },
 
     // Dokumente & Unterlagen
     dokumente: {
       keywords: ['dokument', 'papier', 'brief', 'schein', 'unterlagen', 'brauche', 'benötig', 'mitbring', 'papiere'],
-      response: '📋 BENÖTIGTE DOKUMENTE\n\n📱 Für Online-Bewertung:\n→ Nur Fahrzeugdaten (keine Dokumente!)\n\n📄 Bei Verkauf/Übergabe:\n✓ Fahrzeugbrief (Zulassungsbescheinigung Teil II)\n✓ Fahrzeugschein (Zulassungsbescheinigung Teil I)\n✓ Alle Fahrzeugschlüssel\n✓ Personalausweis (gültig)\n✓ Serviceheft (falls vorhanden)\n✓ TÜV-Berichte (falls vorhanden)\n✓ Reparaturrechnungen (optional)\n\n💡 Tipp: Je mehr Unterlagen, desto besser die Bewertung!'
+      response: '📋 BENÖTIGTE UNTERLAGEN\n\n📱 Für Bewertung:\n→ Nur Fahrzeugdaten (keine Dokumente nötig!)\n\n📄 Bei Verkauf/Übergabe:\n✅ Pflicht:\n• Fahrzeugbrief (Zulassungsbescheinigung Teil II)\n• Fahrzeugschein (Zulassungsbescheinigung Teil I)\n• Alle Fahrzeugschlüssel\n• Gültiger Personalausweis oder Reisepass\n\n📖 Wenn vorhanden (hilfreich):\n• Serviceheft\n• Nachweise der letzten Hauptuntersuchung (HU)\n• Rechnungen/Belege zu Reparaturen\n\n💡 Fehlt ein Dokument? Sprich uns an – wir finden oft eine Lösung!'
     },
 
     // Zeit & Dauer
     zeit: {
       keywords: ['dauer', 'schnell', 'lange', 'zeit', 'wann', 'termin', 'wartezeit', 'wie lange'],
-      response: '⚡ ZEITÜBERSICHT - Super schnell!\n\n1️⃣ Online-Bewertung:\n→ 2 Minuten Formular\n→ Sofortiges Ergebnis\n\n2️⃣ Angebotsabgabe:\n→ Innerhalb 24 Stunden\n→ Oft schon nach wenigen Stunden\n\n3️⃣ Abholtermin:\n→ 2-5 Werktage\n→ Nach Ihrem Wunschtermin\n\n4️⃣ Vor-Ort-Besichtigung:\n→ Ca. 30-45 Minuten\n\n5️⃣ Auszahlung:\n→ SOFORT bei Übergabe!\n\nKeine langen Wartezeiten - alles schnell & unkompliziert!'
+      response: '⚡ ZEITÜBERSICHT - Schnell & unkompliziert!\n\n1️⃣ Bewertung:\n→ Wenige Minuten Formular ausfüllen\n→ Zeitnahe Rückmeldung (meist innerhalb 24h)\n\n2️⃣ Termin:\n→ Wir finden schnell einen passenden Termin\n→ Auch nach Feierabend & am Wochenende möglich\n\n3️⃣ Besichtigung vor Ort:\n→ Ca. 30-45 Minuten\n→ Wir kommen zu dir oder du zu uns\n\n4️⃣ Auszahlung:\n→ SOFORT nach Vertragsunterzeichnung!\n→ Bar oder per Überweisung (meist 24h)\n\nSchnelligkeit ist uns wichtig - deine Zeit ist wertvoll!'
     },
 
     // Zahlung & Auszahlung
     zahlung: {
       keywords: ['zahlung', 'auszahl', 'geld', 'bezahl', 'überweis', 'bar', 'wann geld', 'bekomme geld'],
-      response: '💰 SOFORT-AUSZAHLUNG!\n\n✅ Bei Fahrzeugübergabe erhalten Sie:\n→ Sofortige Bezahlung\n→ Keine Wartezeit\n\n💵 Zahlungsmethoden:\n• BAR in die Hand (beliebteste Option)\n• Banküberweisung (nach Vereinbarung)\n• Verrechnungsscheck\n\n🔒 Sicher & Zuverlässig:\n• Ordentlicher Kaufvertrag\n• Vollständige Abwicklung\n• Keine versteckten Abzüge\n\nSie bekommen den vereinbarten Preis - zu 100%!'
+      response: '💰 SOFORT-AUSZAHLUNG!\n\n✅ Nach Vertragsunterzeichnung:\n→ Sofortige Auszahlung\n→ Keine Wartezeit\n\n💵 Zahlungsmethoden:\n• BAR vor Ort\n• Banküberweisung (meist 24h auf deinem Konto)\n• Sofortüberweisung möglich\n\n🔒 Sicher & Zuverlässig:\n• Schriftlicher Kaufvertrag\n• Transparente Abwicklung\n• Keine versteckten Abzüge\n• Fester Ansprechpartner\n\nDu bekommst den vereinbarten Preis - zu 100%!'
     },
 
     // Fahrzeugzustände
     zustand: {
       keywords: ['defekt', 'kaputt', 'schaden', 'unfall', 'zustand', 'mängel', 'problem', 'motor', 'getriebe'],
-      response: '🔧 WIR KAUFEN ALLE AUTOS!\n\n✅ Auch bei:\n• ⚙️ Motorschaden\n• 🔩 Getriebeschaden\n• 💥 Unfallschäden\n• 🚫 Ohne TÜV / AU\n• 🦀 Rost & Blechschäden\n• 🔋 Elektronikdefekten\n• ⏰ Älteren Fahrzeugen\n• 🏚️ Standschäden\n• 🚗 Export-Fahrzeugen\n\n💡 Wichtig:\n→ Bitte Zustand ehrlich angeben!\n→ Wir bewerten fair\n→ Kein Auto ist zu alt/kaputt\n\nJeder Wagen hat seinen Wert - auch Ihres!'
+      response: '🔧 WIR KAUFEN ALLE FAHRZEUGTYPEN!\n\n✅ Auch bei:\n• ⚙️ Motorschaden\n• 🔩 Getriebeschaden\n• 💥 Unfallschäden / Totalschaden\n• 🚫 Ohne TÜV\n• 🚗 Hoher Laufleistung\n• 📋 Ohne Zulassung\n• 🏚️ Nicht mehr fahrbereite Autos\n• 🚚 Defektautos\n• 🌍 Export-Fahrzeuge\n\n💡 Wichtig:\n→ Bitte Zustand ehrlich angeben!\n→ Wir bewerten fair - auch mit Mängeln\n→ Kostenloser Abtransport (auch nicht verkehrstüchtig)\n\nJedes Fahrzeug hat seinen Wert - auch deins!'
     },
 
     tuev: {
       keywords: ['tüv', 'tuv', 'hu', 'au', 'hauptuntersuchung', 'abgasuntersuchung', 'plakette'],
-      response: '🚫 AUTO OHNE TÜV VERKAUFEN?\n\n✅ Kein Problem - wir kaufen auch:\n• Ohne gültigen TÜV\n• Ohne AU (Abgasuntersuchung)\n• Abgelaufene HU\n• Durchgefallen bei Prüfung\n\n💡 Hinweise:\n• Beeinflusst den Preis (leicht niedriger)\n• Bitte bei Bewertung angeben\n• Wir holen trotzdem ab!\n• Keine TÜV-Vorführung nötig\n\nSelbst ohne TÜV kaufen wir Ihr Auto - fair & unkompliziert!'
+      response: '🚫 AUTO OHNE TÜV VERKAUFEN?\n\n✅ Ja, absolut! Wir kaufen auch:\n• Ohne gültigen TÜV\n• Abgelaufene Hauptuntersuchung\n• Durchgefallen bei Prüfung\n\n💡 Ablauf:\n• Zustand ehrlich bei Bewertung angeben\n• Wir erstellen dir ein passendes Angebot\n• Der Ankauf läuft genauso ab\n• Du musst keine teure HU durchführen lassen\n\n📞 Ruf uns an oder nutze die Online-Bewertung!\n\nSelbst ohne TÜV kaufen wir dein Auto - fair & unkompliziert!'
     },
 
     // Formalitäten
     abmeldung: {
       keywords: ['abmeld', 'ummeld', 'zulassung', 'kennzeichen', 'stilllegung', 'formalitäten'],
-      response: '📋 ABMELDUNG & FORMALITÄTEN\n\n✅ WIR kümmern uns um:\n• Fahrzeug-Abmeldung\n• Alle Formalitäten\n• Ummeldung auf uns\n\n❌ SIE müssen NICHTS tun!\n\n📄 Wir erstellen:\n• Ordnungsgemäßen Kaufvertrag\n• Übergabeprotokoll\n• Alle nötigen Unterlagen\n\n🔒 Rechtlich sicher:\n• Sie sind ab Übergabe raus\n• Keine Haftung mehr\n• Alles wasserdicht abgesichert\n\nEntspannt verkaufen - wir regeln alles!'
+      response: '📋 ABMELDUNG & FORMALITÄTEN\n\n✅ WIR kümmern uns um:\n• Fahrzeug-Abmeldung bei der Zulassungsstelle\n• Alle Abmeldegebühren übernehmen wir\n• Ummeldung auf uns\n• Alle Formalitäten\n\n❌ DU musst NICHTS tun!\n\n📄 Wir erstellen:\n• Ordnungsgemäßen Kaufvertrag\n• Übergabeprotokoll\n• Alle nötigen Unterlagen\n\n🔒 Rechtlich sicher:\n• Du bist ab Übergabe raus\n• Keine Haftung mehr\n• Kein Gang zur Zulassungsstelle\n• Kein Papierkram, kein Stress\n\nEntspannt verkaufen - wir regeln alles!'
     },
 
     kaufvertrag: {
       keywords: ['kaufvertrag', 'vertrag', 'unterschrift', 'rechtlich', 'absicherung'],
-      response: '📜 KAUFVERTRAG - Alles geregelt!\n\n✅ Wir erstellen:\n• Ordnungsgemäßen Kaufvertrag\n• Alle wichtigen Punkte enthalten\n• Rechtlich einwandfrei\n• Beide Seiten abgesichert\n\n📋 Inhalt:\n• Fahrzeugdaten\n• Verkäufer & Käufer\n• Kaufpreis\n• Zustand\n• Gewährleistungsausschluss\n• Übergabezeitpunkt\n\n🔒 Ihre Sicherheit:\n• Keine Haftung nach Übergabe\n• Klare Regelungen\n• Professionell & seriös\n\nAlles transparent & rechtssicher!'
+      response: '📜 KAUFVERTRAG - Transparent & rechtssicher!\n\n✅ Wir erstellen:\n• Schriftlichen Kaufvertrag\n• Alle wichtigen Punkte enthalten\n• Rechtlich einwandfrei\n• Beide Seiten abgesichert\n\n📋 Inhalt:\n• Fahrzeugdaten\n• Verkäufer & Käufer\n• Kaufpreis\n• Fahrzeugzustand\n• Gewährleistungsausschluss\n• Übergabezeitpunkt\n\n🔒 Deine Sicherheit:\n• Keine Haftung nach Übergabe\n• Klare Regelungen\n• Professionell & seriös\n• Fester Ansprechpartner\n\nAlles transparent & rechtssicher!'
     },
 
     finanzierung: {
       keywords: ['finanzierung', 'kredit', 'leasing', 'rate', 'bank', 'ablösung', 'restschuld'],
-      response: '🏦 AUTO MIT FINANZIERUNG VERKAUFEN\n\n✅ Ja, das geht!\n\n📋 So funktioniert es:\n1. Sie nennen uns die Restschuld\n2. Wir kontaktieren Ihre Bank\n3. Wir lösen die Finanzierung ab\n4. Restbetrag wird verrechnet\n\n💰 Beispiel:\n• Unser Angebot: 10.000€\n• Restschuld: 4.000€\n• Sie erhalten: 6.000€\n\n📞 Benötigt:\n• Kontakt zu Ihrer Bank\n• Restschuldnachweis\n• Fahrzeugbrief (oft bei Bank)\n\n→ Sprechen Sie uns einfach darauf an!'
+      response: '🏦 AUTO MIT FINANZIERUNG VERKAUFEN\n\n✅ Ja, wir kaufen auch finanzierte Fahrzeuge!\n\n📋 So funktioniert es:\n1. Wir kümmern uns um die Ablösung\n2. Wickeln alles direkt mit deiner Bank ab\n3. Nach Abzug der Restschuld wird der Restbetrag an dich ausgezahlt\n\n💰 Beispiel:\n• Unser Angebot: 10.000€\n• Restschuld: 4.000€\n• Du erhältst: 6.000€\n\n📞 Benötigt:\n• Unterlagen deiner Finanzierungsbank\n• Restschuldnachweis\n• Fahrzeugbrief (oft bei der Bank)\n\n✅ Dieser Service ist für dich kostenlos!\n\n→ Sprich uns einfach darauf an!'
     },
 
     // Datenschutz
@@ -123,14 +123,14 @@ function Chatbot() {
 
     // Kontakt
     kontakt: {
-      keywords: ['kontakt', 'telefon', 'anruf', 'email', 'erreichen', 'nummer', 'mail', 'frage'],
-      response: '📞 SO ERREICHEN SIE UNS\n\n☎️ Telefon:\n0176 30339020\n📅 Mo-Sa: 8:00 - 20:00 Uhr\n📅 So: Nach Vereinbarung\n\n💬 Kontaktformular:\n→ Auf unserer Website\n→ Antwort innerhalb 24h\n\n📧 E-Mail:\n→ Über Kontaktseite\n\n✅ Wir helfen gerne bei:\n• Fragen zur Bewertung\n• Terminvereinbarung\n• Spezifischen Anliegen\n• Beratung\n\nZögern Sie nicht - wir sind für Sie da!'
+      keywords: ['kontakt', 'telefon', 'anruf', 'email', 'erreichen', 'nummer', 'mail', 'frage', 'whatsapp'],
+      response: '📞 SO ERREICHST DU UNS\n\n☎️ Telefon:\n0176 30339020\n📅 Mo–Fr: 9–18 Uhr\n📅 Auch samstags erreichbar\n\n📧 E-Mail:\ninfo@autohd.de\n\n💬 WhatsApp:\n0176 30339020\n\n📍 Adresse:\nAutoHD - AutoAnkauf Rheinberg\nSauerfeldstraße 4\n47495 Rheinberg\n\n✅ Wir helfen gerne bei:\n• Fragen zur Bewertung\n• Terminvereinbarung\n• Beratung\n• Spezifischen Anliegen\n\nDirekt vom Inhaber - persönlich & kompetent!'
     },
 
-    // Marken
+    // Marken & Fahrzeugtypen
     marke: {
-      keywords: ['bmw', 'mercedes', 'audi', 'vw', 'volkswagen', 'opel', 'ford', 'skoda', 'seat', 'toyota', 'renault', 'peugeot', 'citroen', 'fiat', 'porsche', 'mazda', 'honda', 'nissan', 'hyundai', 'kia', 'volvo', 'mini', 'jeep'],
-      response: '🚗 ALLE AUTOMARKEN!\n\nWir kaufen JEDE Marke:\n✅ Deutsche: BMW, Mercedes, Audi, VW, Opel, Porsche...\n✅ Französisch: Renault, Peugeot, Citroen...\n✅ Japanisch: Toyota, Honda, Mazda, Nissan...\n✅ Koreanisch: Hyundai, Kia...\n✅ Amerikanisch: Ford, Jeep, Chevrolet...\n✅ Italienisch: Fiat, Alfa Romeo...\n✅ Alle anderen Marken\n\n💰 Faire Preise für alle!\n\nStarten Sie jetzt die kostenlose Bewertung für Ihre Marke!'
+      keywords: ['bmw', 'mercedes', 'audi', 'vw', 'volkswagen', 'opel', 'ford', 'skoda', 'seat', 'toyota', 'renault', 'peugeot', 'citroen', 'fiat', 'porsche', 'mazda', 'honda', 'nissan', 'hyundai', 'kia', 'volvo', 'mini', 'jeep', 'transporter', 'kleinbus'],
+      response: '🚗 ALLE FAHRZEUGTYPEN!\n\nWir kaufen viele Fahrzeugtypen an:\n✅ Pkw aller Marken\n✅ SUV\n✅ Transporter\n✅ Kleinbusse\n\n🔧 Auch mit:\n• Unfallschaden\n• Hoher Laufleistung\n• Motorschaden/Getriebeschaden\n• Ohne TÜV\n\n💰 Faire Angebote für alle!\n\nSprich uns einfach an – wir sagen dir schnell, was möglich ist!\n\nJetzt kostenlose Bewertung starten!'
     }
   };
 

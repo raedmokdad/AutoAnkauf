@@ -222,10 +222,23 @@
   margin-top: 8px;
 }
 
-.btn-bewertung-orange:hover {
+.btn-bewertung-orange:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(255, 107, 53, 0.4);
   background: linear-gradient(135deg, #ff5722 0%, #ff7733 100%);
+}
+
+.btn-bewertung-orange:disabled {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  color: white;
+  cursor: not-allowed;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+  opacity: 0.6;
+}
+
+.btn-bewertung-orange:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
 }
 
 .btn-bewertung-orange svg {
@@ -596,5 +609,104 @@
   .bewertung-phone-features {
     flex-direction: column;
     gap: var(--spacing-md);
+  }
+}
+
+/* Service-Kacheln wie UeberUns Advantages (grid-2, Nummer, ohne Icon) */
+.bewertung-service-section {
+  background: linear-gradient(180deg, #fefefe 0%, #f9fafb 100%);
+}
+
+.bewertung-service-headline {
+  text-align: center;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.bewertung-service-subtitle {
+  text-align: center;
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-2xl);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bewertung-service-headline-more {
+  margin-top: var(--spacing-3xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.bewertung-advantage-card {
+  background: white;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 2px solid transparent;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.bewertung-advantage-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4CAF50, #2196F3);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+}
+
+.bewertung-advantage-card:hover::before {
+  transform: scaleX(1);
+}
+
+.bewertung-advantage-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-2xl);
+  border-color: var(--primary-200);
+}
+
+.bewertung-advantage-card h3 {
+  font-size: 1.4em;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.01em;
+}
+
+.bewertung-advantage-card p {
+  color: var(--gray-600);
+  line-height: 1.7;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .bewertung-advantage-card {
+    padding: var(--spacing-xl);
+  }
+
+  .bewertung-advantage-card h3 {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .bewertung-advantage-card {
+    padding: var(--spacing-lg);
+  }
+
+  .bewertung-advantage-card p {
+    font-size: 0.95rem;
   }
 }

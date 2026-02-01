@@ -33,3 +33,4 @@ echo "<li>E-Mail-Postfach: Arzautomobileservice@gmail.com (Mitarbeiter-E-Mail)</
 echo "<li>E-Mail-Postfach: " . htmlspecialchars($_POST['email']) . " (Kunden-E-Mail)</li>";
 echo "</ul>";
 ?>
+

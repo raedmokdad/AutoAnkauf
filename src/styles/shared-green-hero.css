@@ -2,7 +2,8 @@
 .ankauf-hero-green,
 .ueber-uns-hero-green,
 .faq-hero-green,
-.kontakt-hero-green {
+.kontakt-hero-green,
+.impressum-hero-green {
   background: linear-gradient(135deg, #2d6a4f 0%, #40916c 50%, #52b788 100%);
   color: white;
   padding: 100px 20px 80px;
@@ -14,7 +15,8 @@
 .ankauf-hero-green::before,
 .ueber-uns-hero-green::before,
 .faq-hero-green::before,
-.kontakt-hero-green::before {
+.kontakt-hero-green::before,
+.impressum-hero-green::before {
   content: '';
   position: absolute;
   top: 0;
@@ -30,7 +32,8 @@
 .ankauf-hero-container,
 .ueber-uns-hero-container,
 .faq-hero-container,
-.kontakt-hero-container {
+.kontakt-hero-container,
+.impressum-hero-container {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -54,7 +57,8 @@
 .ankauf-hero-title,
 .ueber-hero-title,
 .faq-hero-title,
-.kontakt-hero-title {
+.kontakt-hero-title,
+.impressum-hero-title {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 900;
   line-height: 1.1;
@@ -65,7 +69,8 @@
 .ankauf-hero-subtitle,
 .ueber-hero-subtitle,
 .faq-hero-subtitle,
-.kontakt-hero-subtitle {
+.kontakt-hero-subtitle,
+.impressum-hero-subtitle {
   font-size: clamp(1.1rem, 2vw, 1.3rem);
   line-height: 1.6;
   margin-bottom: 40px;

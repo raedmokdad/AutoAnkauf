@@ -80,3 +80,4 @@ curl -X POST http://localhost:8000/backend/bewertung.php \
 **Problem: HTML wird als Text angezeigt**
 - Prüfen Sie, ob `Content-Type: text/html` gesetzt ist
 - Moderne E-Mail-Clients sollten HTML automatisch rendern
+

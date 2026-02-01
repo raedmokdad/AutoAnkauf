@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ClockIcon, CheckIcon, TruckIcon } from '../components/Icons';
+import { ClockIcon, CheckIcon, CarIcon } from '../components/Icons';
 import '../styles/shared-green-hero.css';
 import './KontaktPage.css';
 
@@ -9,14 +9,15 @@ function KontaktPage() {
     email: '',
     phone: '',
     subject: 'allgemein',
-    message: ''
+    message: '',
+    acceptedPrivacy: false
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const handleSubmit = async (e) => {
@@ -31,7 +32,8 @@ function KontaktPage() {
         email: '',
         phone: '',
         subject: 'allgemein',
-        message: ''
+        message: '',
+        acceptedPrivacy: false
       });
       setIsSubmitting(false);
     }, 1000);
@@ -41,23 +43,24 @@ function KontaktPage() {
     <div className="kontakt-page">
       <section className="kontakt-hero-green">
         <div className="kontakt-hero-container">
-          <div className="hero-badge-green">✓ Wir sind für Sie da</div>
-          <h1 className="kontakt-hero-title">Kontaktieren Sie uns</h1>
+          <div className="hero-badge-green">✓ Schnell erreichbar – persönlich & unkompliziert
+          </div>
+          <h1 className="kontakt-hero-title">Kontakt zu AutoHD           </h1>
           <p className="kontakt-hero-subtitle">
-            Haben Sie Fragen? Unser Team steht Ihnen gerne zur Verfügung - per Telefon, E-Mail oder persönlich
+          Hast du Fragen? Ruf uns an, schreib uns oder nutze das Formular – Wir sind für dich da
           </p>
           <div className="kontakt-hero-features">
             <div className="hero-feature-green">
-              <ClockIcon className="feature-icon-white" />
-              <span>24h Antwortzeit</span>
-            </div>
-            <div className="hero-feature-green">
               <CheckIcon className="feature-icon-white" />
-              <span>Persönliche Beratung</span>
+              <span>Kostenlose Beratung</span>
             </div>
             <div className="hero-feature-green">
-              <TruckIcon className="feature-icon-white" />
-              <span>Deutschlandweit</span>
+              <ClockIcon className="feature-icon-white" />
+              <span>Flexible Termine</span>
+            </div>
+            <div className="hero-feature-green">
+              <CarIcon className="feature-icon-white" />
+              <span>Rheinberg & Umkreis 100 km</span>
             </div>
           </div>
         </div>
@@ -67,66 +70,48 @@ function KontaktPage() {
         <div className="container">
           <div className="kontakt-content">
             <div className="kontakt-info">
-              <h2>Kontaktinformationen</h2>
-              <p className="kontakt-intro">
-                Haben Sie Fragen oder möchten Sie uns direkt kontaktieren? 
-                Wir sind gerne für Sie da!
-              </p>
+              
 
-              <div className="kontakt-methods">
-                <div className="kontakt-method">
-                  <div className="method-icon">📞</div>
-                  <div className="method-details">
-                    <h3>Telefon</h3>
-                    <p>0176 30339020</p>
-                    <span className="method-time">Mo-Fr: 8:00 - 18:00 Uhr<br/>Sa: 9:00 - 14:00 Uhr</span>
-                  </div>
-                </div>
-
-                <div className="kontakt-method">
-                  <div className="method-icon">✉️</div>
-                  <div className="method-details">
-                    <h3>E-Mail</h3>
-                    <p>Arzautomobileservice@gmail.com</p>
-                    <span className="method-time">Antwort innerhalb von 24h</span>
-                  </div>
-                </div>
-
-                <div className="kontakt-method">
-                  <div className="method-icon">💬</div>
-                  <div className="method-details">
-                    <h3>WhatsApp</h3>
-                    <p>0176 30339020</p>
-                    <span className="method-time">Schnelle Antworten per Chat</span>
-                  </div>
-                </div>
-
-                <div className="kontakt-method">
-                  <div className="method-icon">📍</div>
-                  <div className="method-details">
-                    <h3>Adresse</h3>
-                    <p>Sauerfeldstraße 4<br/>47495 Rheinberg</p>
-                    <span className="method-time">Nach Terminvereinbarung</span>
-                  </div>
-                </div>
+              <div className="kontakt-adresse-block">
+                <h3>Adresse</h3>
+                <p><strong>AutoHD – Autoankauf Rheinberg</strong></p>
+                <p>Sauerfeldstraße 4</p>
+                <p>47495 Rheinberg</p>
               </div>
 
-              <div className="opening-hours">
+              <div className="kontakt-kontakt-block">
+                <h3>Kontakt</h3>
+                <p className="kontakt-line">📞 +49 176 30339020</p>
+                <p className="kontakt-line">✉️ info@autohd.de</p>
+                <p className="kontakt-line">💬 WhatsApp: +49 176 30339020</p>
+                <p className="kontakt-note">Wir antworten meist innerhalb von 24 Stunden</p>
+              </div>
+
+              <div className="opening-hours-section">
                 <h3>Öffnungszeiten</h3>
-                <ul>
-                  <li>
-                    <span>Montag - Freitag:</span>
-                    <span>8:00 - 18:00 Uhr</span>
-                  </li>
-                  <li>
-                    <span>Samstag:</span>
-                    <span>9:00 - 14:00 Uhr</span>
-                  </li>
-                  <li>
-                    <span>Sonntag:</span>
-                    <span>Geschlossen</span>
-                  </li>
-                </ul>
+                <p className="opening-hours-intro">
+                  Du arbeitest zu unseren Bürozeiten oder hast am Wochenende mehr Zeit? Kein Problem! Wir bieten dir flexible Termine außerhalb der regulären Bürozeiten an.
+                </p>
+                <div className="opening-hours-grid">
+                  <div className="opening-hours-box">
+                    <h4>Bürozeiten</h4>
+                    <ul className="hours-list">
+                      <li>Montag 09:00 – 18:00</li>
+                      <li>Samstag 09:00 – 14:00</li>
+                      <li>Sonntag geschlossen</li>
+                    </ul>
+                  </div>
+                  <div className="opening-hours-box">
+                    <h4>Servicezeiten und Erreichbarkeit</h4>
+                    <p className="opening-hours-sub">(Mobile & WhatsApp)</p>
+                    <ul className="hours-list">
+                      <li>Mo – So 7:30 – 21:00</li>
+                    </ul>
+                  </div>
+                </div>
+                <p className="opening-hours-outro">
+                  Ruf uns einfach an oder schreib uns – wir finden einen Termin, der zu deinem Zeitplan passt!
+                </p>
               </div>
             </div>
 
@@ -180,17 +165,16 @@ function KontaktPage() {
                     onChange={handleChange}
                     required
                   >
+                    <option value="bewertung">Fahrzeugbewertung anfordern</option>
+                    <option value="verkauf">Fahrzeug verkaufen</option>
+                    <option value="termin">Termin vereinbaren</option>
                     <option value="allgemein">Allgemeine Anfrage</option>
-                    <option value="bewertung">Fahrzeugbewertung</option>
-                    <option value="verkauf">Fahrzeugverkauf</option>
-                    <option value="termin">Terminvereinbarung</option>
-                    <option value="beschwerde">Beschwerde</option>
                     <option value="sonstiges">Sonstiges</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="message">Ihre Nachricht *</label>
+                  <label htmlFor="message">Deine Nachricht *</label>
                   <textarea
                     id="message"
                     name="message"
@@ -202,10 +186,23 @@ function KontaktPage() {
                   ></textarea>
                 </div>
 
+                <div className="form-group privacy-checkbox-group">
+                  <label className="privacy-checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="acceptedPrivacy"
+                      checked={formData.acceptedPrivacy}
+                      onChange={handleChange}
+                      required
+                    />
+                    <span>Ich akzeptiere die <a href="/datenschutz" target="_blank" rel="noopener noreferrer" className="privacy-link">Datenschutzerklärung</a> *</span>
+                  </label>
+                </div>
+
                 <button 
                   type="submit" 
                   className="btn btn-primary btn-large"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !formData.acceptedPrivacy}
                 >
                   {isSubmitting ? 'Wird gesendet...' : 'Nachricht senden'}
                 </button>
@@ -218,7 +215,7 @@ function KontaktPage() {
       <section className="map-section">
         <div className="map-info">
           <h3>📍 Unser Standort</h3>
-          <p><strong>ARZ Delivery & Automobile</strong></p>
+          <p><strong>AutoHD</strong></p>
           <p>Sauerfeldstraße 4, 47495 Rheinberg</p>
         </div>
         <div className="map-container">
@@ -240,7 +237,7 @@ function KontaktPage() {
                 rel="noopener noreferrer"
                 className="map-link"
               >
-                📍 Route planen zu ARZ Automobile
+                📍 Route planen zu AutoHD
               </a>
             </p>
           </div>
