@@ -710,7 +710,7 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                   className="btn-bewertung-orange" 
                   disabled={isSubmitting || !formData.acceptedPrivacy}
                   aria-busy={isSubmitting}
-                  style={isSubmitting ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+                  style={isSubmitting ? { cursor: 'not-allowed' } : {}}
                 >
                   {isSubmitting ? (
                     <>

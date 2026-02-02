@@ -591,7 +591,7 @@ function HomePage() {
                   className="btn-form-submit" 
                   disabled={isSubmitting || !formData.acceptedPrivacy}
                   aria-busy={isSubmitting}
-                  style={isSubmitting ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+                  style={isSubmitting ? { cursor: 'not-allowed' } : {}}
                 >
                   {isSubmitting ? (
                     <>

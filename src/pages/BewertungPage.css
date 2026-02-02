@@ -233,7 +233,7 @@
   color: white;
   cursor: not-allowed;
   box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .btn-bewertung-orange:disabled:hover {

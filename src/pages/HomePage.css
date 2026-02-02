@@ -207,7 +207,7 @@
 }
 
 .btn-form-submit:disabled {
-  opacity: 0.6;
+  opacity: 1;
   cursor: not-allowed;
   transform: none;
 }
