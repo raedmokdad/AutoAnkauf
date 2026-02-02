@@ -643,7 +643,7 @@ function HomePage() {
       )}
 
       {/* So verkaufst du dein Auto bei uns - in nur 3 Schritten */}
-      <section className="section section-gray">
+      <section className="section section-gray how-it-works-section">
         <div className="container">
           <p className="section-subtitle" style={{ marginBottom: '0.5rem' }}><strong>Verkaufe clever statt kompliziert</strong></p>
           <h2 className="section-title">So verkaufst du dein Auto bei uns - in nur 3 Schritten</h2>
@@ -836,7 +836,7 @@ function HomePage() {
       </section>
 
       {/* Dein Autoankauf in Zahlen*/}
-      <section className="social-proof-bar">
+      <section className="social-proof-bar stats-section">
         <div className="container">
           <h2 className="section-title">Dein Autoankauf in Zahlen</h2>
           <div className="proof-grid">
@@ -867,7 +867,7 @@ function HomePage() {
 
 
       {/* Auto verkaufen ohne Stress? */}
-      <section className="cta-section">
+      <section className="cta-section cta-bottom-section">
         <div className="container">
           <div className="cta-content">
             <h2 className="cta-title">Auto verkaufen ohne Stress?</h2>
@@ -882,7 +882,7 @@ function HomePage() {
       </section>
 
       {/* AutoHD – Autoankauf am Niederrhein */}
-      <section className="section section-white">
+      <section className="section section-white niederrhein-section">
         <div className="container">
           <h2 className="section-title">AutoHD – Autoankauf am Niederrhein</h2>
           <p className="section-subtitle">

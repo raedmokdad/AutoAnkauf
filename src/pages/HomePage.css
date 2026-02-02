@@ -1283,6 +1283,30 @@
   padding-bottom: var(--spacing-3xl);
 }
 
+/* How It Works Section (3 Schritte) */
+.section.how-it-works-section {
+  padding-top: 120px;
+  padding-bottom: var(--spacing-3xl);
+}
+
+/* Stats Section (Zahlen) */
+.social-proof-bar.stats-section {
+  padding-top: 120px;
+  padding-bottom: var(--spacing-3xl);
+}
+
+/* CTA Bottom Section (Ohne Stress) */
+.cta-section.cta-bottom-section {
+  padding-top: 120px;
+  padding-bottom: var(--spacing-3xl);
+}
+
+/* Niederrhein Section (AutoHD) */
+.section.niederrhein-section {
+  padding-top: 120px;
+  padding-bottom: var(--spacing-3xl);
+}
+
 /* Benefits Section (Deine Vorteile) */
 .section.benefits-section {
   padding-top: 120px;
