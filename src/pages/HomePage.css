@@ -330,7 +330,7 @@
 /* Quick Bewertung Section - Prominent CTA */
 .quick-bewertung-section {
   background: linear-gradient(135deg, #2d6a4f 0%, #40916c 50%, #52b788 100%);
-  padding: 60px 20px;
+  padding: var(--spacing-3xl) var(--spacing-lg);
   margin-top: -40px;
   position: relative;
   z-index: 10;
@@ -1277,9 +1277,18 @@
   text-align: center;
 }
 
+/* Benefits Section (Deine Vorteile) */
+.section.benefits-section {
+  padding-top: 120px;
+  padding-bottom: var(--spacing-3xl);
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
+}
+
 /* Advantages Section */
 .advantages-section {
   background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+  padding: var(--spacing-3xl) var(--spacing-lg);
 }
 
 .advantages-grid {
@@ -1371,9 +1380,12 @@
 }
 
 /* Testimonials Section */
-.testimonials-section {
+.section.testimonials-section {
   background: linear-gradient(180deg, #fdfefe 0%, #f0f4f8 100%);
-  padding: var(--spacing-3xl) var(--spacing-lg);
+  padding-top: 80px;
+  padding-bottom: var(--spacing-3xl);
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
 }
 
 .testimonials-grid {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SEO from '../components/SEO';
 import vehicleData from '../data/vehicleData.json';
@@ -26,8 +26,126 @@ function BewertungPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [openFAQIndex, setOpenFAQIndex] = useState(null);
+  
+  // Neue States für erweiterte Funktionalität
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [touchedFields, setTouchedFields] = useState({});
+  const [submitState, setSubmitState] = useState({
+    status: 'idle', // 'idle' | 'validating' | 'submitting' | 'success' | 'error'
+    message: ''
+  });
+  const [isDraftRestored, setIsDraftRestored] = useState(false);
 
   const makes = vehicleData.makes || [];
+
+  // Validierungsfunktion für Felder
+  const validateField = useCallback((name, value) => {
+    switch(name) {
+      case 'email':
+        if (!value) return 'E-Mail-Adresse ist erforderlich';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          return 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
+        }
+        return '';
+      case 'phone':
+        if (!value) return 'Telefonnummer ist erforderlich';
+        if (!/^[\d\s+()-]{8,}$/.test(value)) {
+          return 'Bitte geben Sie eine gültige Telefonnummer ein';
+        }
+        return '';
+      case 'mileage':
+        if (!value) return 'Bitte wählen Sie einen Kilometerstand';
+        return '';
+      case 'condition':
+        if (!value) return 'Bitte wählen Sie einen Fahrzeugzustand';
+        return '';
+      default:
+        return '';
+    }
+  }, []);
+
+  // Telefonnummer formatieren
+  const formatPhoneNumber = useCallback((value) => {
+    const cleaned = value.replace(/[^\d+]/g, '');
+    if (cleaned.startsWith('0') && cleaned.length > 4) {
+      return cleaned.slice(0, 4) + ' ' + cleaned.slice(4);
+    }
+    return cleaned;
+  }, []);
+
+  // Progress berechnen
+  const calculateProgress = useCallback(() => {
+    const requiredFields = ['makeId', 'modelId', 'year', 'mileage', 'condition', 'email', 'phone'];
+    const filledFields = requiredFields.filter(field => formData[field]).length;
+    return Math.round((filledFields / requiredFields.length) * 100);
+  }, [formData]);
+
+  // LocalStorage Auto-Save (mit Debounce)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (Object.values(formData).some(val => val) && !submitted) {
+        localStorage.setItem('bewertung_draft', JSON.stringify({
+          ...formData,
+          timestamp: Date.now()
+        }));
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, [formData, submitted]);
+
+  // Draft automatisch wiederherstellen beim Laden (ohne Nachfrage)
+  useEffect(() => {
+    const draft = localStorage.getItem('bewertung_draft');
+    if (draft && !prefilledData && !submitted) {
+      try {
+        const parsed = JSON.parse(draft);
+        // Nur wiederherstellen wenn < 24h alt
+        if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+          const { timestamp, ...draftData } = parsed;
+          
+          // Prüfe ob wirklich Daten vorhanden sind
+          const hasContent = Object.entries(draftData).some(([key, value]) => 
+            key !== 'acceptedPrivacy' && value && value !== ''
+          );
+          
+          if (hasContent) {
+            setFormData(draftData);
+            setIsDraftRestored(true);
+            
+            // Modelle und Jahre wiederherstellen
+            if (draftData.makeId) {
+              const selectedMake = makes.find(m => m.id === parseInt(draftData.makeId));
+              if (selectedMake) {
+                setAvailableModels(selectedMake.models || []);
+                
+                if (draftData.modelId) {
+                  const selectedModel = selectedMake.models.find(m => m.id === parseInt(draftData.modelId));
+                  if (selectedModel?.generations.length > 0) {
+                    const allYears = new Set();
+                    selectedModel.generations.forEach(gen => {
+                      if (gen.yearBegin && gen.yearEnd) {
+                        for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+                          allYears.add(y);
+                        }
+                      }
+                    });
+                    setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          // Alten Draft löschen
+          localStorage.removeItem('bewertung_draft');
+        }
+      } catch (e) {
+        console.error('Fehler beim Laden des Drafts:', e);
+        localStorage.removeItem('bewertung_draft');
+      }
+    }
+  }, []);
 
   // Prefill form with data from HomePage
   useEffect(() => {
@@ -86,14 +204,37 @@ function BewertungPage() {
   }, [prefilledData]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    let { name, value, type, checked } = e.target;
+    
+    // Draft löschen beim ersten Bearbeiten nach Restore
+    if (isDraftRestored) {
+      localStorage.removeItem('bewertung_draft');
+      setIsDraftRestored(false);
+    }
+    
+    // Input-Formatierung & Sanitization
+    if (name === 'phone') {
+      value = formatPhoneNumber(value);
+    }
+    if (name === 'email') {
+      value = value.trim().toLowerCase();
+    }
+    
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    
+    // Live-Validierung für bereits berührte Felder
+    if (touchedFields[name] && !['makeId', 'modelId', 'year'].includes(name)) {
+      const error = validateField(name, value);
+      setFieldErrors(prev => ({ ...prev, [name]: error }));
+    }
 
     if (name === 'makeId' && value) {
       const selectedMake = makes.find(m => m.id === parseInt(value));
       setAvailableModels(selectedMake?.models || []);
       setFormData(prev => ({ ...prev, modelId: '', year: '' }));
       setAvailableYears([]);
+      // Fehler zurücksetzen
+      setFieldErrors(prev => ({ ...prev, modelId: '', year: '' }));
     }
 
     if (name === 'modelId' && value) {
@@ -109,12 +250,61 @@ function BewertungPage() {
         });
         setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
       }
+      // Fehler zurücksetzen
+      setFieldErrors(prev => ({ ...prev, year: '' }));
     }
   };
 
+  // Handler für Field Blur (Touch-Tracking)
+  const handleBlur = useCallback((e) => {
+    const { name, value } = e.target;
+    setTouchedFields(prev => ({ ...prev, [name]: true }));
+    const error = validateField(name, value);
+    setFieldErrors(prev => ({ ...prev, [name]: error }));
+  }, [validateField]);
+
+  // Keyboard Navigation Enhancement
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' && e.target.tagName === 'SELECT') {
+      e.preventDefault();
+      const form = e.target.form;
+      const index = Array.from(form.elements).indexOf(e.target);
+      const nextElement = form.elements[index + 1];
+      if (nextElement && !nextElement.disabled) {
+        nextElement.focus();
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Client-side Validierung
+    setSubmitState({ status: 'validating', message: 'Überprüfe Eingaben...' });
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // Alle Felder validieren
+    const errors = {};
+    ['email', 'phone', 'mileage', 'condition'].forEach(field => {
+      const error = validateField(field, formData[field]);
+      if (error) errors[field] = error;
+    });
+    
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setTouchedFields({
+        email: true,
+        phone: true,
+        mileage: true,
+        condition: true
+      });
+      setSubmitState({ status: 'error', message: 'Bitte füllen Sie alle Pflichtfelder korrekt aus.' });
+      setTimeout(() => setSubmitState({ status: 'idle', message: '' }), 3000);
+      return;
+    }
+    
     setIsSubmitting(true);
+    setSubmitState({ status: 'submitting', message: 'Sende Anfrage...' });
     
     try {
       // Finde Marke und Modell Namen für die E-Mail
@@ -156,7 +346,10 @@ function BewertungPage() {
       }
       
       if (result.success) {
+        setSubmitState({ status: 'success', message: 'Erfolgreich gesendet!' });
         setSubmitted(true);
+        // LocalStorage Draft löschen
+        localStorage.removeItem('bewertung_draft');
         // Reset Formular
         setFormData({
           makeId: '',
@@ -170,15 +363,26 @@ function BewertungPage() {
         });
         setAvailableModels([]);
         setAvailableYears([]);
+        setFieldErrors({});
+        setTouchedFields({});
       } else {
-        alert('Fehler beim Senden: ' + (result.message || 'Unbekannter Fehler'));
+        setSubmitState({ 
+          status: 'error', 
+          message: 'Fehler beim Senden: ' + (result.message || 'Unbekannter Fehler') 
+        });
       }
     } catch (error) {
       console.error('Fehler:', error);
       const errorMessage = error.message || 'Unbekannter Fehler';
-      alert(`Fehler beim Senden der Anfrage:\n\n${errorMessage}\n\nBitte:\n1. Prüfen Sie, ob der PHP-Server läuft (php -S localhost:8000 im backend-Ordner)\n2. Öffnen Sie die Browser-Konsole (F12) für mehr Details`);
+      setSubmitState({ 
+        status: 'error', 
+        message: `Fehler beim Senden der Anfrage: ${errorMessage}` 
+      });
     } finally {
       setIsSubmitting(false);
+      if (submitState.status === 'error') {
+        setTimeout(() => setSubmitState({ status: 'idle', message: '' }), 5000);
+      }
     }
   };
 
@@ -235,7 +439,42 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
               <h2 className="form-title-bewertung">Jetzt Auto bewerten</h2>
               <p className="form-subtitle-bewertung">Fahrinformationen eingeben & Bewertung anfordern.</p>
               
-              <form onSubmit={handleSubmit} className="bewertung-compact-form">
+              {/* Progress Indicator */}
+              <div className="form-progress" style={{ marginBottom: '1.5rem' }}>
+                <div className="progress-bar" style={{
+                  width: '100%',
+                  height: '8px',
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: '4px',
+                  overflow: 'hidden'
+                }}>
+                  <div 
+                    className="progress-fill" 
+                    style={{ 
+                      width: `${calculateProgress()}%`,
+                      height: '100%',
+                      backgroundColor: '#FF6B35',
+                      transition: 'width 0.3s ease',
+                      borderRadius: '4px'
+                    }}
+                    role="progressbar"
+                    aria-valuenow={calculateProgress()}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  />
+                </div>
+                <span className="progress-text" style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  marginTop: '0.5rem',
+                  fontSize: '0.875rem',
+                  color: '#666'
+                }}>
+                  {calculateProgress()}% ausgefüllt
+                </span>
+              </div>
+              
+              <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="bewertung-compact-form">
                 <div className="bewertung-form-grid">
                   <div className="form-group-bewertung">
                     <label htmlFor="makeId">Marke *</label>
@@ -256,7 +495,17 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                   </div>
 
                   <div className="form-group-bewertung">
-                    <label htmlFor="modelId">Modell *</label>
+                    <label htmlFor="modelId">
+                      Modell *
+                      {!formData.makeId && (
+                        <span className="field-hint" title="Bitte wählen Sie zuerst eine Marke" style={{
+                          marginLeft: '0.5rem',
+                          fontSize: '0.875rem',
+                          color: '#999',
+                          cursor: 'help'
+                        }}>ℹ️</span>
+                      )}
+                    </label>
                     <select
                       id="modelId"
                       name="modelId"
@@ -264,18 +513,41 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       onChange={handleChange}
                       required
                       disabled={!formData.makeId}
+                      aria-describedby={!formData.makeId ? "modelId-hint" : undefined}
                     >
-                      <option value="">Bitte wählen</option>
+                      <option value="">
+                        {!formData.makeId ? 'Zuerst Marke wählen' : 'Bitte wählen'}
+                      </option>
                       {availableModels.map(model => (
                         <option key={model.id} value={model.id}>
                           {model.name}
                         </option>
                       ))}
                     </select>
+                    {!formData.makeId && (
+                      <small id="modelId-hint" className="field-helper" style={{
+                        display: 'block',
+                        marginTop: '0.25rem',
+                        fontSize: '0.75rem',
+                        color: '#999'
+                      }}>
+                        Wählen Sie zuerst eine Marke aus
+                      </small>
+                    )}
                   </div>
 
                   <div className="form-group-bewertung">
-                    <label htmlFor="year">Erstzulassung *</label>
+                    <label htmlFor="year">
+                      Erstzulassung *
+                      {!formData.modelId && (
+                        <span className="field-hint" title="Bitte wählen Sie zuerst ein Modell" style={{
+                          marginLeft: '0.5rem',
+                          fontSize: '0.875rem',
+                          color: '#999',
+                          cursor: 'help'
+                        }}>ℹ️</span>
+                      )}
+                    </label>
                     <select
                       id="year"
                       name="year"
@@ -283,14 +555,27 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       onChange={handleChange}
                       required
                       disabled={!formData.modelId || availableYears.length === 0}
+                      aria-describedby={!formData.modelId ? "year-hint" : undefined}
                     >
-                      <option value="">Bitte wählen</option>
+                      <option value="">
+                        {!formData.modelId ? 'Zuerst Modell wählen' : 'Bitte wählen'}
+                      </option>
                       {availableYears.map(year => (
                         <option key={year} value={year}>
                           {year}
                         </option>
                       ))}
                     </select>
+                    {!formData.modelId && (
+                      <small id="year-hint" className="field-helper" style={{
+                        display: 'block',
+                        marginTop: '0.25rem',
+                        fontSize: '0.75rem',
+                        color: '#999'
+                      }}>
+                        Wählen Sie zuerst ein Modell aus
+                      </small>
+                    )}
                   </div>
 
                   <div className="form-group-bewertung">
@@ -336,9 +621,27 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       placeholder="ihre@email.de"
+                      className={touchedFields.email && fieldErrors.email ? 'input-error' : ''}
+                      style={touchedFields.email && fieldErrors.email ? {
+                        borderColor: '#dc3545',
+                        backgroundColor: '#fff5f5'
+                      } : {}}
+                      aria-invalid={touchedFields.email && fieldErrors.email ? 'true' : 'false'}
+                      aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                       required
                     />
+                    {touchedFields.email && fieldErrors.email && (
+                      <span id="email-error" className="field-error" role="alert" style={{
+                        display: 'block',
+                        marginTop: '0.25rem',
+                        fontSize: '0.8rem',
+                        color: '#dc3545'
+                      }}>
+                        {fieldErrors.email}
+                      </span>
+                    )}
                   </div>
 
                   <div className="form-group-bewertung">
@@ -349,9 +652,27 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       placeholder="0176 12345678"
+                      className={touchedFields.phone && fieldErrors.phone ? 'input-error' : ''}
+                      style={touchedFields.phone && fieldErrors.phone ? {
+                        borderColor: '#dc3545',
+                        backgroundColor: '#fff5f5'
+                      } : {}}
+                      aria-invalid={touchedFields.phone && fieldErrors.phone ? 'true' : 'false'}
+                      aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
                       required
                     />
+                    {touchedFields.phone && fieldErrors.phone && (
+                      <span id="phone-error" className="field-error" role="alert" style={{
+                        display: 'block',
+                        marginTop: '0.25rem',
+                        fontSize: '0.8rem',
+                        color: '#dc3545'
+                      }}>
+                        {fieldErrors.phone}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -368,11 +689,42 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                   </label>
                 </div>
 
-                <button type="submit" className="btn-bewertung-orange" disabled={isSubmitting || !formData.acceptedPrivacy}>
-                  {isSubmitting ? 'Wird gesendet...' : 'Jetzt kostenlos bewerten'}
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                {/* Submit Status Nachricht */}
+                {submitState.status !== 'idle' && submitState.status !== 'success' && (
+                  <div className={`submit-status status-${submitState.status}`} role="status" style={{
+                    padding: '0.75rem',
+                    marginBottom: '1rem',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    textAlign: 'center',
+                    backgroundColor: submitState.status === 'error' ? '#fee' : '#e3f2fd',
+                    color: submitState.status === 'error' ? '#c00' : '#1976d2',
+                    border: `1px solid ${submitState.status === 'error' ? '#fcc' : '#90caf9'}`
+                  }}>
+                    {submitState.message}
+                  </div>
+                )}
+
+                <button 
+                  type="submit" 
+                  className="btn-bewertung-orange" 
+                  disabled={isSubmitting || !formData.acceptedPrivacy}
+                  aria-busy={isSubmitting}
+                  style={isSubmitting ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span style={{ display: 'inline-block', marginRight: '0.5rem' }}>⏳</span>
+                      {submitState.message || 'Wird gesendet...'}
+                    </>
+                  ) : (
+                    <>
+                      Jetzt kostenlos bewerten
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </>
+                  )}
                 </button>
               </form>
             </div>
