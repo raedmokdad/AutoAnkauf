@@ -1277,6 +1277,12 @@
   text-align: center;
 }
 
+/* Services Section (Gebrauchtwagen verkaufen) */
+.section.services-section {
+  padding-top: 120px;
+  padding-bottom: var(--spacing-3xl);
+}
+
 /* Benefits Section (Deine Vorteile) */
 .section.benefits-section {
   padding-top: 120px;
