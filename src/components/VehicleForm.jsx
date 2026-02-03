@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SummaryModal from './SummaryModal';
 import vehicleData from '../data/vehicleData.json';
 import vehicleOptions from '../data/vehicleOptions.json';
@@ -77,8 +77,6 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
   const [availableYears, setAvailableYears] = useState(() => getInitialYears(mergedData.makeId, mergedData.modelId));
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Alte useEffects entfernt (Logik jetzt in useState Init und handleChange)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

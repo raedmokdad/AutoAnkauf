@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import VehicleForm from '../components/VehicleForm';
 import { CheckIcon } from '../components/Icons';
@@ -7,9 +7,9 @@ import '../styles/shared-green-hero.css';
 import './AnkaufPage.css';
 
 function BewertungKomplettPage() {
-  const location = useLocation();
-  const prefilledData = location.state?.prefilledData || {};
-
+  // Wir nutzen keine Navigation-States mehr, da alles über localStorage synchronisiert wird.
+  // VehicleForm lädt die Daten automatisch.
+  
   return (
     <div className="ankauf-page">
       <SEO
@@ -61,7 +61,6 @@ function BewertungKomplettPage() {
           <VehicleForm 
             buttonText="Jetzt Bewertung anfordern"
             pageTitle="Vervollständige deine Fahrzeugdaten für eine präzise Bewertung."
-            initialData={prefilledData}
           />
         </div>
       </section>

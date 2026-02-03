@@ -14,6 +14,33 @@ function BewertungPage() {
   
   // Kombiniere Navigations-Daten mit gespeicherten Daten
   const initialData = mergeWithSavedData(prefilledData);
+  const makes = vehicleData.makes || [];
+
+  // Helper für synchrone Initialisierung
+  const getInitialModels = (makeId) => {
+    if (!makeId) return [];
+    const make = makes.find(m => m.id === parseInt(makeId));
+    return make?.models || [];
+  };
+
+  const getInitialYears = (makeId, modelId) => {
+    if (!makeId || !modelId) return [];
+    const make = makes.find(m => m.id === parseInt(makeId));
+    const model = make?.models?.find(m => m.id === parseInt(modelId));
+    
+    if (model?.generations?.length > 0) {
+      const allYears = new Set();
+      model.generations.forEach(gen => {
+        if (gen.yearBegin && gen.yearEnd) {
+          for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+            allYears.add(y);
+          }
+        }
+      });
+      return Array.from(allYears).sort((a, b) => b - a);
+    }
+    return [];
+  };
   
   const [formData, setFormData] = useState({
     makeId: initialData.makeId || '',
@@ -27,47 +54,19 @@ function BewertungPage() {
     acceptedPrivacy: initialData.acceptedPrivacy || false
   });
 
-  const [availableModels, setAvailableModels] = useState([]);
-  const [availableYears, setAvailableYears] = useState([]);
+  const [availableModels, setAvailableModels] = useState(() => getInitialModels(initialData.makeId));
+  const [availableYears, setAvailableYears] = useState(() => getInitialYears(initialData.makeId, initialData.modelId));
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [openFAQIndex, setOpenFAQIndex] = useState(null);
   
-  // Neue States für erweiterte Funktionalität
   const [fieldErrors, setFieldErrors] = useState({});
   const [touchedFields, setTouchedFields] = useState({});
   const [submitState, setSubmitState] = useState({
-    status: 'idle', // 'idle' | 'validating' | 'submitting' | 'success' | 'error'
+    status: 'idle',
     message: ''
   });
-  const [isDraftRestored, setIsDraftRestored] = useState(false);
-
-  const makes = vehicleData.makes || [];
-
-  // Initialisiere Dropdowns basierend auf geladenen Daten
-  useEffect(() => {
-    if (formData.makeId && makes.length > 0) {
-      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
-      if (selectedMake) {
-        setAvailableModels(selectedMake.models || []);
-        
-        if (formData.modelId) {
-          const selectedModel = selectedMake.models?.find(m => m.id === parseInt(formData.modelId));
-          if (selectedModel?.generations?.length > 0) {
-            const allYears = new Set();
-            selectedModel.generations.forEach(gen => {
-              if (gen.yearBegin && gen.yearEnd) {
-                for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
-                  allYears.add(y);
-                }
-              }
-            });
-            setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
-          }
-        }
-      }
-    }
-  }, []); // Nur beim Mounten ausführen (für Initialisierung)
 
   // Validierungsfunktion für Felder
   const validateField = useCallback((name, value) => {
@@ -114,79 +113,6 @@ function BewertungPage() {
     return Math.round((filledFields / requiredFields.length) * 100);
   }, [formData]);
 
-  // LocalStorage Auto-Save (mit Debounce)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (Object.values(formData).some(val => val) && !submitted) {
-        localStorage.setItem('bewertung_draft', JSON.stringify({
-          ...formData,
-          timestamp: Date.now()
-        }));
-      }
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, [formData, submitted]);
-
-  // Draft automatisch wiederherstellen beim Laden (ohne Nachfrage)
-  useEffect(() => {
-    const draft = localStorage.getItem('bewertung_draft');
-    if (draft && !prefilledData && !submitted) {
-      try {
-        const parsed = JSON.parse(draft);
-        // Nur wiederherstellen wenn < 24h alt
-        if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
-          const { timestamp, ...draftData } = parsed;
-          
-          // Prüfe ob wirklich Daten vorhanden sind
-          const hasContent = Object.entries(draftData).some(([key, value]) => 
-            key !== 'acceptedPrivacy' && value && value !== ''
-          );
-          
-          if (hasContent) {
-            setFormData(draftData);
-            setIsDraftRestored(true);
-            
-            // Modelle und Jahre wiederherstellen
-            if (draftData.makeId) {
-              const selectedMake = makes.find(m => m.id === parseInt(draftData.makeId));
-              if (selectedMake) {
-                setAvailableModels(selectedMake.models || []);
-                
-                if (draftData.modelId) {
-                  const selectedModel = selectedMake.models.find(m => m.id === parseInt(draftData.modelId));
-                  if (selectedModel?.generations.length > 0) {
-                    const allYears = new Set();
-                    selectedModel.generations.forEach(gen => {
-                      if (gen.yearBegin && gen.yearEnd) {
-                        for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
-                          allYears.add(y);
-                        }
-                      }
-                    });
-                    setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
-                  }
-                }
-              }
-            }
-          }
-        } else {
-          // Alten Draft löschen
-          localStorage.removeItem('bewertung_draft');
-        }
-      } catch (e) {
-        console.error('Fehler beim Laden des Drafts:', e);
-        localStorage.removeItem('bewertung_draft');
-      }
-    }
-  }, []);
-
-  // Prefill-Logik entfernt, da jetzt initialData verwendet wird
-  // Das verhindert das Überschreiben der gespeicherten Daten
-  useEffect(() => {
-    // Leerer Effekt als Platzhalter, falls Logik benötigt wird
-  }, []);
-
   // Scroll to form when coming from HomePage
   useEffect(() => {
     if (prefilledData && prefilledData.marke) {
@@ -201,12 +127,6 @@ function BewertungPage() {
 
   const handleChange = (e) => {
     let { name, value, type, checked } = e.target;
-    
-    // Draft löschen beim ersten Bearbeiten nach Restore
-    if (isDraftRestored) {
-      localStorage.removeItem('bewertung_draft');
-      setIsDraftRestored(false);
-    }
     
     // Input-Formatierung & Sanitization
     if (name === 'phone') {
@@ -297,22 +217,8 @@ function BewertungPage() {
       return;
     }
     
-    // Navigiere zu bewertung-komplett mit vorausgefüllten Daten
-    navigate('/bewertung-komplett', {
-      state: {
-        prefilledData: {
-          makeId: formData.makeId,
-          modelId: formData.modelId,
-          year: formData.year,
-          mileage: formData.mileage,
-          condition: formData.condition,
-          location: formData.location,
-          email: formData.email,
-          phone: formData.phone,
-          acceptedPrivacy: formData.acceptedPrivacy
-        }
-      }
-    });
+    // Navigiere zu bewertung-komplett (Daten sind bereits im localStorage gespeichert)
+    navigate('/bewertung-komplett');
   };
 
   return (
