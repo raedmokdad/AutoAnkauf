@@ -57,6 +57,12 @@ function SummaryModal({
             <strong>Kilometerstand:</strong>
             <span>{formData.mileage || 'Nicht gewählt'}</span>
           </div>
+          {formData.location && (
+            <div className="summary-row">
+              <strong>Standort:</strong>
+              <span>{formData.location}</span>
+            </div>
+          )}
           {selectedFeaturesList.length > 0 && (
             <div className="summary-row" style={{ alignItems: 'flex-start' }}>
               <strong>Ausstattung:</strong>

@@ -17,6 +17,7 @@ function BewertungPage() {
     year: '',
     mileage: '',
     condition: '',
+    location: '',
     email: '',
     phone: '',
     acceptedPrivacy: false
@@ -296,6 +297,7 @@ function BewertungPage() {
           year: formData.year,
           mileage: formData.mileage,
           condition: formData.condition,
+          location: formData.location,
           email: formData.email,
           phone: formData.phone,
           acceptedPrivacy: formData.acceptedPrivacy
@@ -413,17 +415,7 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                   </div>
 
                   <div className="form-group-bewertung">
-                    <label htmlFor="modelId">
-                      Modell *
-                      {!formData.makeId && (
-                        <span className="field-hint" title="Bitte wählen Sie zuerst eine Marke" style={{
-                          marginLeft: '0.5rem',
-                          fontSize: '0.875rem',
-                          color: '#999',
-                          cursor: 'help'
-                        }}>ℹ️</span>
-                      )}
-                    </label>
+                    <label htmlFor="modelId">Modell *</label>
                     <select
                       id="modelId"
                       name="modelId"
@@ -431,7 +423,6 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       onChange={handleChange}
                       required
                       disabled={!formData.makeId}
-                      aria-describedby={!formData.makeId ? "modelId-hint" : undefined}
                     >
                       <option value="">
                         {!formData.makeId ? 'Zuerst Marke wählen' : 'Bitte wählen'}
@@ -442,30 +433,10 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                         </option>
                       ))}
                     </select>
-                    {!formData.makeId && (
-                      <small id="modelId-hint" className="field-helper" style={{
-                        display: 'block',
-                        marginTop: '0.25rem',
-                        fontSize: '0.75rem',
-                        color: '#999'
-                      }}>
-                        Wählen Sie zuerst eine Marke aus
-                      </small>
-                    )}
                   </div>
 
                   <div className="form-group-bewertung">
-                    <label htmlFor="year">
-                      Erstzulassung *
-                      {!formData.modelId && (
-                        <span className="field-hint" title="Bitte wählen Sie zuerst ein Modell" style={{
-                          marginLeft: '0.5rem',
-                          fontSize: '0.875rem',
-                          color: '#999',
-                          cursor: 'help'
-                        }}>ℹ️</span>
-                      )}
-                    </label>
+                    <label htmlFor="year">Erstzulassung *</label>
                     <select
                       id="year"
                       name="year"
@@ -473,7 +444,6 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       onChange={handleChange}
                       required
                       disabled={!formData.modelId || availableYears.length === 0}
-                      aria-describedby={!formData.modelId ? "year-hint" : undefined}
                     >
                       <option value="">
                         {!formData.modelId ? 'Zuerst Modell wählen' : 'Bitte wählen'}
@@ -484,16 +454,6 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                         </option>
                       ))}
                     </select>
-                    {!formData.modelId && (
-                      <small id="year-hint" className="field-helper" style={{
-                        display: 'block',
-                        marginTop: '0.25rem',
-                        fontSize: '0.75rem',
-                        color: '#999'
-                      }}>
-                        Wählen Sie zuerst ein Modell aus
-                      </small>
-                    )}
                   </div>
 
                   <div className="form-group-bewertung">
@@ -529,6 +489,18 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       <option value="fair">Befriedigend (Gebrauchsspuren)</option>
                       <option value="poor">Ausreichend (Reparaturbedarf)</option>
                     </select>
+                  </div>
+
+                  <div className="form-group-bewertung">
+                    <label htmlFor="location">Standort</label>
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      placeholder="z.B. Berlin, 10115"
+                    />
                   </div>
 
                   <div className="form-group-bewertung">

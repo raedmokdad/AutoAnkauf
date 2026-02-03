@@ -14,6 +14,7 @@ function HomePage() {
     year: '',
     mileage: '',
     condition: '',
+    location: '',
     email: '',
     phone: '',
     acceptedPrivacy: false
@@ -234,6 +235,7 @@ function HomePage() {
           year: formData.year,
           mileage: formData.mileage,
           condition: formData.condition,
+          location: formData.location,
           email: formData.email,
           phone: formData.phone,
           acceptedPrivacy: formData.acceptedPrivacy
@@ -409,6 +411,18 @@ function HomePage() {
                       <option value="fair">Befriedigend (Gebrauchsspuren)</option>
                       <option value="poor">Ausreichend (Reparaturbedarf)</option>
                     </select>
+                  </div>
+
+                  <div className="form-group-vertical">
+                    <label htmlFor="home-location">Standort</label>
+                    <input
+                      type="text"
+                      id="home-location"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      placeholder="z.B. Berlin, 10115"
+                    />
                   </div>
 
                   <div className="form-group-vertical">

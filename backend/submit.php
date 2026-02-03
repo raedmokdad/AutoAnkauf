@@ -23,6 +23,7 @@ $fuelId = $_POST['fuelId'] ?? '';
 $transmissionId = $_POST['transmissionId'] ?? '';
 $year = $_POST['year'] ?? '';
 $mileage = $_POST['mileage'] ?? '';
+$location = $_POST['location'] ?? '';
 $featuresJson = $_POST['features'] ?? '[]';
 $email = $_POST['email'] ?? '';
 $phone = $_POST['phone'] ?? '';
@@ -45,6 +46,9 @@ $message .= "Kraftstoff: $fuelId\n";
 $message .= "Getriebe: $transmissionId\n";
 $message .= "Erstzulassung: $year\n";
 $message .= "Kilometerstand: $mileage\n";
+if (!empty($location)) {
+    $message .= "Standort: $location\n";
+}
 
 $featureNames = [
     "ac" => "Klimaanlage / Klimaautomatik",

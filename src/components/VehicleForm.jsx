@@ -14,6 +14,7 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
     transmissionId: '',
     year: initialData.year || '',
     mileage: initialData.mileage || '',
+    location: initialData.location || '',
     selectedFeatures: [],
     email: initialData.email || '',
     phone: initialData.phone || '',
@@ -187,6 +188,7 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
       formDataToSend.append('transmissionId', formData.transmissionId);
       formDataToSend.append('year', formData.year);
       formDataToSend.append('mileage', formData.mileage);
+      formDataToSend.append('location', formData.location);
       formDataToSend.append('features', JSON.stringify(formData.selectedFeatures));
       formDataToSend.append('email', formData.email);
       formDataToSend.append('phone', formData.phone);
@@ -218,6 +220,7 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
           transmissionId: '',
           year: '',
           mileage: '',
+          location: '',
           selectedFeatures: [],
           email: '',
           phone: '',
@@ -401,6 +404,18 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
                 <option value="100001-150000">100.001 - 150.000 km</option>
                 <option value="150001-plus">Über 150.000 km</option>
               </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="location">Standort</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="z.B. Berlin, 10115"
+              />
             </div>
           </div>
         </section>
