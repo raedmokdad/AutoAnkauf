@@ -8,6 +8,7 @@ import Chatbot from './components/Chatbot';
 import WhatsAppButton from './components/WhatsAppButton';
 import HomePage from './pages/HomePage';
 import BewertungPage from './pages/BewertungPage';
+import BewertungKomplettPage from './pages/BewertungKomplettPage';
 import AnkaufPage from './pages/AnkaufPage';
 import UeberUnsPage from './pages/UeberUnsPage';
 import FAQPage from './pages/FAQPage';
@@ -48,6 +49,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/bewertung" element={<BewertungPage />} />
+              <Route path="/bewertung-komplett" element={<BewertungKomplettPage />} />
               <Route path="/ankauf" element={<AnkaufPage />} />
               <Route path="/angebot" element={<AngebotPage />} />
               <Route path="/ueber-uns" element={<UeberUnsPage />} />

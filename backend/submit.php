@@ -19,8 +19,11 @@ $makeId = $_POST['makeId'] ?? '';
 $modelId = $_POST['modelId'] ?? '';
 $generationId = $_POST['generationId'] ?? '';
 $serieId = $_POST['serieId'] ?? '';
+$fuelId = $_POST['fuelId'] ?? '';
+$transmissionId = $_POST['transmissionId'] ?? '';
 $year = $_POST['year'] ?? '';
 $mileage = $_POST['mileage'] ?? '';
+$featuresJson = $_POST['features'] ?? '[]';
 $email = $_POST['email'] ?? '';
 $phone = $_POST['phone'] ?? '';
 $price = $_POST['price'] ?? '';
@@ -38,8 +41,45 @@ $message .= "Marke ID: $makeId\n";
 $message .= "Modell ID: $modelId\n";
 $message .= "Generation ID: $generationId\n";
 $message .= "Karosserieform ID: $serieId\n";
+$message .= "Kraftstoff: $fuelId\n";
+$message .= "Getriebe: $transmissionId\n";
 $message .= "Erstzulassung: $year\n";
-$message .= "Kilometerstand: $mileage\n\n";
+$message .= "Kilometerstand: $mileage\n";
+
+$featureNames = [
+    "ac" => "Klimaanlage / Klimaautomatik",
+    "navi" => "Navigation",
+    "parking_sensors" => "Parksensoren",
+    "heated_seats" => "Sitzheizung",
+    "panoramic_roof" => "Panoramadach",
+    "sunroof" => "Schiebedach",
+    "parking_assist" => "Parkassistent",
+    "brake_assist" => "Bremsassistent",
+    "multifunction_steering_wheel" => "Multifunktionslenkrad",
+    "alloy_wheels" => "Alufelgen",
+    "steel_wheels" => "Stahlfelgen",
+    "trailer_hitch" => "Anhängerkupplung",
+    "carplay" => "Carplay / Android Auto",
+    "keyless" => "Keyless Entry / Go",
+    "xenon_led" => "Xenon / LED Scheinwerfer",
+    "fog_lights" => "Nebelscheinwerfer"
+];
+
+$selectedFeatures = json_decode($featuresJson, true) ?? [];
+if (!empty($selectedFeatures)) {
+    $message .= "Ausstattung: ";
+    $featureList = [];
+    foreach ($selectedFeatures as $featureId) {
+        if (isset($featureNames[$featureId])) {
+            $featureList[] = $featureNames[$featureId];
+        } else {
+             $featureList[] = $featureId;
+        }
+    }
+    $message .= implode(", ", $featureList) . "\n";
+}
+$message .= "\n";
+
 $message .= "=== Kontaktdaten ===\n";
 $message .= "E-Mail: $email\n";
 $message .= "Telefon: $phone\n";

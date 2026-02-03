@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import SummaryModal from './SummaryModal';
 import vehicleData from '../data/vehicleData.json';
+import vehicleOptions from '../data/vehicleOptions.json';
 import './VehicleForm.css';
 
-function VehicleForm() {
+function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.', initialData = {} }) {
   const [formData, setFormData] = useState({
-    makeId: '',
-    modelId: '',
+    makeId: initialData.makeId || '',
+    modelId: initialData.modelId || '',
     generationId: '',
     serieId: '',
-    year: '',
-    mileage: '',
-    email: '',
-    phone: '',
+    fuelId: '',
+    transmissionId: '',
+    year: initialData.year || '',
+    mileage: initialData.mileage || '',
+    selectedFeatures: [],
+    email: initialData.email || '',
+    phone: initialData.phone || '',
     price: '',
     images: [],
-    acceptedPrivacy: false
+    acceptedPrivacy: initialData.acceptedPrivacy || false
   });
 
   const [availableModels, setAvailableModels] = useState([]);
@@ -25,8 +29,41 @@ function VehicleForm() {
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Lade Marken
+  // Lade Marken und Optionen
   const makes = vehicleData.makes || [];
+  const { fuelTypes, transmissionTypes, features } = vehicleOptions;
+
+  // Initialisiere verfügbare Modelle wenn initialData vorhanden ist
+  useEffect(() => {
+    if (initialData.makeId) {
+      const selectedMake = makes.find(m => m.id === parseInt(initialData.makeId));
+      if (selectedMake) {
+        setAvailableModels(selectedMake.models || []);
+        
+        // Wenn auch modelId vorhanden ist, lade Generationen und Serien
+        if (initialData.modelId) {
+          const selectedModel = selectedMake.models.find(m => m.id === parseInt(initialData.modelId));
+          if (selectedModel) {
+            setAvailableGenerations(selectedModel.generations || []);
+            setAvailableSeries(selectedModel.series || []);
+            
+            // Lade verfügbare Jahre
+            if (selectedModel.generations.length > 0) {
+              const allYears = new Set();
+              selectedModel.generations.forEach(gen => {
+                if (gen.yearBegin && gen.yearEnd) {
+                  for (let y = gen.yearEnd; y >= gen.yearBegin; y--) {
+                    allYears.add(y);
+                  }
+                }
+              });
+              setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+            }
+          }
+        }
+      }
+    }
+  }, [initialData, makes]);
 
   // Wenn Marke gewählt wird
   useEffect(() => {
@@ -96,6 +133,23 @@ function VehicleForm() {
     }));
   };
 
+  const handleFeatureChange = (featureId) => {
+    setFormData(prev => {
+      const currentFeatures = prev.selectedFeatures || [];
+      if (currentFeatures.includes(featureId)) {
+        return {
+          ...prev,
+          selectedFeatures: currentFeatures.filter(id => id !== featureId)
+        };
+      } else {
+        return {
+          ...prev,
+          selectedFeatures: [...currentFeatures, featureId]
+        };
+      }
+    });
+  };
+
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
     if (file) {
@@ -129,8 +183,11 @@ function VehicleForm() {
       formDataToSend.append('modelId', formData.modelId);
       formDataToSend.append('generationId', formData.generationId);
       formDataToSend.append('serieId', formData.serieId);
+      formDataToSend.append('fuelId', formData.fuelId);
+      formDataToSend.append('transmissionId', formData.transmissionId);
       formDataToSend.append('year', formData.year);
       formDataToSend.append('mileage', formData.mileage);
+      formDataToSend.append('features', JSON.stringify(formData.selectedFeatures));
       formDataToSend.append('email', formData.email);
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('price', formData.price);
@@ -157,8 +214,11 @@ function VehicleForm() {
           modelId: '',
           generationId: '',
           serieId: '',
+          fuelId: '',
+          transmissionId: '',
           year: '',
           mileage: '',
+          selectedFeatures: [],
           email: '',
           phone: '',
           price: '',
@@ -181,13 +241,15 @@ function VehicleForm() {
   const selectedModel = availableModels.find(m => m.id === parseInt(formData.modelId));
   const selectedGeneration = availableGenerations.find(g => g.id === parseInt(formData.generationId));
   const selectedSerie = availableSeries.find(s => s.id === parseInt(formData.serieId));
+  const selectedFuel = fuelTypes.find(f => f.id === formData.fuelId);
+  const selectedTransmission = transmissionTypes.find(t => t.id === formData.transmissionId);
 
   return (
     <div className="vehicle-form-container">
       <form onSubmit={handleSubmit} className="vehicle-form">
         {/* Fahrzeugdetails */}
         <section className="form-section">
-          <h2 style={{ marginBottom: '1.5rem' }}>Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.</h2>
+          <h2 style={{ marginBottom: '1.5rem' }}>{pageTitle}</h2>
           
           <div className="form-grid">
             <div className="form-group">
@@ -265,6 +327,42 @@ function VehicleForm() {
             </div>
 
             <div className="form-group">
+              <label htmlFor="fuelId">Kraftstoff *</label>
+              <select
+                id="fuelId"
+                name="fuelId"
+                value={formData.fuelId}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Bitte wählen</option>
+                {fuelTypes.map(fuel => (
+                  <option key={fuel.id} value={fuel.id}>
+                    {fuel.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="transmissionId">Getriebe *</label>
+              <select
+                id="transmissionId"
+                name="transmissionId"
+                value={formData.transmissionId}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Bitte wählen</option>
+                {transmissionTypes.map(transmission => (
+                  <option key={transmission.id} value={transmission.id}>
+                    {transmission.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
               <label htmlFor="year">Erstzulassung *</label>
               <select
                 id="year"
@@ -304,6 +402,23 @@ function VehicleForm() {
                 <option value="150001-plus">Über 150.000 km</option>
               </select>
             </div>
+          </div>
+        </section>
+
+        {/* Ausstattung */}
+        <section className="form-section">
+          <h2>Ausstattung</h2>
+          <div className="features-grid">
+            {features && features.map(feature => (
+              <label key={feature.id} className="feature-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={formData.selectedFeatures?.includes(feature.id)}
+                  onChange={() => handleFeatureChange(feature.id)}
+                />
+                <span>{feature.name}</span>
+              </label>
+            ))}
           </div>
         </section>
 
@@ -422,7 +537,7 @@ function VehicleForm() {
           className="submit-btn submit-btn-green"
           disabled={isSubmitting || !formData.acceptedPrivacy}
         >
-          {isSubmitting ? 'Wird gesendet...' : 'Jetzt Angebot erhalten'}
+          {isSubmitting ? 'Wird gesendet...' : buttonText}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="btn-icon">
             <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
           </svg>
@@ -436,6 +551,8 @@ function VehicleForm() {
           selectedModel={selectedModel}
           selectedGeneration={selectedGeneration}
           selectedSerie={selectedSerie}
+          selectedFuel={selectedFuel}
+          selectedTransmission={selectedTransmission}
           onClose={() => setShowModal(false)}
           onConfirm={handleConfirmSubmit}
           isSubmitting={isSubmitting}

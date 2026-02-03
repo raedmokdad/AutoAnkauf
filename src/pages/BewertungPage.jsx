@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import vehicleData from '../data/vehicleData.json';
 import { CheckIcon, LightningIcon, TruckIcon, DocumentIcon, ChartIcon } from '../components/Icons';
@@ -8,6 +8,7 @@ import './FAQPage.css';
 
 function BewertungPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const prefilledData = location.state; // Daten von HomePage
   
   const [formData, setFormData] = useState({
@@ -279,111 +280,28 @@ function BewertungPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Client-side Validierung
-    setSubmitState({ status: 'validating', message: 'Überprüfe Eingaben...' });
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    // Alle Felder validieren
-    const errors = {};
-    ['email', 'phone', 'mileage', 'condition'].forEach(field => {
-      const error = validateField(field, formData[field]);
-      if (error) errors[field] = error;
-    });
-    
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setTouchedFields({
-        email: true,
-        phone: true,
-        mileage: true,
-        condition: true
-      });
-      setSubmitState({ status: 'error', message: 'Bitte füllen Sie alle Pflichtfelder korrekt aus.' });
+    // Mindestvalidierung: makeId, modelId sind Pflicht für Weiterleitung
+    if (!formData.makeId || !formData.modelId) {
+      setSubmitState({ status: 'error', message: 'Bitte wählen Sie mindestens Marke und Modell aus.' });
       setTimeout(() => setSubmitState({ status: 'idle', message: '' }), 3000);
       return;
     }
     
-    setIsSubmitting(true);
-    setSubmitState({ status: 'submitting', message: 'Sende Anfrage...' });
-    
-    try {
-      // Finde Marke und Modell Namen für die E-Mail
-      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
-      const selectedModel = selectedMake?.models.find(m => m.id === parseInt(formData.modelId));
-      
-      const formDataToSend = new FormData();
-      formDataToSend.append('makeId', formData.makeId);
-      formDataToSend.append('makeName', selectedMake?.name || '');
-      formDataToSend.append('modelId', formData.modelId);
-      formDataToSend.append('modelName', selectedModel?.name || '');
-      formDataToSend.append('year', formData.year);
-      formDataToSend.append('mileage', formData.mileage);
-      formDataToSend.append('condition', formData.condition);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('phone', formData.phone);
-
-      const response = await fetch('/backend/bewertung.php', {
-        method: 'POST',
-        body: formDataToSend
-      });
-
-      // Prüfe ob Response OK ist
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('HTTP Error:', response.status, errorText);
-        throw new Error(`Server-Fehler: ${response.status} - ${errorText.substring(0, 100)}`);
+    // Navigiere zu bewertung-komplett mit vorausgefüllten Daten
+    navigate('/bewertung-komplett', {
+      state: {
+        prefilledData: {
+          makeId: formData.makeId,
+          modelId: formData.modelId,
+          year: formData.year,
+          mileage: formData.mileage,
+          condition: formData.condition,
+          email: formData.email,
+          phone: formData.phone,
+          acceptedPrivacy: formData.acceptedPrivacy
+        }
       }
-
-      // Versuche JSON zu parsen
-      let result;
-      try {
-        const text = await response.text();
-        console.log('Response:', text);
-        result = JSON.parse(text);
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        throw new Error('Ungültige Antwort vom Server. Bitte prüfen Sie, ob der PHP-Server läuft.');
-      }
-      
-      if (result.success) {
-        setSubmitState({ status: 'success', message: 'Erfolgreich gesendet!' });
-        setSubmitted(true);
-        // LocalStorage Draft löschen
-        localStorage.removeItem('bewertung_draft');
-        // Reset Formular
-        setFormData({
-          makeId: '',
-          modelId: '',
-          year: '',
-          mileage: '',
-          condition: '',
-          email: '',
-          phone: '',
-          acceptedPrivacy: false
-        });
-        setAvailableModels([]);
-        setAvailableYears([]);
-        setFieldErrors({});
-        setTouchedFields({});
-      } else {
-        setSubmitState({ 
-          status: 'error', 
-          message: 'Fehler beim Senden: ' + (result.message || 'Unbekannter Fehler') 
-        });
-      }
-    } catch (error) {
-      console.error('Fehler:', error);
-      const errorMessage = error.message || 'Unbekannter Fehler';
-      setSubmitState({ 
-        status: 'error', 
-        message: `Fehler beim Senden der Anfrage: ${errorMessage}` 
-      });
-    } finally {
-      setIsSubmitting(false);
-      if (submitState.status === 'error') {
-        setTimeout(() => setSubmitState({ status: 'idle', message: '' }), 5000);
-      }
-    }
+    });
   };
 
   return (
@@ -719,7 +637,7 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                     </>
                   ) : (
                     <>
-                      Jetzt kostenlos bewerten
+                      Weiter zur detaillierten Bewertung
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
@@ -948,4 +866,3 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
 }
 
 export default BewertungPage;
-

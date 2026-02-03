@@ -1,4 +1,5 @@
 import React from 'react';
+import vehicleOptions from '../data/vehicleOptions.json';
 import './SummaryModal.css';
 
 function SummaryModal({
@@ -7,10 +8,15 @@ function SummaryModal({
   selectedModel,
   selectedGeneration,
   selectedSerie,
+  selectedFuel,
+  selectedTransmission,
   onClose,
   onConfirm,
   isSubmitting
 }) {
+  const { features } = vehicleOptions;
+  const selectedFeaturesList = features.filter(f => formData.selectedFeatures?.includes(f.id));
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -36,6 +42,14 @@ function SummaryModal({
             <span>{selectedSerie?.name || 'Nicht gewählt'}</span>
           </div>
           <div className="summary-row">
+            <strong>Kraftstoff:</strong>
+            <span>{selectedFuel?.name || 'Nicht gewählt'}</span>
+          </div>
+          <div className="summary-row">
+            <strong>Getriebe:</strong>
+            <span>{selectedTransmission?.name || 'Nicht gewählt'}</span>
+          </div>
+          <div className="summary-row">
             <strong>Erstzulassung:</strong>
             <span>{formData.year || 'Nicht gewählt'}</span>
           </div>
@@ -43,6 +57,14 @@ function SummaryModal({
             <strong>Kilometerstand:</strong>
             <span>{formData.mileage || 'Nicht gewählt'}</span>
           </div>
+          {selectedFeaturesList.length > 0 && (
+            <div className="summary-row" style={{ alignItems: 'flex-start' }}>
+              <strong>Ausstattung:</strong>
+              <span style={{ textAlign: 'right', maxWidth: '60%' }}>
+                {selectedFeaturesList.map(f => f.name).join(', ')}
+              </span>
+            </div>
+          )}
           <div className="summary-row">
             <strong>E-Mail:</strong>
             <span>{formData.email}</span>
