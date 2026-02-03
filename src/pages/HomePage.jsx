@@ -4,19 +4,24 @@ import SEO from '../components/SEO';
 import StructuredData from '../components/StructuredData';
 import { TruckIcon, MoneyIcon, LightningIcon, ChartIcon, CarIcon } from '../components/Icons';
 import vehicleData from '../data/vehicleData.json';
+import { getFormData, saveFormData } from '../utils/formSync';
 import './HomePage.css';
 
 function HomePage() {
   const navigate = useNavigate();
+  
+  // Lade gespeicherte Daten beim Start
+  const savedData = getFormData();
+  
   const [formData, setFormData] = useState({
-    makeId: '',
-    modelId: '',
-    year: '',
-    mileage: '',
-    condition: '',
-    location: '',
-    email: '',
-    phone: '',
+    makeId: savedData.makeId || '',
+    modelId: savedData.modelId || '',
+    year: savedData.year || '',
+    mileage: savedData.mileage || '',
+    condition: savedData.condition || '',
+    location: savedData.location || '',
+    email: savedData.email || '',
+    phone: savedData.phone || '',
     acceptedPrivacy: false
   });
   
@@ -36,7 +41,31 @@ function HomePage() {
 
   const makes = vehicleData.makes || [];
 
-  // Validierungsfunktion für Felder
+  // Initialisiere Dropdowns basierend auf geladenen Daten
+  useEffect(() => {
+    if (formData.makeId && makes.length > 0) {
+      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
+      if (selectedMake) {
+        setAvailableModels(selectedMake.models || []);
+        
+        if (formData.modelId) {
+          const selectedModel = selectedMake.models?.find(m => m.id === parseInt(formData.modelId));
+          if (selectedModel?.generations?.length > 0) {
+            const allYears = new Set();
+            selectedModel.generations.forEach(gen => {
+              if (gen.yearBegin && gen.yearEnd) {
+                for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+                  allYears.add(y);
+                }
+              }
+            });
+            setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+          }
+        }
+      }
+    }
+  }, []); // Nur beim Mounten ausführen
+
   const validateField = useCallback((name, value) => {
     switch(name) {
       case 'email':
@@ -165,23 +194,23 @@ function HomePage() {
       value = value.trim().toLowerCase();
     }
     
-    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
-    
-    // Live-Validierung für bereits berührte Felder
-    if (touchedFields[name] && !['makeId', 'modelId', 'year'].includes(name)) {
-      const error = validateField(name, value);
-      setFieldErrors(prev => ({ ...prev, [name]: error }));
-    }
+    // Erstelle neue Formulardaten
+    let newFormData = { ...formData, [name]: type === 'checkbox' ? checked : value };
 
-    if (name === 'makeId' && value) {
+    // Abhängigkeiten behandeln und State bereinigen
+    if (name === 'makeId') {
       const selectedMake = makes.find(m => m.id === parseInt(value));
       setAvailableModels(selectedMake?.models || []);
-      setFormData(prev => ({ ...prev, modelId: '', year: '' }));
       setAvailableYears([]);
+      
+      // Reset abhängige Felder
+      newFormData.modelId = '';
+      newFormData.year = '';
+      
       setFieldErrors(prev => ({ ...prev, modelId: '', year: '' }));
     }
 
-    if (name === 'modelId' && value) {
+    if (name === 'modelId') {
       const selectedModel = availableModels.find(m => m.id === parseInt(value));
       if (selectedModel?.generations.length > 0) {
         const allYears = new Set();
@@ -193,8 +222,25 @@ function HomePage() {
           }
         });
         setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+      } else {
+        setAvailableYears([]);
       }
+      
+      // Reset abhängige Felder
+      newFormData.year = '';
+      
       setFieldErrors(prev => ({ ...prev, year: '' }));
+    }
+    
+    setFormData(newFormData);
+    
+    // Automatisch speichern bei jeder Änderung (jetzt mit bereinigten Daten!)
+    saveFormData(newFormData);
+    
+    // Live-Validierung für bereits berührte Felder
+    if (touchedFields[name] && !['makeId', 'modelId', 'year'].includes(name)) {
+      const error = validateField(name, value);
+      setFieldErrors(prev => ({ ...prev, [name]: error }));
     }
   };
 

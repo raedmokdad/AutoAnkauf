@@ -2,27 +2,31 @@ import React, { useState, useEffect } from 'react';
 import SummaryModal from './SummaryModal';
 import vehicleData from '../data/vehicleData.json';
 import vehicleOptions from '../data/vehicleOptions.json';
+import { mergeWithSavedData, saveFormData } from '../utils/formSync';
 import './VehicleForm.css';
 
 function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.', initialData = {} }) {
+  // Kombiniere Props-Daten mit gespeicherten Daten
+  const mergedData = mergeWithSavedData(initialData);
+  
   const [formData, setFormData] = useState({
-    makeId: initialData.makeId || '',
-    modelId: initialData.modelId || '',
+    makeId: mergedData.makeId || '',
+    modelId: mergedData.modelId || '',
     generationId: '',
     serieId: '',
     fuelId: '',
     transmissionId: '',
-    year: initialData.year || '',
-    mileage: initialData.mileage || '',
-    condition: initialData.condition || '',
-    location: initialData.location || '',
-    accidentDamage: initialData.accidentDamage || '',
+    year: mergedData.year || '',
+    mileage: mergedData.mileage || '',
+    condition: mergedData.condition || '',
+    location: mergedData.location || '',
+    accidentDamage: mergedData.accidentDamage || '',
     selectedFeatures: [],
-    email: initialData.email || '',
-    phone: initialData.phone || '',
+    email: mergedData.email || '',
+    phone: mergedData.phone || '',
     price: '',
     images: [],
-    acceptedPrivacy: initialData.acceptedPrivacy || false
+    acceptedPrivacy: mergedData.acceptedPrivacy || false
   });
 
   const [availableModels, setAvailableModels] = useState([]);
@@ -36,37 +40,33 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
   const makes = vehicleData.makes || [];
   const { fuelTypes, transmissionTypes, features } = vehicleOptions;
 
-  // Initialisiere verfügbare Modelle wenn initialData vorhanden ist
+  // Initialisiere Dropdowns basierend auf geladenen Daten
   useEffect(() => {
-    if (initialData.makeId) {
-      const selectedMake = makes.find(m => m.id === parseInt(initialData.makeId));
+    if (formData.makeId && makes.length > 0) {
+      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
       if (selectedMake) {
         setAvailableModels(selectedMake.models || []);
         
-        // Wenn auch modelId vorhanden ist, lade Generationen und Serien
-        if (initialData.modelId) {
-          const selectedModel = selectedMake.models.find(m => m.id === parseInt(initialData.modelId));
-          if (selectedModel) {
-            setAvailableGenerations(selectedModel.generations || []);
+        if (formData.modelId) {
+          const selectedModel = selectedMake.models?.find(m => m.id === parseInt(formData.modelId));
+          if (selectedModel?.generations?.length > 0) {
+            setAvailableGenerations(selectedModel.generations);
             setAvailableSeries(selectedModel.series || []);
             
-            // Lade verfügbare Jahre
-            if (selectedModel.generations.length > 0) {
-              const allYears = new Set();
-              selectedModel.generations.forEach(gen => {
-                if (gen.yearBegin && gen.yearEnd) {
-                  for (let y = gen.yearEnd; y >= gen.yearBegin; y--) {
-                    allYears.add(y);
-                  }
+            const allYears = new Set();
+            selectedModel.generations.forEach(gen => {
+              if (gen.yearBegin && gen.yearEnd) {
+                for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+                  allYears.add(y);
                 }
-              });
-              setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
-            }
+              }
+            });
+            setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
           }
         }
       }
     }
-  }, [initialData, makes]);
+  }, []); // Nur beim Mounten ausführen
 
   // Wenn Marke gewählt wird
   useEffect(() => {
@@ -130,10 +130,64 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    
+    // Erstelle neue Formulardaten
+    let newFormData = {
+      ...formData,
       [name]: type === 'checkbox' ? checked : value
-    }));
+    };
+
+    // Abhängigkeiten behandeln und State bereinigen
+    if (name === 'makeId') {
+      const selectedMake = makes.find(m => m.id === parseInt(value));
+      setAvailableModels(selectedMake?.models || []);
+      setAvailableGenerations([]);
+      setAvailableSeries([]);
+      setAvailableYears([]);
+      
+      // Reset abhängige Felder
+      newFormData.modelId = '';
+      newFormData.generationId = '';
+      newFormData.serieId = '';
+      newFormData.year = '';
+    }
+
+    if (name === 'modelId') {
+      const selectedModel = availableModels.find(m => m.id === parseInt(value));
+      if (selectedModel) {
+        setAvailableGenerations(selectedModel.generations || []);
+        setAvailableSeries(selectedModel.series || []);
+        
+        // Jahre laden (Logik aus useEffect kopiert/angepasst)
+        if (selectedModel.generations?.length > 0) {
+          const allYears = new Set();
+          selectedModel.generations.forEach(gen => {
+            if (gen.yearBegin && gen.yearEnd) {
+              for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+                allYears.add(y);
+              }
+            }
+          });
+          setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+        } else {
+          setAvailableYears([]);
+        }
+      } else {
+        setAvailableGenerations([]);
+        setAvailableSeries([]);
+        setAvailableYears([]);
+      }
+      
+      // Reset abhängige Felder
+      newFormData.generationId = '';
+      newFormData.serieId = '';
+      newFormData.year = '';
+    }
+
+    setFormData(newFormData);
+    
+    // Automatisch speichern (jetzt mit bereinigten Daten!)
+    saveFormData(newFormData);
   };
 
   const handleFeatureChange = (featureId) => {

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import vehicleData from '../data/vehicleData.json';
 import { CheckIcon, LightningIcon, TruckIcon, DocumentIcon, ChartIcon } from '../components/Icons';
+import { mergeWithSavedData, saveFormData } from '../utils/formSync';
 import './BewertungPage.css';
 import './FAQPage.css';
 
@@ -11,16 +12,19 @@ function BewertungPage() {
   const navigate = useNavigate();
   const prefilledData = location.state; // Daten von HomePage
   
+  // Kombiniere Navigations-Daten mit gespeicherten Daten
+  const initialData = mergeWithSavedData(prefilledData);
+  
   const [formData, setFormData] = useState({
-    makeId: '',
-    modelId: '',
-    year: '',
-    mileage: '',
-    condition: '',
-    location: '',
-    email: '',
-    phone: '',
-    acceptedPrivacy: false
+    makeId: initialData.makeId || '',
+    modelId: initialData.modelId || '',
+    year: initialData.year || '',
+    mileage: initialData.mileage || '',
+    condition: initialData.condition || '',
+    location: initialData.location || '',
+    email: initialData.email || '',
+    phone: initialData.phone || '',
+    acceptedPrivacy: initialData.acceptedPrivacy || false
   });
 
   const [availableModels, setAvailableModels] = useState([]);
@@ -39,6 +43,31 @@ function BewertungPage() {
   const [isDraftRestored, setIsDraftRestored] = useState(false);
 
   const makes = vehicleData.makes || [];
+
+  // Initialisiere Dropdowns basierend auf geladenen Daten
+  useEffect(() => {
+    if (formData.makeId && makes.length > 0) {
+      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
+      if (selectedMake) {
+        setAvailableModels(selectedMake.models || []);
+        
+        if (formData.modelId) {
+          const selectedModel = selectedMake.models?.find(m => m.id === parseInt(formData.modelId));
+          if (selectedModel?.generations?.length > 0) {
+            const allYears = new Set();
+            selectedModel.generations.forEach(gen => {
+              if (gen.yearBegin && gen.yearEnd) {
+                for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+                  allYears.add(y);
+                }
+              }
+            });
+            setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+          }
+        }
+      }
+    }
+  }, []); // Nur beim Mounten ausführen (für Initialisierung)
 
   // Validierungsfunktion für Felder
   const validateField = useCallback((name, value) => {
@@ -152,49 +181,11 @@ function BewertungPage() {
     }
   }, []);
 
-  // Prefill form with data from HomePage
+  // Prefill-Logik entfernt, da jetzt initialData verwendet wird
+  // Das verhindert das Überschreiben der gespeicherten Daten
   useEffect(() => {
-    if (prefilledData && prefilledData.marke) {
-      // Find make by name
-      const selectedMake = makes.find(m => 
-        m.name.toLowerCase() === prefilledData.marke.toLowerCase()
-      );
-      
-      if (selectedMake) {
-        setFormData(prev => ({ ...prev, makeId: selectedMake.id.toString() }));
-        setAvailableModels(selectedMake.models || []);
-        
-        // Find model by name
-        if (prefilledData.modell) {
-          const selectedModel = selectedMake.models.find(m => 
-            m.name.toLowerCase() === prefilledData.modell.toLowerCase()
-          );
-          
-          if (selectedModel) {
-            setFormData(prev => ({ 
-              ...prev, 
-              makeId: selectedMake.id.toString(),
-              modelId: selectedModel.id.toString(),
-              year: prefilledData.jahr || ''
-            }));
-            
-            // Set available years
-            if (selectedModel.generations.length > 0) {
-              const allYears = new Set();
-              selectedModel.generations.forEach(gen => {
-                if (gen.yearBegin && gen.yearEnd) {
-                  for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
-                    allYears.add(y);
-                  }
-                }
-              });
-              setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
-            }
-          }
-        }
-      }
-    }
-  }, [prefilledData, makes]);
+    // Leerer Effekt als Platzhalter, falls Logik benötigt wird
+  }, []);
 
   // Scroll to form when coming from HomePage
   useEffect(() => {
@@ -225,24 +216,23 @@ function BewertungPage() {
       value = value.trim().toLowerCase();
     }
     
-    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
-    
-    // Live-Validierung für bereits berührte Felder
-    if (touchedFields[name] && !['makeId', 'modelId', 'year'].includes(name)) {
-      const error = validateField(name, value);
-      setFieldErrors(prev => ({ ...prev, [name]: error }));
-    }
+    // Erstelle neue Formulardaten
+    let newFormData = { ...formData, [name]: type === 'checkbox' ? checked : value };
 
-    if (name === 'makeId' && value) {
+    // Abhängigkeiten behandeln und State bereinigen
+    if (name === 'makeId') {
       const selectedMake = makes.find(m => m.id === parseInt(value));
       setAvailableModels(selectedMake?.models || []);
-      setFormData(prev => ({ ...prev, modelId: '', year: '' }));
       setAvailableYears([]);
-      // Fehler zurücksetzen
+      
+      // Reset abhängige Felder
+      newFormData.modelId = '';
+      newFormData.year = '';
+      
       setFieldErrors(prev => ({ ...prev, modelId: '', year: '' }));
     }
 
-    if (name === 'modelId' && value) {
+    if (name === 'modelId') {
       const selectedModel = availableModels.find(m => m.id === parseInt(value));
       if (selectedModel?.generations.length > 0) {
         const allYears = new Set();
@@ -254,9 +244,25 @@ function BewertungPage() {
           }
         });
         setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
+      } else {
+        setAvailableYears([]);
       }
-      // Fehler zurücksetzen
+      
+      // Reset abhängige Felder
+      newFormData.year = '';
+      
       setFieldErrors(prev => ({ ...prev, year: '' }));
+    }
+    
+    setFormData(newFormData);
+    
+    // Automatisch speichern (jetzt mit korrekten Daten!)
+    saveFormData(newFormData);
+    
+    // Live-Validierung für bereits berührte Felder
+    if (touchedFields[name] && !['makeId', 'modelId', 'year'].includes(name)) {
+      const error = validateField(name, value);
+      setFieldErrors(prev => ({ ...prev, [name]: error }));
     }
   };
 
