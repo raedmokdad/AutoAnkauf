@@ -14,7 +14,9 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
     transmissionId: '',
     year: initialData.year || '',
     mileage: initialData.mileage || '',
+    condition: initialData.condition || '',
     location: initialData.location || '',
+    accidentDamage: initialData.accidentDamage || '',
     selectedFeatures: [],
     email: initialData.email || '',
     phone: initialData.phone || '',
@@ -188,7 +190,9 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
       formDataToSend.append('transmissionId', formData.transmissionId);
       formDataToSend.append('year', formData.year);
       formDataToSend.append('mileage', formData.mileage);
+      formDataToSend.append('condition', formData.condition);
       formDataToSend.append('location', formData.location);
+      formDataToSend.append('accidentDamage', formData.accidentDamage);
       formDataToSend.append('features', JSON.stringify(formData.selectedFeatures));
       formDataToSend.append('email', formData.email);
       formDataToSend.append('phone', formData.phone);
@@ -220,7 +224,9 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
           transmissionId: '',
           year: '',
           mileage: '',
+          condition: '',
           location: '',
+          accidentDamage: '',
           selectedFeatures: [],
           email: '',
           phone: '',
@@ -407,7 +413,7 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
             </div>
 
             <div className="form-group">
-              <label htmlFor="location">Standort</label>
+              <label htmlFor="location">Standort *</label>
               <input
                 type="text"
                 id="location"
@@ -415,7 +421,42 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="z.B. Berlin, 10115"
+                required
               />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="condition">Fahrzeugzustand *</label>
+              <select
+                id="condition"
+                name="condition"
+                value={formData.condition}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Bitte wählen</option>
+                <option value="excellent">Sehr gut (neuwertig)</option>
+                <option value="good">Gut (gepflegt)</option>
+                <option value="fair">Befriedigend (Gebrauchsspuren)</option>
+                <option value="poor">Ausreichend (Reparaturbedarf)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="accidentDamage">Unfallschaden *</label>
+              <select
+                id="accidentDamage"
+                name="accidentDamage"
+                value={formData.accidentDamage}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Bitte wählen</option>
+                <option value="none">Kein Unfallschaden</option>
+                <option value="minor">Kleiner Schaden (repariert)</option>
+                <option value="major">Größerer Schaden</option>
+                <option value="total">Totalschaden</option>
+              </select>
             </div>
           </div>
         </section>

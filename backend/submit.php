@@ -23,7 +23,9 @@ $fuelId = $_POST['fuelId'] ?? '';
 $transmissionId = $_POST['transmissionId'] ?? '';
 $year = $_POST['year'] ?? '';
 $mileage = $_POST['mileage'] ?? '';
+$condition = $_POST['condition'] ?? '';
 $location = $_POST['location'] ?? '';
+$accidentDamage = $_POST['accidentDamage'] ?? '';
 $featuresJson = $_POST['features'] ?? '[]';
 $email = $_POST['email'] ?? '';
 $phone = $_POST['phone'] ?? '';
@@ -46,8 +48,28 @@ $message .= "Kraftstoff: $fuelId\n";
 $message .= "Getriebe: $transmissionId\n";
 $message .= "Erstzulassung: $year\n";
 $message .= "Kilometerstand: $mileage\n";
+if (!empty($condition)) {
+    $conditionText = match($condition) {
+        'excellent' => 'Sehr gut (neuwertig)',
+        'good' => 'Gut (gepflegt)',
+        'fair' => 'Befriedigend (Gebrauchsspuren)',
+        'poor' => 'Ausreichend (Reparaturbedarf)',
+        default => $condition
+    };
+    $message .= "Fahrzeugzustand: $conditionText\n";
+}
 if (!empty($location)) {
     $message .= "Standort: $location\n";
+}
+if (!empty($accidentDamage)) {
+    $accidentText = match($accidentDamage) {
+        'none' => 'Kein Unfallschaden',
+        'minor' => 'Kleiner Schaden (repariert)',
+        'major' => 'Größerer Schaden',
+        'total' => 'Totalschaden',
+        default => $accidentDamage
+    };
+    $message .= "Unfallschaden: $accidentText\n";
 }
 
 $featureNames = [

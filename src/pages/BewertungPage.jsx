@@ -61,6 +61,9 @@ function BewertungPage() {
       case 'condition':
         if (!value) return 'Bitte wählen Sie einen Fahrzeugzustand';
         return '';
+      case 'location':
+        if (!value) return 'Standort ist erforderlich';
+        return '';
       default:
         return '';
     }
@@ -492,7 +495,7 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                   </div>
 
                   <div className="form-group-bewertung">
-                    <label htmlFor="location">Standort</label>
+                    <label htmlFor="location">Standort *</label>
                     <input
                       type="text"
                       id="location"
@@ -500,6 +503,7 @@ Erfahre den aktuellen Marktwert deines Fahrzeugs – schnell, einfach, online.
                       value={formData.location}
                       onChange={handleChange}
                       placeholder="z.B. Berlin, 10115"
+                      required
                     />
                   </div>
 

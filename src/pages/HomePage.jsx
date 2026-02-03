@@ -57,6 +57,9 @@ function HomePage() {
       case 'condition':
         if (!value) return 'Bitte wählen Sie einen Fahrzeugzustand';
         return '';
+      case 'location':
+        if (!value) return 'Standort ist erforderlich';
+        return '';
       default:
         return '';
     }
@@ -414,7 +417,7 @@ function HomePage() {
                   </div>
 
                   <div className="form-group-vertical">
-                    <label htmlFor="home-location">Standort</label>
+                    <label htmlFor="home-location">Standort *</label>
                     <input
                       type="text"
                       id="home-location"
@@ -422,6 +425,7 @@ function HomePage() {
                       value={formData.location}
                       onChange={handleChange}
                       placeholder="z.B. Berlin, 10115"
+                      required
                     />
                   </div>
 

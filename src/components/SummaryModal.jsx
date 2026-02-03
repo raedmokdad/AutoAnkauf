@@ -57,10 +57,32 @@ function SummaryModal({
             <strong>Kilometerstand:</strong>
             <span>{formData.mileage || 'Nicht gewählt'}</span>
           </div>
+          {formData.condition && (
+            <div className="summary-row">
+              <strong>Fahrzeugzustand:</strong>
+              <span>
+                {formData.condition === 'excellent' && 'Sehr gut (neuwertig)'}
+                {formData.condition === 'good' && 'Gut (gepflegt)'}
+                {formData.condition === 'fair' && 'Befriedigend (Gebrauchsspuren)'}
+                {formData.condition === 'poor' && 'Ausreichend (Reparaturbedarf)'}
+              </span>
+            </div>
+          )}
           {formData.location && (
             <div className="summary-row">
               <strong>Standort:</strong>
               <span>{formData.location}</span>
+            </div>
+          )}
+          {formData.accidentDamage && (
+            <div className="summary-row">
+              <strong>Unfallschaden:</strong>
+              <span>
+                {formData.accidentDamage === 'none' && 'Kein Unfallschaden'}
+                {formData.accidentDamage === 'minor' && 'Kleiner Schaden (repariert)'}
+                {formData.accidentDamage === 'major' && 'Größerer Schaden'}
+                {formData.accidentDamage === 'total' && 'Totalschaden'}
+              </span>
             </div>
           )}
           {selectedFeaturesList.length > 0 && (
