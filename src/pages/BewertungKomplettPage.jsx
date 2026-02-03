@@ -60,6 +60,7 @@ function BewertungKomplettPage() {
           <VehicleForm 
             buttonText="Jetzt Bewertung anfordern"
             pageTitle="Vervollständige deine Fahrzeugdaten für eine präzise Bewertung."
+            formType="valuation"
           />
         </div>
       </section>

@@ -102,3 +102,27 @@ AutohandelSeite/
 - Für Produktion: PHPMailer für besseren E-Mail-Versand mit Anhängen verwenden
 - CORS-Einstellungen im PHP-Script anpassen, falls nötig
 
+----------------------------------------
+
+ToDo
+
+Getriebe
+Fuel
+
+Ausstattung:
+1- Klimaanlage/ klimaautomatik
+2- Navigation
+3- Parksensoren
+4- Sitzheizung
+5- Panoramadach
+6- Schiebedach
+7- Parkassistent
+8- Bremsassistent
+9- Multifunktionslenkrad
+10- Alufelgen
+11- Stahlfelgen
+12- Anhängerkupplung
+13- Carplay
+14- Key less
+15- Xenon 
+16- Nebelscheinwerfer

@@ -41,7 +41,7 @@ Einfach Formular ausfüllen, Autobewertung bekommen und sofort Zahlung erhalten.
 
       <section className="section ankauf-form-section">
         <div className="container">
-          <VehicleForm />
+          <VehicleForm formType="purchase" />
         </div>
       </section>
 

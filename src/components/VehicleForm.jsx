@@ -5,7 +5,7 @@ import vehicleOptions from '../data/vehicleOptions.json';
 import { mergeWithSavedData, saveFormData } from '../utils/formSync';
 import './VehicleForm.css';
 
-function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.', initialData = {} }) {
+function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.', initialData = {}, formType = 'general' }) {
   // 1. Datenvorbereitung und Helper
   const mergedData = mergeWithSavedData(initialData);
   const makes = vehicleData.makes || [];
@@ -205,6 +205,7 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
       formDataToSend.append('email', formData.email);
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('price', formData.price);
+      formDataToSend.append('formType', formType);
       
       // Helper für Base64 zu Blob Konvertierung
       const dataURLtoBlob = (dataurl) => {
