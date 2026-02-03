@@ -6,127 +6,79 @@ import { mergeWithSavedData, saveFormData } from '../utils/formSync';
 import './VehicleForm.css';
 
 function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib deine Fahrzeugdaten ein und erfahre, was dein Auto wert ist.', initialData = {} }) {
-  // Kombiniere Props-Daten mit gespeicherten Daten
+  // 1. Datenvorbereitung und Helper
   const mergedData = mergeWithSavedData(initialData);
+  const makes = vehicleData.makes || [];
+  const { fuelTypes, transmissionTypes, features } = vehicleOptions;
+
+  const getInitialModels = (makeId) => {
+    if (!makeId) return [];
+    const make = makes.find(m => m.id === parseInt(makeId));
+    return make?.models || [];
+  };
+
+  const getInitialGenerations = (makeId, modelId) => {
+    if (!makeId || !modelId) return [];
+    const make = makes.find(m => m.id === parseInt(makeId));
+    const model = make?.models?.find(m => m.id === parseInt(modelId));
+    return model?.generations || [];
+  };
+
+  const getInitialSeries = (makeId, modelId) => {
+    if (!makeId || !modelId) return [];
+    const make = makes.find(m => m.id === parseInt(makeId));
+    const model = make?.models?.find(m => m.id === parseInt(modelId));
+    return model?.series || [];
+  };
+
+  const getInitialYears = (makeId, modelId) => {
+    if (!makeId || !modelId) return [];
+    const make = makes.find(m => m.id === parseInt(makeId));
+    const model = make?.models?.find(m => m.id === parseInt(modelId));
+    
+    if (model?.generations?.length > 0) {
+      const allYears = new Set();
+      model.generations.forEach(gen => {
+        if (gen.yearBegin && gen.yearEnd) {
+          for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
+            allYears.add(y);
+          }
+        }
+      });
+      return Array.from(allYears).sort((a, b) => b - a);
+    }
+    return [];
+  };
   
+  // 2. State Initialisierung
   const [formData, setFormData] = useState({
     makeId: mergedData.makeId || '',
     modelId: mergedData.modelId || '',
-    generationId: '',
-    serieId: '',
-    fuelId: '',
-    transmissionId: '',
+    generationId: mergedData.generationId || '',
+    serieId: mergedData.serieId || '',
+    fuelId: mergedData.fuelId || '',
+    transmissionId: mergedData.transmissionId || '',
     year: mergedData.year || '',
     mileage: mergedData.mileage || '',
     condition: mergedData.condition || '',
     location: mergedData.location || '',
     accidentDamage: mergedData.accidentDamage || '',
-    selectedFeatures: [],
+    selectedFeatures: mergedData.selectedFeatures || [],
     email: mergedData.email || '',
     phone: mergedData.phone || '',
     price: '',
-    images: [],
+    images: mergedData.images || [],
     acceptedPrivacy: mergedData.acceptedPrivacy || false
   });
 
-  const [availableModels, setAvailableModels] = useState([]);
-  const [availableGenerations, setAvailableGenerations] = useState([]);
-  const [availableSeries, setAvailableSeries] = useState([]);
-  const [availableYears, setAvailableYears] = useState([]);
+  const [availableModels, setAvailableModels] = useState(() => getInitialModels(mergedData.makeId));
+  const [availableGenerations, setAvailableGenerations] = useState(() => getInitialGenerations(mergedData.makeId, mergedData.modelId));
+  const [availableSeries, setAvailableSeries] = useState(() => getInitialSeries(mergedData.makeId, mergedData.modelId));
+  const [availableYears, setAvailableYears] = useState(() => getInitialYears(mergedData.makeId, mergedData.modelId));
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Lade Marken und Optionen
-  const makes = vehicleData.makes || [];
-  const { fuelTypes, transmissionTypes, features } = vehicleOptions;
-
-  // Initialisiere Dropdowns basierend auf geladenen Daten
-  useEffect(() => {
-    if (formData.makeId && makes.length > 0) {
-      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
-      if (selectedMake) {
-        setAvailableModels(selectedMake.models || []);
-        
-        if (formData.modelId) {
-          const selectedModel = selectedMake.models?.find(m => m.id === parseInt(formData.modelId));
-          if (selectedModel?.generations?.length > 0) {
-            setAvailableGenerations(selectedModel.generations);
-            setAvailableSeries(selectedModel.series || []);
-            
-            const allYears = new Set();
-            selectedModel.generations.forEach(gen => {
-              if (gen.yearBegin && gen.yearEnd) {
-                for (let y = gen.yearBegin; y <= gen.yearEnd; y++) {
-                  allYears.add(y);
-                }
-              }
-            });
-            setAvailableYears(Array.from(allYears).sort((a, b) => b - a));
-          }
-        }
-      }
-    }
-  }, []); // Nur beim Mounten ausführen
-
-  // Wenn Marke gewählt wird
-  useEffect(() => {
-    if (formData.makeId) {
-      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
-      if (selectedMake) {
-        setAvailableModels(selectedMake.models || []);
-      }
-      // Reset abhängige Felder
-      setFormData(prev => ({
-        ...prev,
-        modelId: '',
-        generationId: '',
-        serieId: '',
-        year: ''
-      }));
-    } else {
-      setAvailableModels([]);
-    }
-  }, [formData.makeId]);
-
-  // Wenn Modell gewählt wird
-  useEffect(() => {
-    if (formData.modelId && availableModels.length > 0) {
-      const selectedModel = availableModels.find(m => m.id === parseInt(formData.modelId));
-      if (selectedModel) {
-        setAvailableGenerations(selectedModel.generations || []);
-        setAvailableSeries(selectedModel.series || []);
-      }
-      setFormData(prev => ({
-        ...prev,
-        generationId: '',
-        serieId: '',
-        year: ''
-      }));
-    } else {
-      setAvailableGenerations([]);
-      setAvailableSeries([]);
-    }
-  }, [formData.modelId, availableModels]);
-
-  // Wenn Generation gewählt wird
-  useEffect(() => {
-    if (formData.generationId && availableGenerations.length > 0) {
-      const selectedGen = availableGenerations.find(
-        g => g.id === parseInt(formData.generationId)
-      );
-      if (selectedGen && selectedGen.yearBegin && selectedGen.yearEnd) {
-        const years = [];
-        for (let year = selectedGen.yearEnd; year >= selectedGen.yearBegin; year--) {
-          years.push(year);
-        }
-        setAvailableYears(years);
-      } else {
-        setAvailableYears([]);
-      }
-    } else {
-      setAvailableYears([]);
-    }
-  }, [formData.generationId, availableGenerations]);
+  // Alte useEffects entfernt (Logik jetzt in useState Init und handleChange)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -193,17 +145,17 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
   const handleFeatureChange = (featureId) => {
     setFormData(prev => {
       const currentFeatures = prev.selectedFeatures || [];
+      let newFeatures;
+      
       if (currentFeatures.includes(featureId)) {
-        return {
-          ...prev,
-          selectedFeatures: currentFeatures.filter(id => id !== featureId)
-        };
+        newFeatures = currentFeatures.filter(id => id !== featureId);
       } else {
-        return {
-          ...prev,
-          selectedFeatures: [...currentFeatures, featureId]
-        };
+        newFeatures = [...currentFeatures, featureId];
       }
+      
+      const newData = { ...prev, selectedFeatures: newFeatures };
+      saveFormData(newData);
+      return newData;
     });
   };
 
@@ -217,10 +169,14 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
           file: file,
           preview: reader.result
         };
-        setFormData(prev => ({
-          ...prev,
-          images: newImages
-        }));
+        setFormData(prev => {
+          const newData = {
+            ...prev,
+            images: newImages
+          };
+          saveFormData(newData);
+          return newData;
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -252,10 +208,36 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('price', formData.price);
       
+      // Helper für Base64 zu Blob Konvertierung
+      const dataURLtoBlob = (dataurl) => {
+        try {
+          const arr = dataurl.split(',');
+          const mime = arr[0].match(/:(.*?);/)[1];
+          const bstr = atob(arr[1]);
+          let n = bstr.length;
+          const u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          return new Blob([u8arr], { type: mime });
+        } catch (e) {
+          console.error('Fehler bei Bild-Konvertierung:', e);
+          return null;
+        }
+      };
+
       // Füge Bilder hinzu
       formData.images.forEach((image, index) => {
-        if (image && image.file) {
-          formDataToSend.append(`image${index + 1}`, image.file);
+        if (image) {
+          if (image.file) {
+            formDataToSend.append(`image${index + 1}`, image.file);
+          } else if (image.preview) {
+            // Wiederhergestelltes Bild aus localStorage
+            const blob = dataURLtoBlob(image.preview);
+            if (blob) {
+              formDataToSend.append(`image${index + 1}`, blob, `image_${index + 1}.jpg`);
+            }
+          }
         }
       });
 
