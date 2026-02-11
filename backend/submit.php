@@ -260,7 +260,15 @@ if (file_exists(__DIR__ . '/tcpdf/tcpdf.php')) {
         table td:first-child { font-weight: bold; width: 40%; color: #555; }
         .header-info { background: #e8f5e9; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #4CAF50; text-align: center; color: #777; }
-        @media print { body { margin: 0; } }
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }
+        .image-box { border: 2px solid #4CAF50; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .image-box img { width: 100%; height: auto; display: block; }
+        .image-caption { padding: 8px; margin: 0; background: #e8f5e9; font-size: 12px; text-align: center; }
+        @media print { 
+            body { margin: 0; }
+            .image-grid { grid-template-columns: repeat(2, 1fr); page-break-inside: avoid; }
+            .image-box { page-break-inside: avoid; }
+        }
     </style>
 </head>
 <body>
@@ -298,12 +306,19 @@ if (file_exists(__DIR__ . '/tcpdf/tcpdf.php')) {
     if (count($savedImages) > 0) {
         $htmlForPdf .= '
     <h2>📷 Fahrzeugbilder (' . count($savedImages) . ')</h2>
-    <ul>';
+    <div class="image-grid">';
         foreach ($savedImages as $imgPath) {
             $imgUrl = 'https://autohd.de/uploads/' . basename($requestFolder) . '/' . basename($imgPath);
-            $htmlForPdf .= '<li><a href="' . htmlspecialchars($imgUrl) . '">' . htmlspecialchars(basename($imgPath)) . '</a></li>';
+            $htmlForPdf .= '
+        <div class="image-box">
+            <a href="' . htmlspecialchars($imgUrl) . '" target="_blank">
+                <img src="' . htmlspecialchars($imgUrl) . '" alt="' . htmlspecialchars(basename($imgPath)) . '">
+            </a>
+            <p class="image-caption">' . htmlspecialchars(basename($imgPath)) . '</p>
+        </div>';
         }
-        $htmlForPdf .= '</ul>';
+        $htmlForPdf .= '
+    </div>';
     }
     
     $htmlForPdf .= '
