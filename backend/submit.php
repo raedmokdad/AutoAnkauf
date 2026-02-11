@@ -532,9 +532,6 @@ if ($usePHPMailer) {
             error_log("PHPMailer[$level] $str");
         };
         
-        // Explizit Sender setzen (für IONOS)
-        $mail->Sender = 'info@autohd.de';
-        
         $mail->SMTPOptions = array(
             'ssl' => array(
                 'verify_peer' => false,
@@ -544,9 +541,11 @@ if ($usePHPMailer) {
         );
 
         // 1. E-Mail an HÄNDLER
+        // WICHTIG für IONOS: From und Sender müssen identisch sein!
         $mail->setFrom('info@autohd.de', 'AutoHD Webformular');
+        $mail->Sender = 'info@autohd.de'; // Verhindert sh-xxx@eu.hosting-webspace.io
         $mail->addAddress(defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@autohd.de'); 
-        $mail->addReplyTo($email); // Damit man direkt dem Kunden antworten kann
+        $mail->addReplyTo($email, $email); // Damit man direkt dem Kunden antworten kann
 
         $mail->isHTML(true);
         $mail->Subject = $subject;
@@ -570,8 +569,9 @@ if ($usePHPMailer) {
         $mail->clearCCs();
         $mail->clearBCCs();
         
-        // Absender für Kunden-Mail
+        // Absender für Kunden-Mail (gleiche Adresse wie Sender!)
         $mail->setFrom('info@autohd.de', 'AutoHD - ARZ Automobile');
+        $mail->Sender = 'info@autohd.de'; // Verhindert sh-xxx@eu.hosting-webspace.io
         $mail->addAddress($email); // An den Kunden
         $mail->Subject = "✅ Ihre Anfrage bei AutoHD wurde erhalten";
         
