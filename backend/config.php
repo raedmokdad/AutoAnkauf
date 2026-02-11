@@ -5,7 +5,7 @@
 define('SMTP_RECEIVER', 'info@autohd.de');
 
 // E-Mail Versand-Methode: 'smtp' oder 'php'
-// SMTP = über IONOS SMTP-Server (Standard)
+// SMTP = über IONOS SMTP-Server (bessere GMX/Web.de Kompatibilität)
 // PHP = native PHP mail() mit -f Parameter (falls SMTP Probleme macht)
 define('MAIL_METHOD', 'smtp');
 

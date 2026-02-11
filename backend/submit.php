@@ -611,14 +611,12 @@ if ($mailMethod === 'php') {
         
         // IONOS-spezifische Einstellungen - verhindert sh-xxx@eu.hosting-webspace.io
         $mail->XMailer = ' '; // Versteckt "PHPMailer" Header
-        $mail->addCustomHeader('Return-Path', 'info@autohd.de');
-        $mail->addCustomHeader('X-Sender', 'info@autohd.de');
         
-        // Debug aktivieren (für Fehlersuche)
-        $mail->SMTPDebug = 2;
-        $mail->Debugoutput = function ($str, $level) {
-            error_log("PHPMailer[$level] $str");
-        };
+        // Debug deaktivieren für GMX/Web.de (kann HTML-Darstellung stören)
+        // $mail->SMTPDebug = 2;
+        // $mail->Debugoutput = function ($str, $level) {
+        //     error_log("PHPMailer[$level] $str");
+        // };
         
         $mail->SMTPOptions = array(
             'ssl' => array(
