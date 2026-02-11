@@ -4,7 +4,7 @@ session_start();
 // === PASSWORT-KONFIGURATION ===
 // Ändere diese Werte nach dem ersten Login!
 define('ADMIN_USERNAME', 'admin');
-define('ADMIN_PASSWORD', 'AutoHD2024!'); // BITTE ÄNDERN!
+define('ADMIN_PASSWORD', 'xK9#mL2$pQ7@wR5!nH8&vB3%yT6'); // Starkes Passwort - sicher aufbewahren!
 
 // Login-Prüfung
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -45,7 +45,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     </head>
     <body>
         <div class="login-box">
-            <h1>🔒 Admin Login</h1>
+            <h1 style="display: flex; align-items: center; justify-content: center; gap: 10px;"><span style="background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 8px 16px; border-radius: 5px; font-size: 20px;">AutoHD</span> Admin Login</h1>
             <?php if (isset($loginError)): ?>
                 <div class="error"><?= htmlspecialchars($loginError) ?></div>
             <?php endif; ?>
@@ -177,7 +177,7 @@ if (!empty($search)) {
 <body>
     <div class="header">
         <div class="header-content">
-            <h1>🚗 Anfragen Verwaltung - AutoHD</h1>
+            <h1><span style="background: white; color: #4CAF50; padding: 5px 12px; border-radius: 5px; font-weight: bold; margin-right: 15px;">AutoHD</span> Anfragen Verwaltung</h1>
             <a href="?logout" class="logout-btn">Abmelden</a>
         </div>
     </div>
