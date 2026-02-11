@@ -138,16 +138,26 @@ mkdir($requestFolder, 0755, true);
 
 // Bilder speichern
 $savedImages = [];
+error_log("[BILD-UPLOAD] Prüfe $_FILES Array: " . print_r(array_keys($_FILES), true));
 for ($i = 1; $i <= 5; $i++) {
-    if (isset($_FILES["image$i"]) && $_FILES["image$i"]['error'] === UPLOAD_ERR_OK) {
-        $fileName = 'image' . $i . '_' . basename($_FILES["image$i"]['name']);
-        $targetPath = $requestFolder . $fileName;
-        if (move_uploaded_file($_FILES["image$i"]['tmp_name'], $targetPath)) {
-            $savedImages[] = $targetPath;
-            error_log("[BILD-UPLOAD] Bild $i gespeichert: $targetPath");
+    $fieldName = "image$i";
+    if (isset($_FILES[$fieldName])) {
+        error_log("[BILD-UPLOAD] Bild $i - Error Code: " . $_FILES[$fieldName]['error'] . ", Name: " . $_FILES[$fieldName]['name']);
+        if ($_FILES[$fieldName]['error'] === UPLOAD_ERR_OK) {
+            $fileName = 'image' . $i . '_' . basename($_FILES[$fieldName]['name']);
+            $targetPath = $requestFolder . $fileName;
+            if (move_uploaded_file($_FILES[$fieldName]['tmp_name'], $targetPath)) {
+                $savedImages[] = $targetPath;
+                error_log("[BILD-UPLOAD] ✓ Bild $i erfolgreich gespeichert: $targetPath (" . filesize($targetPath) . " bytes)");
+            } else {
+                error_log("[BILD-UPLOAD] ✗ Bild $i konnte nicht verschoben werden");
+            }
+        } else {
+            error_log("[BILD-UPLOAD] Bild $i hat Upload-Fehler: " . $_FILES[$fieldName]['error']);
         }
     }
 }
+error_log("[BILD-UPLOAD] Gesamt " . count($savedImages) . " Bilder gespeichert in: $requestFolder");
 
 // Formulardaten auch als JSON speichern
 $formData = [
@@ -179,6 +189,13 @@ file_put_contents($requestFolder . 'anfrage.json', json_encode($formData, JSON_P
 $message .= "\n=== BILDER ===\n";
 $message .= "Gespeichert in: " . basename($requestFolder) . "\n";
 $message .= "Anzahl Bilder: " . count($savedImages) . "\n";
+if (count($savedImages) > 0) {
+    $message .= "\nBilder online ansehen:\n";
+    foreach ($savedImages as $imgPath) {
+        $imgUrl = 'https://autohd.de/uploads/' . basename($requestFolder) . '/' . basename($imgPath);
+        $message .= "- " . $imgUrl . "\n";
+    }
+}
 
 // HTML E-Mail erstellen
 $htmlMessage = '
@@ -239,7 +256,24 @@ $htmlMessage = '
                         <div class="info-row" style="border: none;"><span class="info-label">E-Mail:</span><span class="info-value"><a class="link" href="mailto:' . htmlspecialchars($email) . '">' . htmlspecialchars($email) . '</a></span></div>
                         <div class="info-row" style="border: none;"><span class="info-label">Telefon:</span><span class="info-value"><a class="link" href="tel:' . htmlspecialchars($phone) . '">' . htmlspecialchars($phone) . '</a></span></div>
                     </div>
-                </div>
+                </div>';
+
+if (count($savedImages) > 0) {
+    $htmlMessage .= '
+                <div class="section">
+                    <h2>📷 Fahrzeugbilder (' . count($savedImages) . ')</h2>';
+    foreach ($savedImages as $imgPath) {
+        $imgUrl = 'https://autohd.de/uploads/' . basename($requestFolder) . '/' . basename($imgPath);
+        $htmlMessage .= '
+                    <div style="margin: 10px 0;">
+                        <a class="link" href="' . htmlspecialchars($imgUrl) . '" target="_blank" style="display: inline-block; padding: 8px 16px; background: #e8f5e9; border-radius: 4px; text-decoration: none;">📎 ' . htmlspecialchars(basename($imgPath)) . '</a>
+                    </div>';
+    }
+    $htmlMessage .= '
+                </div>';
+}
+
+$htmlMessage .= '
             </div>
             <div class="footer">
                 AutoHD - ARZ Automobile | Autoankauf Rheinberg<br>
@@ -350,8 +384,9 @@ if ($usePHPMailer) {
             error_log("PHPMailer[$level] $str");
         };
         
-        // Sender NICHT setzen - lässt IONOS automatisch machen
-        // $mail->Sender = 'info@autohd.de';
+        // Explizit Sender setzen (für IONOS)
+        $mail->Sender = 'info@autohd.de';
+        
         $mail->SMTPOptions = array(
             'ssl' => array(
                 'verify_peer' => false,
@@ -370,15 +405,9 @@ if ($usePHPMailer) {
         $mail->Body    = $htmlMessage;
         $mail->AltBody = $message; // Fallback für E-Mail-Clients ohne HTML
 
-        // Anhänge (Bilder) - aus dem gespeicherten Ordner laden
-        $attachedImages = 0;
-        foreach ($savedImages as $imagePath) {
-            if (file_exists($imagePath)) {
-                $mail->addAttachment($imagePath, basename($imagePath));
-                $attachedImages++;
-            }
-        }
-        error_log("[HÄNDLER-MAIL] $attachedImages Bilder angehängt");
+        // KEINE Anhänge mehr - stattdessen Links in der E-Mail
+        // (SMTP-Größenlimits umgehen, schnellerer Versand)
+        error_log("[HÄNDLER-MAIL] " . count($savedImages) . " Bilder als Links in E-Mail eingefügt");
 
         if (!$mail->send()) {
             error_log('[HÄNDLER-MAIL] Fehler: ' . $mail->ErrorInfo);

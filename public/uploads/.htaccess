@@ -1,0 +1,12 @@
+# Verzeichnis-Listing blockieren
+Options -Indexes
+
+# Bilder erlauben
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|json)$">
+    Require all granted
+</FilesMatch>
+
+# PHP-Ausführung verhindern
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
