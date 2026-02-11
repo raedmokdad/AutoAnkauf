@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import SummaryModal from './SummaryModal';
 import vehicleData from '../data/vehicleData.json';
 import vehicleOptions from '../data/vehicleOptions.json';
@@ -77,6 +78,8 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
   const [availableYears, setAvailableYears] = useState(() => getInitialYears(mergedData.makeId, mergedData.modelId));
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const recaptchaRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -182,20 +185,45 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // reCAPTCHA validieren
+    if (!captchaToken) {
+      alert('Bitte bestätigen Sie, dass Sie kein Roboter sind.');
+      return;
+    }
+    
     setShowModal(true);
+  };
+
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token);
   };
 
   const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
     
     try {
+      // Namen der ausgewählten Optionen finden
+      const selectedMake = makes.find(m => m.id === parseInt(formData.makeId));
+      const selectedModel = availableModels.find(m => m.id === parseInt(formData.modelId));
+      const selectedGeneration = availableGenerations.find(g => g.id === parseInt(formData.generationId));
+      const selectedSerie = availableSeries.find(s => s.id === parseInt(formData.serieId));
+      const selectedFuel = fuelTypes.find(f => f.value === formData.fuelId);
+      const selectedTransmission = transmissionTypes.find(t => t.value === formData.transmissionId);
+      
       const formDataToSend = new FormData();
       formDataToSend.append('makeId', formData.makeId);
+      formDataToSend.append('makeName', selectedMake?.name || '');
       formDataToSend.append('modelId', formData.modelId);
+      formDataToSend.append('modelName', selectedModel?.name || '');
       formDataToSend.append('generationId', formData.generationId);
+      formDataToSend.append('generationName', selectedGeneration?.name || '');
       formDataToSend.append('serieId', formData.serieId);
+      formDataToSend.append('serieName', selectedSerie?.name || '');
       formDataToSend.append('fuelId', formData.fuelId);
+      formDataToSend.append('fuelName', selectedFuel?.label || '');
       formDataToSend.append('transmissionId', formData.transmissionId);
+      formDataToSend.append('transmissionName', selectedTransmission?.label || '');
       formDataToSend.append('year', formData.year);
       formDataToSend.append('mileage', formData.mileage);
       formDataToSend.append('condition', formData.condition);
@@ -206,6 +234,7 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('price', formData.price);
       formDataToSend.append('formType', formType);
+      formDataToSend.append('recaptchaToken', captchaToken);
       
       // Helper für Base64 zu Blob Konvertierung
       const dataURLtoBlob = (dataurl) => {
@@ -381,8 +410,8 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
               >
                 <option value="">Bitte wählen</option>
                 {fuelTypes.map(fuel => (
-                  <option key={fuel.id} value={fuel.id}>
-                    {fuel.name}
+                  <option key={fuel.value} value={fuel.value}>
+                    {fuel.label}
                   </option>
                 ))}
               </select>
@@ -399,8 +428,8 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
               >
                 <option value="">Bitte wählen</option>
                 {transmissionTypes.map(transmission => (
-                  <option key={transmission.id} value={transmission.id}>
-                    {transmission.name}
+                  <option key={transmission.value} value={transmission.value}>
+                    {transmission.label}
                   </option>
                 ))}
               </select>
@@ -623,10 +652,20 @@ function VehicleForm({ buttonText = 'Jetzt Angebot erhalten', pageTitle = 'Gib d
           </label>
         </div>
 
+        {/* reCAPTCHA */}
+        <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey="6LfauWUsAAAAAPeiQPLb0_Twm4jhub345L1tt_zf"
+            onChange={handleCaptchaChange}
+            onExpired={() => setCaptchaToken(null)}
+          />
+        </div>
+
         <button
           type="submit"
           className="submit-btn submit-btn-green"
-          disabled={isSubmitting || !formData.acceptedPrivacy}
+          disabled={isSubmitting || !formData.acceptedPrivacy || !captchaToken}
         >
           {isSubmitting ? 'Wird gesendet...' : buttonText}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="btn-icon">

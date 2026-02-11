@@ -1,17 +1,17 @@
 {
   "fuelTypes": [
-    { "id": "benzin", "name": "Benzin" },
-    { "id": "diesel", "name": "Diesel" },
-    { "id": "elektro", "name": "Elektro" },
-    { "id": "hybrid", "name": "Hybrid" },
-    { "id": "lpg", "name": "LPG (Autogas)" },
-    { "id": "cng", "name": "CNG (Erdgas)" },
-    { "id": "andere", "name": "Andere" }
+    { "value": "benzin", "label": "Benzin" },
+    { "value": "diesel", "label": "Diesel" },
+    { "value": "elektro", "label": "Elektro" },
+    { "value": "hybrid", "label": "Hybrid" },
+    { "value": "lpg", "label": "LPG (Autogas)" },
+    { "value": "cng", "label": "CNG (Erdgas)" },
+    { "value": "andere", "label": "Andere" }
   ],
   "transmissionTypes": [
-    { "id": "manual", "name": "Schaltgetriebe" },
-    { "id": "automatic", "name": "Automatik" },
-    { "id": "semi_automatic", "name": "Halbautomatik" }
+    { "value": "manual", "label": "Schaltgetriebe" },
+    { "value": "automatic", "label": "Automatik" },
+    { "value": "semi_automatic", "label": "Halbautomatik" }
   ],
   "features": [
     { "id": "ac", "name": "Klimaanlage / Klimaautomatik" },

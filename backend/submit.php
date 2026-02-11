@@ -9,7 +9,7 @@ if (file_exists('config.php')) {
     require_once 'config.php';
 } else {
     // Fallback falls config fehlt
-    define('SMTP_RECEIVER', 'info@arz-automobile.de');
+    define('SMTP_RECEIVER', 'info@autohd.de');
 }
 
 // Prüfen ob PHPMailer vorhanden ist
@@ -30,17 +30,67 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// === reCAPTCHA VERIFIZIERUNG ===
+$recaptchaToken = $_POST['recaptchaToken'] ?? '';
+
+if (empty($recaptchaToken)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'reCAPTCHA-Token fehlt']);
+    exit;
+}
+
+// reCAPTCHA bei Google überprüfen
+$recaptchaSecret = defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '';
+
+if (empty($recaptchaSecret) || $recaptchaSecret === 'DEIN_SECRET_KEY_HIER_EINFUEGEN') {
+    // Entwicklungsmodus: Warnung loggen aber weiter verarbeiten
+    error_log('WARNUNG: reCAPTCHA Secret Key nicht konfiguriert!');
+} else {
+    // Produktionsmodus: reCAPTCHA verifizieren
+    $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
+    $recaptchaData = [
+        'secret' => $recaptchaSecret,
+        'response' => $recaptchaToken,
+        'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
+    ];
+
+    $options = [
+        'http' => [
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($recaptchaData)
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $response = @file_get_contents($recaptchaUrl, false, $context);
+    
+    if ($response === false) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'reCAPTCHA-Verifizierung fehlgeschlagen']);
+        exit;
+    }
+
+    $responseData = json_decode($response, true);
+    
+    if (!isset($responseData['success']) || $responseData['success'] !== true) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'reCAPTCHA-Verifizierung ungültig. Bitte versuchen Sie es erneut.']);
+        exit;
+    }
+}
+
 // === DATEN VERARBEITEN ===
 $formType = $_POST['formType'] ?? 'general';
 $email = $_POST['email'] ?? '';
 $phone = $_POST['phone'] ?? '';
-$makeId = $_POST['makeId'] ?? '';
-$modelId = $_POST['modelId'] ?? '';
+$makeName = $_POST['makeName'] ?? '';
+$modelName = $_POST['modelName'] ?? '';
 $price = $_POST['price'] ?? '';
 
 // Betreff generieren
 $subjectPrefix = ($formType === 'purchase') ? 'ANKAUF-ANFRAGE' : 'BEWERTUNG';
-$subject = "Neue $subjectPrefix: $makeId $modelId";
+$subject = "Neue $subjectPrefix: $makeName $modelName";
 
 // E-Mail Inhalt bauen (Text)
 $message = "Neue Anfrage über das Web-Formular\n";
@@ -48,14 +98,14 @@ $message .= "====================================\n\n";
 $message .= "Typ: " . ($formType === 'purchase' ? 'Direkter Ankauf' : 'Fahrzeugbewertung') . "\n\n";
 
 $message .= "=== FAHRZEUG ===\n";
-$message .= "Marke: " . ($_POST['makeId'] ?? '-') . "\n";
-$message .= "Modell: " . ($_POST['modelId'] ?? '-') . "\n";
-$message .= "Generation: " . ($_POST['generationId'] ?? '-') . "\n";
-$message .= "Serie: " . ($_POST['serieId'] ?? '-') . "\n";
+$message .= "Marke: " . ($_POST['makeName'] ?? '-') . "\n";
+$message .= "Modell: " . ($_POST['modelName'] ?? '-') . "\n";
+$message .= "Generation: " . ($_POST['generationName'] ?? '-') . "\n";
+$message .= "Serie: " . ($_POST['serieName'] ?? '-') . "\n";
 $message .= "Baujahr: " . ($_POST['year'] ?? '-') . "\n";
 $message .= "KM-Stand: " . ($_POST['mileage'] ?? '-') . "\n";
-$message .= "Kraftstoff: " . ($_POST['fuelId'] ?? '-') . "\n";
-$message .= "Getriebe: " . ($_POST['transmissionId'] ?? '-') . "\n";
+$message .= "Kraftstoff: " . ($_POST['fuelName'] ?? $_POST['fuelId'] ?? '-') . "\n";
+$message .= "Getriebe: " . ($_POST['transmissionName'] ?? $_POST['transmissionId'] ?? '-') . "\n";
 $message .= "Zustand: " . ($_POST['condition'] ?? '-') . "\n";
 $message .= "Unfallschaden: " . ($_POST['accidentDamage'] ?? '-') . "\n";
 $message .= "Standort: " . ($_POST['location'] ?? '-') . "\n";
@@ -74,6 +124,211 @@ $message .= "=== KONTAKT ===\n";
 $message .= "E-Mail: $email\n";
 $message .= "Telefon: $phone\n";
 
+// === BILDER AUF SERVER SPEICHERN ===
+$uploadDir = __DIR__ . '/../uploads/';
+if (!file_exists($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
+}
+
+// Eindeutigen Ordner für diese Anfrage erstellen
+$timestamp = date('Ymd_His');
+$emailSafe = preg_replace('/[^a-zA-Z0-9]/', '_', $email);
+$requestFolder = $uploadDir . $timestamp . '_' . $emailSafe . '/';
+mkdir($requestFolder, 0755, true);
+
+// Bilder speichern
+$savedImages = [];
+for ($i = 1; $i <= 5; $i++) {
+    if (isset($_FILES["image$i"]) && $_FILES["image$i"]['error'] === UPLOAD_ERR_OK) {
+        $fileName = 'image' . $i . '_' . basename($_FILES["image$i"]['name']);
+        $targetPath = $requestFolder . $fileName;
+        if (move_uploaded_file($_FILES["image$i"]['tmp_name'], $targetPath)) {
+            $savedImages[] = $targetPath;
+            error_log("[BILD-UPLOAD] Bild $i gespeichert: $targetPath");
+        }
+    }
+}
+
+// Formulardaten auch als JSON speichern
+$formData = [
+    'timestamp' => date('Y-m-d H:i:s'),
+    'formType' => $formType,
+    'fahrzeug' => [
+        'marke' => $_POST['makeName'] ?? '-',
+        'modell' => $_POST['modelName'] ?? '-',
+        'generation' => $_POST['generationName'] ?? '-',
+        'serie' => $_POST['serieName'] ?? '-',
+        'baujahr' => $_POST['year'] ?? '-',
+        'kmStand' => $_POST['mileage'] ?? '-',
+        'kraftstoff' => $_POST['fuelName'] ?? $_POST['fuelId'] ?? '-',
+        'getriebe' => $_POST['transmissionName'] ?? $_POST['transmissionId'] ?? '-',
+        'zustand' => $_POST['condition'] ?? '-',
+        'unfallschaden' => $_POST['accidentDamage'] ?? '-',
+        'standort' => $_POST['location'] ?? '-',
+        'preisvorstellung' => $_POST['price'] ?? '-'
+    ],
+    'ausstattung' => $features,
+    'kontakt' => [
+        'email' => $email,
+        'telefon' => $phone
+    ],
+    'bilder' => array_map('basename', $savedImages)
+];
+file_put_contents($requestFolder . 'anfrage.json', json_encode($formData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+$message .= "\n=== BILDER ===\n";
+$message .= "Gespeichert in: " . basename($requestFolder) . "\n";
+$message .= "Anzahl Bilder: " . count($savedImages) . "\n";
+
+// HTML E-Mail erstellen
+$htmlMessage = '
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .card { background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header { background: #4CAF50; background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .header p { margin: 5px 0 0 0; font-size: 16px; }
+        .content { padding: 30px; background: #f9f9f9; border-radius: 0 0 10px 10px; }
+        .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .section h2 { color: #4CAF50; margin-top: 0; font-size: 20px; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+        .info-row { display: flex; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .info-label { font-weight: bold; width: 40%; color: #555; }
+        .info-value { width: 60%; color: #333; }
+        .contact-box { background: #e8f5e9; padding: 15px; border-left: 4px solid #4CAF50; margin-top: 20px; }
+        .footer { text-align: center; padding: 20px; color: #777; font-size: 14px; }
+        .link { color: #4CAF50; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🚗 Neue Fahrzeuganfrage</h1>
+                <p style="margin: 5px 0 0 0; font-size: 16px;">Fahrzeugbewertung</p>
+            </div>
+            <div class="content">
+                <div class="section">
+                    <h2>📋 Fahrzeugdaten</h2>
+                    <div class="info-row"><span class="info-label">Marke:</span><span class="info-value">' . htmlspecialchars($_POST['makeName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Modell:</span><span class="info-value">' . htmlspecialchars($_POST['modelName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Generation:</span><span class="info-value">' . htmlspecialchars($_POST['generationName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Serie:</span><span class="info-value">' . htmlspecialchars($_POST['serieName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Baujahr:</span><span class="info-value">' . htmlspecialchars($_POST['year'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">KM-Stand:</span><span class="info-value">' . htmlspecialchars($_POST['mileage'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Kraftstoff:</span><span class="info-value">' . htmlspecialchars($_POST['fuelName'] ?? $_POST['fuelId'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Getriebe:</span><span class="info-value">' . htmlspecialchars($_POST['transmissionName'] ?? $_POST['transmissionId'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Zustand:</span><span class="info-value">' . htmlspecialchars($_POST['condition'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Unfallschaden:</span><span class="info-value">' . htmlspecialchars($_POST['accidentDamage'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Standort:</span><span class="info-value">' . htmlspecialchars($_POST['location'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Preisvorstellung:</span><span class="info-value"><strong>' . htmlspecialchars($_POST['price'] ?? '-') . ' EUR</strong></span></div>
+                </div>
+                
+                <div class="section">
+                    <h2>🔧 Ausstattung</h2>
+                    <div class="info-row" style="border:none;"><span class="info-value" style="width:100%;">' . (is_array($features) && count($features) > 0 ? implode(', ', array_map('htmlspecialchars', $features)) : 'Keine Ausstattungsmerkmale angegeben') . '</span></div>
+                </div>
+                
+                <div class="section">
+                    <h2>📞 Kontaktdaten</h2>
+                    <div class="contact-box">
+                        <div class="info-row" style="border: none;"><span class="info-label">E-Mail:</span><span class="info-value"><a class="link" href="mailto:' . htmlspecialchars($email) . '">' . htmlspecialchars($email) . '</a></span></div>
+                        <div class="info-row" style="border: none;"><span class="info-label">Telefon:</span><span class="info-value"><a class="link" href="tel:' . htmlspecialchars($phone) . '">' . htmlspecialchars($phone) . '</a></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                AutoHD - ARZ Automobile | Autoankauf Rheinberg<br>
+                info@autohd.de | 0176 30339020
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+';
+
+// Kunden-Bestätigungsmail (HTML) - identische Struktur wie Händler-Mail
+$customerHtmlMsg = '
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .card { background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header { background: #4CAF50; background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .header p { margin: 5px 0 0 0; font-size: 16px; }
+        .content { padding: 30px; background: #f9f9f9; border-radius: 0 0 10px 10px; }
+        .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .section h2 { color: #4CAF50; margin-top: 0; font-size: 20px; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+        .info-row { display: flex; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .info-label { font-weight: bold; width: 40%; color: #555; }
+        .info-value { width: 60%; color: #333; }
+        .contact-box { background: #e8f5e9; padding: 15px; border-left: 4px solid #4CAF50; margin-top: 20px; }
+        .footer { text-align: center; padding: 20px; color: #777; font-size: 14px; }
+        .link { color: #4CAF50; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🚗 Bestätigung Ihrer Anfrage</h1>
+                <p style="margin: 5px 0 0 0; font-size: 16px;">Vielen Dank für Ihr Vertrauen</p>
+            </div>
+            <div class="content">
+                <div class="section">
+                    <h2>📋 Ihre übermittelten Fahrzeugdaten</h2>
+                    <div class="info-row"><span class="info-label">Marke:</span><span class="info-value">' . htmlspecialchars($_POST['makeName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Modell:</span><span class="info-value">' . htmlspecialchars($_POST['modelName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Generation:</span><span class="info-value">' . htmlspecialchars($_POST['generationName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Serie:</span><span class="info-value">' . htmlspecialchars($_POST['serieName'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Baujahr:</span><span class="info-value">' . htmlspecialchars($_POST['year'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">KM-Stand:</span><span class="info-value">' . htmlspecialchars($_POST['mileage'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Kraftstoff:</span><span class="info-value">' . htmlspecialchars($_POST['fuelName'] ?? $_POST['fuelId'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Getriebe:</span><span class="info-value">' . htmlspecialchars($_POST['transmissionName'] ?? $_POST['transmissionId'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Zustand:</span><span class="info-value">' . htmlspecialchars($_POST['condition'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Unfallschaden:</span><span class="info-value">' . htmlspecialchars($_POST['accidentDamage'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Standort:</span><span class="info-value">' . htmlspecialchars($_POST['location'] ?? '-') . '</span></div>
+                    <div class="info-row"><span class="info-label">Ihre Preisvorstellung:</span><span class="info-value"><strong>' . htmlspecialchars($_POST['price'] ?? '-') . ' EUR</strong></span></div>
+                </div>
+                
+                <div class="section">
+                    <h2>🔧 Ausstattung</h2>
+                    <div class="info-row" style="border:none;"><span class="info-value" style="width:100%;">' . (is_array($features) && count($features) > 0 ? implode(', ', array_map('htmlspecialchars', $features)) : 'Keine Ausstattungsmerkmale angegeben') . '</span></div>
+                </div>
+                
+                <div class="section">
+                    <h2>� Was passiert als Nächstes?</h2>
+                    <p style="margin: 8px 0;"><strong>1.</strong> Wir prüfen Ihre Fahrzeugdaten</p>
+                    <p style="margin: 8px 0;"><strong>2.</strong> Sie erhalten ein faires, transparentes Angebot</p>
+                    <p style="margin: 8px 0;"><strong>3.</strong> Bei Interesse vereinbaren wir einen Termin</p>
+                </div>
+                
+                <div class="section">
+                    <h2>📞 Haben Sie Fragen?</h2>
+                    <div class="contact-box">
+                        <p style="margin: 8px 0;"><strong>Rufen Sie uns an:</strong> <a class="link" href="tel:017630339020">0176 30339020</a></p>
+                        <p style="margin: 8px 0;"><strong>Oder schreiben Sie an:</strong> <a class="link" href="mailto:info@autohd.de">info@autohd.de</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                AutoHD - ARZ Automobile | Autoankauf Rheinberg<br>
+                info@autohd.de | 0176 30339020
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+';
+
 // === VERSAND ===
 
 if ($usePHPMailer) {
@@ -83,47 +338,81 @@ if ($usePHPMailer) {
         $mail->isSMTP();
         $mail->Host       = defined('SMTP_HOST') ? SMTP_HOST : 'smtp.ionos.de';
         $mail->SMTPAuth   = true;
-        $mail->Username   = defined('SMTP_USER') ? SMTP_USER : 'info@arz-automobile.de';
+        $mail->Username   = defined('SMTP_USER') ? SMTP_USER : 'info@autohd.de';
         $mail->Password   = defined('SMTP_PASS') ? SMTP_PASS : ''; // Passwort aus Config
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = defined('SMTP_PORT') ? SMTP_PORT : 587;
         $mail->CharSet    = 'UTF-8';
+        
+        // Debug aktivieren (für Fehlersuche)
+        $mail->SMTPDebug = 2;
+        $mail->Debugoutput = function ($str, $level) {
+            error_log("PHPMailer[$level] $str");
+        };
+        
+        // Sender NICHT setzen - lässt IONOS automatisch machen
+        // $mail->Sender = 'info@autohd.de';
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
 
         // 1. E-Mail an HÄNDLER
-        $mail->setFrom(defined('SMTP_USER') ? SMTP_USER : 'info@arz-automobile.de', 'Webformular');
-        $mail->addAddress(defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@arz-automobile.de'); 
+        $mail->setFrom('info@autohd.de', 'AutoHD Webformular');
+        $mail->addAddress(defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@autohd.de'); 
         $mail->addReplyTo($email); // Damit man direkt dem Kunden antworten kann
 
+        $mail->isHTML(true);
         $mail->Subject = $subject;
-        $mail->Body    = $message;
+        $mail->Body    = $htmlMessage;
+        $mail->AltBody = $message; // Fallback für E-Mail-Clients ohne HTML
 
-        // Anhänge
-        for ($i = 1; $i <= 5; $i++) {
-            if (isset($_FILES["image$i"]) && $_FILES["image$i"]['error'] === UPLOAD_ERR_OK) {
-                $mail->addAttachment($_FILES["image$i"]['tmp_name'], $_FILES["image$i"]['name']);
+        // Anhänge (Bilder) - aus dem gespeicherten Ordner laden
+        $attachedImages = 0;
+        foreach ($savedImages as $imagePath) {
+            if (file_exists($imagePath)) {
+                $mail->addAttachment($imagePath, basename($imagePath));
+                $attachedImages++;
             }
         }
+        error_log("[HÄNDLER-MAIL] $attachedImages Bilder angehängt");
 
-        $mail->send();
+        if (!$mail->send()) {
+            error_log('[HÄNDLER-MAIL] Fehler: ' . $mail->ErrorInfo);
+            throw new Exception('Händler-Mail konnte nicht gesendet werden');
+        }
+        error_log('[HÄNDLER-MAIL] Erfolgreich gesendet an: ' . (defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@autohd.de'));
 
         // 2. Bestätigung an KUNDEN (Auto-Responder)
         $mail->clearAddresses();
         $mail->clearAttachments();
+        $mail->clearReplyTos();
+        $mail->clearCCs();
+        $mail->clearBCCs();
+        
+        // Absender für Kunden-Mail
+        $mail->setFrom('info@autohd.de', 'AutoHD - ARZ Automobile');
         $mail->addAddress($email); // An den Kunden
-        $mail->Subject = "Eingangsbestätigung: Ihre Anfrage bei ARZ Automobile";
+        $mail->Subject = "✅ Ihre Anfrage bei AutoHD wurde erhalten";
         
         $customerMsg = "Hallo,\n\n";
         $customerMsg .= "vielen Dank für Ihre Anfrage. Wir haben Ihre Fahrzeugdaten erhalten und werden diese schnellstmöglich prüfen.\n\n";
-        $customerMsg .= "Hier ist eine Zusammenfassung Ihrer Angaben:\n";
-        $customerMsg .= "--------------------------------------------------\n";
-        $customerMsg .= $message;
-        $customerMsg .= "\n--------------------------------------------------\n\n";
-        $customerMsg .= "Ihr Team von ARZ Automobile\n";
+        $customerMsg .= "Ihr Team von AutoHD - ARZ Automobile\n";
         $customerMsg .= "Tel: 0176 30339020\n";
-        $customerMsg .= "Web: www.arz-automobile.de";
+        $customerMsg .= "E-Mail: info@autohd.de\n";
+        $customerMsg .= "Web: autohd.de";
 
-        $mail->Body = $customerMsg;
-        $mail->send();
+        $mail->Body = $customerHtmlMsg;
+        $mail->AltBody = $customerMsg;
+        
+        if (!$mail->send()) {
+            error_log('[KUNDEN-MAIL] Fehler: ' . $mail->ErrorInfo);
+            throw new Exception('Kunden-Mail konnte nicht gesendet werden');
+        }
+        error_log('[KUNDEN-MAIL] Erfolgreich gesendet an: ' . $email);
 
         echo json_encode(['success' => true, 'message' => 'Anfrage erfolgreich gesendet']);
 
@@ -132,16 +421,25 @@ if ($usePHPMailer) {
         echo json_encode(['success' => false, 'message' => 'Mailer Error: ' . $mail->ErrorInfo]);
     }
 } else {
-    // Fallback: Standard mail() (Nicht empfohlen, keine Anhänge, oft Spam)
-    // Nur nutzen, wenn PHPMailer fehlt
-    $headers = "From: no-reply@arz-automobile.de\r\n";
+    // Fallback: Standard mail() 
+    // Händler-Mail mit HTML
+    $headers = "From: info@autohd.de\r\n";
     $headers .= "Reply-To: $email\r\n";
-    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
     
-    $success = mail(defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@arz-automobile.de', $subject, $message, $headers);
+    $success = mail(defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@autohd.de', $subject, $htmlMessage, $headers);
     
+    // Kunden-Bestätigung
     if ($success) {
-        echo json_encode(['success' => true, 'message' => 'Gesendet (Standard-Mode)']);
+        $customerHeaders = "From: info@autohd.de\r\n";
+        $customerHeaders .= "Reply-To: info@autohd.de\r\n";
+        $customerHeaders .= "MIME-Version: 1.0\r\n";
+        $customerHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
+        
+        mail($email, "✅ Ihre Anfrage bei AutoHD wurde erhalten", $customerHtmlMsg, $customerHeaders);
+        
+        echo json_encode(['success' => true, 'message' => 'Gesendet']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Fehler beim Senden']);
     }
