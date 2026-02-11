@@ -29,7 +29,7 @@ echo "<hr>";
 echo "<h2>Test abgeschlossen!</h2>";
 echo "<p>Bitte prüfen Sie:</p>";
 echo "<ul>";
-echo "<li>E-Mail-Postfach: Arzautomobileservice@gmail.com (Mitarbeiter-E-Mail)</li>";
+echo "<li>E-Mail-Postfach: info@autohd.de (Mitarbeiter-E-Mail)</li>";
 echo "<li>E-Mail-Postfach: " . htmlspecialchars($_POST['email']) . " (Kunden-E-Mail)</li>";
 echo "</ul>";
 ?>

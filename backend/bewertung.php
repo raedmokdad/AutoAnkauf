@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Konfiguration
-$toEmail = 'Arzautomobileservice@gmail.com';
+$toEmail = 'info@autohd.de';
 $subject = 'Neue Fahrzeugbewertungsanfrage - AutoHD Autoankauf Rheinberg';
 
 // Sammle Formular-Daten
@@ -76,7 +76,7 @@ $message .= "   Format: https://www.autoankauf-deutschland.de/angebot?\n";
 $message .= "   make=$makeName&model=$modelName&year=$year&price=XXXXX\n\n";
 
 // E-Mail-Header
-$headers = "From: raedmokdad@gmx.de\r\n";
+$headers = "From: info@autohd.de\r\n";
 $headers .= "Reply-To: $email\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
@@ -97,12 +97,12 @@ $customerMessage .= "Fahrzeugzustand: $conditionLabel\n\n";
 $customerMessage .= "Unser Team wird Ihr Fahrzeug professionell bewerten und Ihnen die Bewertung meist noch am selben Tag per E-Mail zusenden.\n\n";
 $customerMessage .= "Bei Fragen erreichen Sie uns unter:\n";
 $customerMessage .= "Telefon: 0176 30339020\n";
-$customerMessage .= "E-Mail: Arzautomobileservice@gmail.com\n\n";
+$customerMessage .= "E-Mail: info@autohd.de\n\n";
 $customerMessage .= "Mit freundlichen Grüßen\n";
 $customerMessage .= "Ihr Team von AutoHD Autoankauf Rheinberg";
 
-$customerHeaders = "From: raedmokdad@gmx.de\r\n";
-$customerHeaders .= "Reply-To: Arzautomobileservice@gmail.com\r\n";
+$customerHeaders = "From: info@autohd.de\r\n";
+$customerHeaders .= "Reply-To: info@autohd.de\r\n";
 $customerHeaders .= "MIME-Version: 1.0\r\n";
 $customerHeaders .= "Content-Type: text/plain; charset=UTF-8\r\n";
 

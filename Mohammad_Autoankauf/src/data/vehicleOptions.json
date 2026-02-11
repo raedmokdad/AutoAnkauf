@@ -1,0 +1,34 @@
+{
+  "fuelTypes": [
+    { "id": "benzin", "name": "Benzin" },
+    { "id": "diesel", "name": "Diesel" },
+    { "id": "elektro", "name": "Elektro" },
+    { "id": "hybrid", "name": "Hybrid" },
+    { "id": "lpg", "name": "LPG (Autogas)" },
+    { "id": "cng", "name": "CNG (Erdgas)" },
+    { "id": "andere", "name": "Andere" }
+  ],
+  "transmissionTypes": [
+    { "id": "manual", "name": "Schaltgetriebe" },
+    { "id": "automatic", "name": "Automatik" },
+    { "id": "semi_automatic", "name": "Halbautomatik" }
+  ],
+  "features": [
+    { "id": "ac", "name": "Klimaanlage / Klimaautomatik" },
+    { "id": "navi", "name": "Navigation" },
+    { "id": "parking_sensors", "name": "Parksensoren" },
+    { "id": "heated_seats", "name": "Sitzheizung" },
+    { "id": "panoramic_roof", "name": "Panoramadach" },
+    { "id": "sunroof", "name": "Schiebedach" },
+    { "id": "parking_assist", "name": "Parkassistent" },
+    { "id": "brake_assist", "name": "Bremsassistent" },
+    { "id": "multifunction_steering_wheel", "name": "Multifunktionslenkrad" },
+    { "id": "alloy_wheels", "name": "Alufelgen" },
+    { "id": "steel_wheels", "name": "Stahlfelgen" },
+    { "id": "trailer_hitch", "name": "Anhängerkupplung" },
+    { "id": "carplay", "name": "Carplay / Android Auto" },
+    { "id": "keyless", "name": "Keyless Entry / Go" },
+    { "id": "xenon_led", "name": "Xenon / LED Scheinwerfer" },
+    { "id": "fog_lights", "name": "Nebelscheinwerfer" }
+  ]
+}
