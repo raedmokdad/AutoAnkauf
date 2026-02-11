@@ -1,0 +1,15 @@
+{
+    "name": "autohd/backend",
+    "description": "Backend für AutoHD Webformular",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "phpmailer/phpmailer": "^6.8",
+        "tecnickcom/tcpdf": "^6.6"
+    },
+    "autoload": {
+        "classmap": [
+            "PHPMailer/"
+        ]
+    }
+}

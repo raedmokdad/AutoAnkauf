@@ -186,6 +186,139 @@ $formData = [
 ];
 file_put_contents($requestFolder . 'anfrage.json', json_encode($formData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
+// PDF-Version der E-Mail erstellen (mit TCPDF falls vorhanden, sonst HTML)
+if (file_exists(__DIR__ . '/tcpdf/tcpdf.php')) {
+    require_once(__DIR__ . '/tcpdf/tcpdf.php');
+    
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+    $pdf->SetCreator('AutoHD');
+    $pdf->SetAuthor('AutoHD - ARZ Automobile');
+    $pdf->SetTitle('Fahrzeuganfrage ' . $makeName . ' ' . $modelName);
+    $pdf->SetSubject('Bewertung');
+    
+    $pdf->setPrintHeader(false);
+    $pdf->setPrintFooter(false);
+    $pdf->SetMargins(15, 15, 15);
+    $pdf->SetAutoPageBreak(TRUE, 15);
+    
+    $pdf->AddPage();
+    $pdf->SetFont('helvetica', '', 10);
+    
+    // Text-Version für PDF
+    $pdfContent = '<h1 style="color: #4CAF50;">🚗 Neue Fahrzeuganfrage</h1>';
+    $pdfContent .= '<p><strong>Datum:</strong> ' . date('d.m.Y H:i:s') . '</p>';
+    $pdfContent .= '<hr>';
+    $pdfContent .= '<h2 style="color: #4CAF50;">Fahrzeugdaten</h2>';
+    $pdfContent .= '<table cellpadding="5" style="width:100%; border: 1px solid #ddd;">';
+    $pdfContent .= '<tr><td style="width:40%; font-weight:bold;">Marke:</td><td>' . htmlspecialchars($_POST['makeName'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Modell:</td><td>' . htmlspecialchars($_POST['modelName'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Generation:</td><td>' . htmlspecialchars($_POST['generationName'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Serie:</td><td>' . htmlspecialchars($_POST['serieName'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Baujahr:</td><td>' . htmlspecialchars($_POST['year'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">KM-Stand:</td><td>' . htmlspecialchars($_POST['mileage'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Kraftstoff:</td><td>' . htmlspecialchars($_POST['fuelName'] ?? $_POST['fuelId'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Getriebe:</td><td>' . htmlspecialchars($_POST['transmissionName'] ?? $_POST['transmissionId'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Zustand:</td><td>' . htmlspecialchars($_POST['condition'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Unfallschaden:</td><td>' . htmlspecialchars($_POST['accidentDamage'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Standort:</td><td>' . htmlspecialchars($_POST['location'] ?? '-') . '</td></tr>';
+    $pdfContent .= '<tr><td style="font-weight:bold;">Preisvorstellung:</td><td style="font-weight:bold;">' . htmlspecialchars($_POST['price'] ?? '-') . ' EUR</td></tr>';
+    $pdfContent .= '</table>';
+    
+    $pdfContent .= '<h2 style="color: #4CAF50; margin-top:20px;">Ausstattung</h2>';
+    $pdfContent .= '<p>' . (is_array($features) && count($features) > 0 ? implode(', ', array_map('htmlspecialchars', $features)) : 'Keine Ausstattungsmerkmale angegeben') . '</p>';
+    
+    $pdfContent .= '<h2 style="color: #4CAF50;">Kontaktdaten</h2>';
+    $pdfContent .= '<p><strong>E-Mail:</strong> ' . htmlspecialchars($email) . '<br>';
+    $pdfContent .= '<strong>Telefon:</strong> ' . htmlspecialchars($phone) . '</p>';
+    
+    if (count($savedImages) > 0) {
+        $pdfContent .= '<h2 style="color: #4CAF50;">Bilder (' . count($savedImages) . ')</h2>';
+        $pdfContent .= '<p>';
+        foreach ($savedImages as $imgPath) {
+            $pdfContent .= '• ' . basename($imgPath) . '<br>';
+        }
+        $pdfContent .= '</p>';
+    }
+    
+    $pdf->writeHTML($pdfContent, true, false, true, false, '');
+    $pdf->Output($requestFolder . 'anfrage.pdf', 'F');
+    error_log('[PDF] TCPDF-Datei erstellt: ' . $requestFolder . 'anfrage.pdf');
+    
+} else {
+    // Fallback: HTML-Datei speichern (kann später mit wkhtmltopdf zu PDF konvertiert werden)
+    $htmlForPdf = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fahrzeuganfrage ' . htmlspecialchars($makeName . ' ' . $modelName) . '</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 20px auto; padding: 20px; }
+        h1 { color: #4CAF50; border-bottom: 3px solid #4CAF50; padding-bottom: 10px; }
+        h2 { color: #4CAF50; margin-top: 30px; border-bottom: 2px solid #4CAF50; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        table td { padding: 10px; border-bottom: 1px solid #eee; }
+        table td:first-child { font-weight: bold; width: 40%; color: #555; }
+        .header-info { background: #e8f5e9; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #4CAF50; text-align: center; color: #777; }
+        @media print { body { margin: 0; } }
+    </style>
+</head>
+<body>
+    <h1>🚗 Neue Fahrzeuganfrage</h1>
+    <div class="header-info">
+        <strong>Eingangsdatum:</strong> ' . date('d.m.Y H:i:s') . '<br>
+        <strong>Anfragetyp:</strong> ' . ($formType === 'purchase' ? 'Direkter Ankauf' : 'Fahrzeugbewertung') . '
+    </div>
+    
+    <h2>📋 Fahrzeugdaten</h2>
+    <table>
+        <tr><td>Marke:</td><td>' . htmlspecialchars($_POST['makeName'] ?? '-') . '</td></tr>
+        <tr><td>Modell:</td><td>' . htmlspecialchars($_POST['modelName'] ?? '-') . '</td></tr>
+        <tr><td>Generation:</td><td>' . htmlspecialchars($_POST['generationName'] ?? '-') . '</td></tr>
+        <tr><td>Serie:</td><td>' . htmlspecialchars($_POST['serieName'] ?? '-') . '</td></tr>
+        <tr><td>Baujahr:</td><td>' . htmlspecialchars($_POST['year'] ?? '-') . '</td></tr>
+        <tr><td>KM-Stand:</td><td>' . htmlspecialchars($_POST['mileage'] ?? '-') . '</td></tr>
+        <tr><td>Kraftstoff:</td><td>' . htmlspecialchars($_POST['fuelName'] ?? $_POST['fuelId'] ?? '-') . '</td></tr>
+        <tr><td>Getriebe:</td><td>' . htmlspecialchars($_POST['transmissionName'] ?? $_POST['transmissionId'] ?? '-') . '</td></tr>
+        <tr><td>Zustand:</td><td>' . htmlspecialchars($_POST['condition'] ?? '-') . '</td></tr>
+        <tr><td>Unfallschaden:</td><td>' . htmlspecialchars($_POST['accidentDamage'] ?? '-') . '</td></tr>
+        <tr><td>Standort:</td><td>' . htmlspecialchars($_POST['location'] ?? '-') . '</td></tr>
+        <tr><td>Preisvorstellung:</td><td><strong>' . htmlspecialchars($_POST['price'] ?? '-') . ' EUR</strong></td></tr>
+    </table>
+    
+    <h2>🔧 Ausstattung</h2>
+    <p>' . (is_array($features) && count($features) > 0 ? implode(', ', array_map('htmlspecialchars', $features)) : 'Keine Ausstattungsmerkmale angegeben') . '</p>
+    
+    <h2>📞 Kontaktdaten</h2>
+    <table>
+        <tr><td>E-Mail:</td><td>' . htmlspecialchars($email) . '</td></tr>
+        <tr><td>Telefon:</td><td>' . htmlspecialchars($phone) . '</td></tr>
+    </table>';
+    
+    if (count($savedImages) > 0) {
+        $htmlForPdf .= '
+    <h2>📷 Fahrzeugbilder (' . count($savedImages) . ')</h2>
+    <ul>';
+        foreach ($savedImages as $imgPath) {
+            $imgUrl = 'https://autohd.de/uploads/' . basename($requestFolder) . '/' . basename($imgPath);
+            $htmlForPdf .= '<li><a href="' . htmlspecialchars($imgUrl) . '">' . htmlspecialchars(basename($imgPath)) . '</a></li>';
+        }
+        $htmlForPdf .= '</ul>';
+    }
+    
+    $htmlForPdf .= '
+    <div class="footer">
+        <strong>AutoHD - ARZ Automobile</strong><br>
+        Autoankauf Rheinberg<br>
+        info@autohd.de | 0176 30339020
+    </div>
+</body>
+</html>';
+    
+    file_put_contents($requestFolder . 'anfrage.html', $htmlForPdf);
+    error_log('[PDF] HTML-Datei erstellt (Browser->Drucken->PDF): ' . $requestFolder . 'anfrage.html');
+}
+
 $message .= "\n=== BILDER ===\n";
 $message .= "Gespeichert in: " . basename($requestFolder) . "\n";
 $message .= "Anzahl Bilder: " . count($savedImages) . "\n";
