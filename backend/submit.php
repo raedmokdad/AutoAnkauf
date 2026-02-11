@@ -513,7 +513,60 @@ $customerHtmlMsg = '
 
 // === VERSAND ===
 
-if ($usePHPMailer) {
+// Versand-Methode prüfen (smtp oder php)
+$mailMethod = defined('MAIL_METHOD') ? MAIL_METHOD : 'smtp';
+
+if ($mailMethod === 'php') {
+    // === NATIVE PHP MAIL() - Umgeht IONOS SMTP-Probleme ===
+    error_log('[PHP-MAIL] Verwende native PHP mail() Funktion');
+    
+    // Händler-Mail mit HTML
+    $headers = "From: info@autohd.de\r\n";
+    $headers .= "Reply-To: $email\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+    $headers .= "Return-Path: info@autohd.de\r\n";
+    
+    // -f Parameter setzt Envelope-Sender explizit!
+    $additionalParams = '-finfo@autohd.de';
+    
+    $success = mail(
+        defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@autohd.de',
+        $subject,
+        $htmlMessage,
+        $headers,
+        $additionalParams
+    );
+    
+    if ($success) {
+        error_log('[HÄNDLER-MAIL] Erfolgreich mit PHP mail() gesendet');
+        
+        // Kunden-Bestätigung
+        $customerHeaders = "From: info@autohd.de\r\n";
+        $customerHeaders .= "Reply-To: info@autohd.de\r\n";
+        $customerHeaders .= "MIME-Version: 1.0\r\n";
+        $customerHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $customerHeaders .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+        $customerHeaders .= "Return-Path: info@autohd.de\r\n";
+        
+        mail(
+            $email,
+            "✅ Ihre Anfrage bei AutoHD wurde erhalten",
+            $customerHtmlMsg,
+            $customerHeaders,
+            $additionalParams
+        );
+        error_log('[KUNDEN-MAIL] Erfolgreich mit PHP mail() gesendet an: ' . $email);
+        
+        echo json_encode(['success' => true, 'message' => 'Anfrage erfolgreich gesendet']);
+    } else {
+        error_log('[HÄNDLER-MAIL] Fehler beim PHP mail() Versand');
+        echo json_encode(['success' => false, 'message' => 'Fehler beim Senden']);
+    }
+    
+} elseif ($usePHPMailer) {
+    // === PHPMAILER SMTP ===
     $mail = new PHPMailer(true);
     try {
         // Server settings
@@ -525,6 +578,11 @@ if ($usePHPMailer) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = defined('SMTP_PORT') ? SMTP_PORT : 587;
         $mail->CharSet    = 'UTF-8';
+        
+        // IONOS-spezifische Einstellungen - verhindert sh-xxx@eu.hosting-webspace.io
+        $mail->XMailer = ' '; // Versteckt "PHPMailer" Header
+        $mail->addCustomHeader('Return-Path', 'info@autohd.de');
+        $mail->addCustomHeader('X-Sender', 'info@autohd.de');
         
         // Debug aktivieren (für Fehlersuche)
         $mail->SMTPDebug = 2;
@@ -568,6 +626,7 @@ if ($usePHPMailer) {
         $mail->clearReplyTos();
         $mail->clearCCs();
         $mail->clearBCCs();
+        // Custom Header bleiben erhalten (Return-Path, X-Sender)
         
         // Absender für Kunden-Mail (gleiche Adresse wie Sender!)
         $mail->setFrom('info@autohd.de', 'AutoHD - ARZ Automobile');

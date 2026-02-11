@@ -4,6 +4,11 @@
 // Empfänger-Adresse (Hier kommen die Anfragen an)
 define('SMTP_RECEIVER', 'info@autohd.de');
 
+// E-Mail Versand-Methode: 'smtp' oder 'php'
+// SMTP = über IONOS SMTP-Server (Standard)
+// PHP = native PHP mail() mit -f Parameter (falls SMTP Probleme macht)
+define('MAIL_METHOD', 'smtp');
+
 // SMTP-Zugangsdaten (Vom IONOS Kundencenter)
 define('SMTP_HOST', 'smtp.ionos.de');
 define('SMTP_PORT', 587); // Oder 465 für SSL
