@@ -1,8 +1,8 @@
 # Verzeichnis-Listing blockieren
 Options -Indexes
 
-# Bilder erlauben
-<FilesMatch "\.(jpg|jpeg|png|gif|webp|json)$">
+# Bilder und HTML erlauben
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|json|html|htm)$">
     Require all granted
 </FilesMatch>
 
