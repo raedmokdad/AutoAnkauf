@@ -520,13 +520,29 @@ if ($mailMethod === 'php') {
     // === NATIVE PHP MAIL() - Umgeht IONOS SMTP-Probleme ===
     error_log('[PHP-MAIL] Verwende native PHP mail() Funktion');
     
-    // Händler-Mail mit HTML
+    // MIME Boundary für Multipart-E-Mails (GMX/Web.de kompatibel)
+    $boundary = md5(uniqid(time()));
+    
+    // Händler-Mail mit HTML (Multipart für GMX/Web.de)
     $headers = "From: info@autohd.de\r\n";
     $headers .= "Reply-To: $email\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "Content-Type: multipart/alternative; boundary=\"{$boundary}\"\r\n";
     $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
     $headers .= "Return-Path: info@autohd.de\r\n";
+    
+    // Multipart Message Body
+    $body = "--{$boundary}\r\n";
+    $body .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    $body .= $message . "\r\n\r\n"; // Plain Text Version
+    
+    $body .= "--{$boundary}\r\n";
+    $body .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    $body .= $htmlMessage . "\r\n\r\n"; // HTML Version
+    
+    $body .= "--{$boundary}--";
     
     // -f Parameter setzt Envelope-Sender explizit!
     $additionalParams = '-finfo@autohd.de';
@@ -534,7 +550,7 @@ if ($mailMethod === 'php') {
     $success = mail(
         defined('SMTP_RECEIVER') ? SMTP_RECEIVER : 'info@autohd.de',
         $subject,
-        $htmlMessage,
+        $body,
         $headers,
         $additionalParams
     );
@@ -542,18 +558,32 @@ if ($mailMethod === 'php') {
     if ($success) {
         error_log('[HÄNDLER-MAIL] Erfolgreich mit PHP mail() gesendet');
         
-        // Kunden-Bestätigung
+        // Kunden-Bestätigung (ebenfalls Multipart)
+        $customerBoundary = md5(uniqid(time()));
+        
         $customerHeaders = "From: info@autohd.de\r\n";
         $customerHeaders .= "Reply-To: info@autohd.de\r\n";
         $customerHeaders .= "MIME-Version: 1.0\r\n";
-        $customerHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $customerHeaders .= "Content-Type: multipart/alternative; boundary=\"{$customerBoundary}\"\r\n";
         $customerHeaders .= "X-Mailer: PHP/" . phpversion() . "\r\n";
         $customerHeaders .= "Return-Path: info@autohd.de\r\n";
+        
+        $customerBody = "--{$customerBoundary}\r\n";
+        $customerBody .= "Content-Type: text/plain; charset=UTF-8\r\n";
+        $customerBody .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+        $customerBody .= $customerMsg . "\r\n\r\n";
+        
+        $customerBody .= "--{$customerBoundary}\r\n";
+        $customerBody .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $customerBody .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+        $customerBody .= $customerHtmlMsg . "\r\n\r\n";
+        
+        $customerBody .= "--{$customerBoundary}--";
         
         mail(
             $email,
             "Ihre Anfrage bei AutoHD wurde erhalten",
-            $customerHtmlMsg,
+            $customerBody,
             $customerHeaders,
             $additionalParams
         );
