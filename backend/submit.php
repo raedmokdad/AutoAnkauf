@@ -552,7 +552,7 @@ if ($mailMethod === 'php') {
         
         mail(
             $email,
-            "✅ Ihre Anfrage bei AutoHD wurde erhalten",
+            "Ihre Anfrage bei AutoHD wurde erhalten",
             $customerHtmlMsg,
             $customerHeaders,
             $additionalParams
@@ -632,7 +632,7 @@ if ($mailMethod === 'php') {
         $mail->setFrom('info@autohd.de', 'AutoHD - ARZ Automobile');
         $mail->Sender = 'info@autohd.de'; // Verhindert sh-xxx@eu.hosting-webspace.io
         $mail->addAddress($email); // An den Kunden
-        $mail->Subject = "✅ Ihre Anfrage bei AutoHD wurde erhalten";
+        $mail->Subject = "Ihre Anfrage bei AutoHD wurde erhalten";
         
         $customerMsg = "Hallo,\n\n";
         $customerMsg .= "vielen Dank für Ihre Anfrage. Wir haben Ihre Fahrzeugdaten erhalten und werden diese schnellstmöglich prüfen.\n\n";
@@ -673,7 +673,7 @@ if ($mailMethod === 'php') {
         $customerHeaders .= "MIME-Version: 1.0\r\n";
         $customerHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
         
-        mail($email, "✅ Ihre Anfrage bei AutoHD wurde erhalten", $customerHtmlMsg, $customerHeaders);
+        mail($email, "Ihre Anfrage bei AutoHD wurde erhalten", $customerHtmlMsg, $customerHeaders);
         
         echo json_encode(['success' => true, 'message' => 'Gesendet']);
     } else {
