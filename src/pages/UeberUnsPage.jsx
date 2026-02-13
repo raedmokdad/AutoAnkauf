@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 import { ClockIcon, CheckIcon, StarIcon, LightningIcon, MoneyIcon, ShieldCheckIcon, DocumentIcon } from '../components/Icons';
 import '../styles/shared-green-hero.css';
 import './UeberUnsPage.css';
@@ -7,6 +8,12 @@ import './UeberUnsPage.css';
 function UeberUnsPage() {
   return (
     <div className="ueber-uns-page">
+      <SEO
+        title="Über uns - AutoHD Autoankauf Rheinberg | Lokaler Partner"
+        description="Lernen Sie AutoHD kennen ✓ Ihr lokaler Autoankauf in Rheinberg ✓ Persönliche Beratung ✓ Transparente Abwicklung ✓ Über 10 Jahre Erfahrung"
+        keywords="über uns, autoankauf rheinberg, autohändler rheinberg, lokaler autoankauf, seriöser autoankauf"
+        canonical="https://autohd.de/ueber-uns"
+      />
       <section className="ueber-uns-hero-green">
         <div className="ueber-uns-hero-container">
           <div className="hero-badge-green">Inhabergeführt · Autoankauf Rheinberg</div>

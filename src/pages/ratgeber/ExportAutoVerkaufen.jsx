@@ -233,6 +233,7 @@ function ExportAutoVerkaufen() {
       seoTitle="Auto Export verkaufen - Beste Preise | ARZ"
       seoDescription="Auto für Export verkaufen ✓ Welche Autos sind gefragt? ✓ Export vs. Privatverkauf ✓ Vorsicht Betrug ✓ Sichere Abwicklung ✓ Sofort Bargeld"
       seoKeywords="auto export verkaufen, exportfahrzeug verkaufen, auto ausland verkaufen, gebrauchtwagen export"
+      canonical="https://autohd.de/ratgeber/export-auto-verkaufen"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Export-Auto" }

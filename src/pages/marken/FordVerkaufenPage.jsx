@@ -67,6 +67,7 @@ function FordVerkaufenPage() {
       seoTitle="Ford verkaufen - Ford-Ankauf deutschlandweit"
       seoDescription="Ford verkaufen zum fairen Preis ✓ Fiesta, Focus, Mondeo ✓ Kostenlose Abholung ✓ Auch Transporter"
       seoKeywords="ford verkaufen, ford ankauf, fiesta verkaufen, focus verkaufen"
+      canonical="https://autohd.de/marken/ford-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Ford verkaufen" }

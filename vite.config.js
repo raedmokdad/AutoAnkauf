@@ -18,7 +18,14 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    cssMinify: false
+    cssMinify: false,
+    target: 'es2015',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: false
+      }
+    }
   }
 });
 

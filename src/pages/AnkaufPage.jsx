@@ -13,7 +13,7 @@ function AnkaufPage() {
         title="Auto verkaufen - Wir holen bei Ihnen ab | Deutschlandweit kostenlos"
         description="Gebrauchtwagen bequem verkaufen ✓ Wir kommen zu Ihnen nach Hause ✓ Kostenlose Abholung vor Ihrer Haustür ✓ Faire Preise ✓ Sofort-Auszahlung. Sie bleiben zu Hause!"
         keywords="auto verkaufen mit abholung, autoankauf abholservice, fahrzeug verkaufen ohne anfahrt, auto abholen lassen, bequem auto verkaufen, autoankauf vor ort"
-        canonical="https://www.autoankauf-deutschland.de/ankauf"
+        canonical="https://autohd.de/ankauf"
       />
       <section className="ankauf-hero-green">
         <div className="ankauf-hero-container">

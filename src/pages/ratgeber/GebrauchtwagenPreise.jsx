@@ -231,6 +231,7 @@ function GebrauchtwagenPreise() {
       seoTitle="Gebrauchtwagen Preise aktuell - Auto Wert ermitteln"
       seoDescription="Gebrauchtwagen Preise 2024 ✓ Was ist mein Auto wert? ✓ Faktoren & Wertverlust ✓ Kostenlose Bewertung ✓ Marktpreise prüfen ✓ Beste Verkaufszeit"
       seoKeywords="gebrauchtwagen preise, auto wert ermitteln, gebrauchtwagenwert, was ist mein auto wert, gebrauchtwagen marktwert"
+      canonical="https://autohd.de/ratgeber/gebrauchtwagen-preise"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Gebrauchtwagen Preise" }

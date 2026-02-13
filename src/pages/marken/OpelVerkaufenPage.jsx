@@ -66,6 +66,7 @@ function OpelVerkaufenPage() {
       seoTitle="Opel verkaufen - Opel-Ankauf deutschlandweit"
       seoDescription="Opel verkaufen zum fairen Preis ✓ Corsa, Astra, Insignia ✓ Kostenlose Abholung ✓ Schnelle Abwicklung"
       seoKeywords="opel verkaufen, opel ankauf, corsa verkaufen, astra verkaufen"
+      canonical="https://autohd.de/marken/opel-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Opel verkaufen" }

@@ -1,128 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Hauptseiten -->
   <url>
-    <loc>https://arz-automobile.de/</loc>
+    <loc>https://autohd.de/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/bewertung</loc>
+    <loc>https://autohd.de/bewertung</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ankauf</loc>
+    <loc>https://autohd.de/bewertung-komplett</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://autohd.de/ankauf</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ueber-uns</loc>
+    <loc>https://autohd.de/angebot</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://autohd.de/ueber-uns</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/faq</loc>
+    <loc>https://autohd.de/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/kontakt</loc>
+    <loc>https://autohd.de/kontakt</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://autohd.de/impressum</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <lastmod>2026-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://autohd.de/datenschutz</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   
   <!-- Marken-Seiten -->
   <url>
-    <loc>https://arz-automobile.de/marken/bmw-verkaufen</loc>
+    <loc>https://autohd.de/marken/bmw-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/mercedes-verkaufen</loc>
+    <loc>https://autohd.de/marken/mercedes-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/volkswagen-verkaufen</loc>
+    <loc>https://autohd.de/marken/volkswagen-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/audi-verkaufen</loc>
+    <loc>https://autohd.de/marken/audi-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/opel-verkaufen</loc>
+    <loc>https://autohd.de/marken/opel-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/ford-verkaufen</loc>
+    <loc>https://autohd.de/marken/ford-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/skoda-verkaufen</loc>
+    <loc>https://autohd.de/marken/skoda-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/renault-verkaufen</loc>
+    <loc>https://autohd.de/marken/renault-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/seat-verkaufen</loc>
+    <loc>https://autohd.de/marken/seat-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/marken/toyota-verkaufen</loc>
+    <loc>https://autohd.de/marken/toyota-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   
   <!-- Ratgeber-Seiten -->
   <url>
-    <loc>https://arz-automobile.de/ratgeber/auto-verkaufen-checkliste</loc>
+    <loc>https://autohd.de/ratgeber/auto-verkaufen-checkliste</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/kaufvertrag-auto-muster</loc>
+    <loc>https://autohd.de/ratgeber/kaufvertrag-auto-muster</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/fahrzeugbewertung-ablauf</loc>
+    <loc>https://autohd.de/ratgeber/fahrzeugbewertung-ablauf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/auto-ohne-tuev-verkaufen</loc>
+    <loc>https://autohd.de/ratgeber/auto-ohne-tuev-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/unfallwagen-verkaufen</loc>
+    <loc>https://autohd.de/ratgeber/unfallwagen-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/export-auto-verkaufen</loc>
+    <loc>https://autohd.de/ratgeber/export-auto-verkaufen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/gebrauchtwagen-preise</loc>
+    <loc>https://autohd.de/ratgeber/gebrauchtwagen-preise</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
   <url>
-    <loc>https://arz-automobile.de/ratgeber/auto-abmelden-verkauf</loc>
+    <loc>https://autohd.de/ratgeber/auto-abmelden-verkauf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <lastmod>2026-02-13</lastmod>
   </url>
 </urlset>
 

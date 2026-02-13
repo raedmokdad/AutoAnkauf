@@ -212,7 +212,7 @@ function HomePage() {
         title="Auto verkaufen - Wir kommen zu Ihnen! | Kostenlose Abholung"
         description="Auto verkaufen ohne Stress ✓ Wir holen Ihr Fahrzeug kostenlos bei Ihnen ab ✓ Keine Anfahrt zur Filiale ✓ Faire Preise ✓ Sofort-Auszahlung. Deutschlandweiter Abholservice!"
         keywords="auto verkaufen, autoankauf mit abholung, fahrzeug abholung kostenlos, auto verkaufen ohne anfahrt, autoankauf vor ort, gebrauchtwagen verkaufen bequem"
-        canonical="https://www.autoankauf-deutschland.de"
+        canonical="https://autohd.de"
       />
       <StructuredData />
       

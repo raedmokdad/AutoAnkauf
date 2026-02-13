@@ -8,6 +8,7 @@ function ImpressumPage() {
       <SEO 
         title="Impressum – AutoHD Autoankauf Rheinberg"
         description="Impressum und rechtliche Informationen von AutoHD – Autoankauf Rheinberg."
+        canonical="https://autohd.de/impressum"
       />
 
       <section className="section impressum-section">

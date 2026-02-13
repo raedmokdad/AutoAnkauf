@@ -6,8 +6,53 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "react-snap",
+    "build:simple": "vite build",
     "preview": "vite preview",
     "convert-csv": "node scripts/csv-to-json.js"
+  },
+  "reactSnap": {
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ],
+    "source": "dist",
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false
+    },
+    "crawl": false,
+    "skipThirdPartyRequests": true,
+    "include": [
+      "/",
+      "/bewertung",
+      "/bewertung-komplett",
+      "/ankauf",
+      "/angebot",
+      "/ueber-uns",
+      "/faq",
+      "/kontakt",
+      "/impressum",
+      "/datenschutz",
+      "/marken/bmw-verkaufen",
+      "/marken/mercedes-verkaufen",
+      "/marken/volkswagen-verkaufen",
+      "/marken/audi-verkaufen",
+      "/marken/opel-verkaufen",
+      "/marken/ford-verkaufen",
+      "/marken/skoda-verkaufen",
+      "/marken/renault-verkaufen",
+      "/marken/seat-verkaufen",
+      "/marken/toyota-verkaufen",
+      "/ratgeber/auto-verkaufen-checkliste",
+      "/ratgeber/kaufvertrag-auto-muster",
+      "/ratgeber/fahrzeugbewertung-ablauf",
+      "/ratgeber/auto-ohne-tuev-verkaufen",
+      "/ratgeber/unfallwagen-verkaufen",
+      "/ratgeber/export-auto-verkaufen",
+      "/ratgeber/gebrauchtwagen-preise",
+      "/ratgeber/auto-abmelden-verkauf"
+    ]
   },
   "dependencies": {
     "nodemailer": "^6.9.7",
@@ -19,6 +64,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
+    "react-snap": "^1.23.0",
+    "terser": "^5.46.0",
     "vite": "^5.0.8"
   }
 }

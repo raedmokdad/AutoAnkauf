@@ -238,6 +238,7 @@ function UnfallwagenVerkaufen() {
       seoTitle="Unfallwagen verkaufen - Auch Totalschaden | ARZ"
       seoDescription="Unfallwagen verkaufen ✓ Auch Totalschaden ✓ Kostenlose Abholung ✓ Faire Preise ✓ Sofort Bargeld ✓ Was muss ich beachten? ✓ Nicht fahrbereit?"
       seoKeywords="unfallwagen verkaufen, unfallauto verkaufen, totalschaden verkaufen, auto nach unfall verkaufen"
+      canonical="https://autohd.de/ratgeber/unfallwagen-verkaufen"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Unfallwagen" }

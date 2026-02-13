@@ -74,6 +74,7 @@ function AudiVerkaufenPage() {
       seoTitle="Audi verkaufen - Seriöser Audi-Ankauf deutschlandweit"
       seoDescription="Audi verkaufen zum Bestpreis ✓ A3, A4, A6, Q5 ✓ Kostenlose Abholung ✓ Faire Preise ✓ S-Line und RS-Modelle willkommen"
       seoKeywords="audi verkaufen, audi ankauf, a4 verkaufen, q5 verkaufen, s-line verkaufen"
+      canonical="https://autohd.de/marken/audi-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Audi verkaufen" }

@@ -90,6 +90,7 @@ function BmwVerkaufenPage() {
       seoTitle="BMW verkaufen - Seriöser BMW-Ankauf deutschlandweit"
       seoDescription="BMW verkaufen leicht gemacht ✓ Alle Modelle: 1er, 3er, 5er, X1, X3, X5 ✓ Kostenlose Abholung ✓ Faire Preise ✓ Wir kommen zu Ihnen!"
       seoKeywords="bmw verkaufen, bmw ankauf, bmw 3er verkaufen, bmw x5 verkaufen, gebrauchtwagen bmw"
+      canonical="https://autohd.de/marken/bmw-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "BMW verkaufen" }

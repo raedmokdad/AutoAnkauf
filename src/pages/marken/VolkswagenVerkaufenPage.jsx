@@ -71,6 +71,7 @@ function VolkswagenVerkaufenPage() {
       seoTitle="VW verkaufen - Volkswagen Ankauf deutschlandweit"
       seoDescription="Volkswagen verkaufen leicht gemacht ✓ Golf, Passat, Tiguan ✓ Faire VW-Ankaufspreise ✓ Kostenlose Abholung ✓ Sofort-Auszahlung"
       seoKeywords="vw verkaufen, volkswagen ankauf, golf verkaufen, passat verkaufen, tiguan verkaufen"
+      canonical="https://autohd.de/marken/volkswagen-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "VW verkaufen" }

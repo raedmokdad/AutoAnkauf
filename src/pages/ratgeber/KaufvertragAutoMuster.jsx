@@ -161,6 +161,7 @@ function KaufvertragAutoMuster() {
       seoTitle="Auto Kaufvertrag Muster - Kostenlose PDF Vorlage"
       seoDescription="Kfz-Kaufvertrag Muster ✓ Kostenlose Vorlage ✓ Rechtssicher ✓ Was muss rein ✓ ADAC-Kaufvertrag ✓ Gewährleistung ausschließen"
       seoKeywords="kaufvertrag auto, kfz kaufvertrag muster, auto kaufvertrag pdf, kaufvertrag privatverkauf"
+      canonical="https://autohd.de/ratgeber/kaufvertrag-auto-muster"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Kaufvertrag" }

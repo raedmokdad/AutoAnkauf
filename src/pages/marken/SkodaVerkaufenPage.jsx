@@ -66,6 +66,7 @@ function SkodaVerkaufenPage() {
       seoTitle="Skoda verkaufen - Skoda-Ankauf deutschlandweit"
       seoDescription="Skoda verkaufen zum Bestpreis ✓ Octavia, Superb, Kodiaq ✓ Kostenlose Abholung ✓ Faire Preise"
       seoKeywords="skoda verkaufen, skoda ankauf, octavia verkaufen, kodiaq verkaufen"
+      canonical="https://autohd.de/marken/skoda-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Skoda verkaufen" }

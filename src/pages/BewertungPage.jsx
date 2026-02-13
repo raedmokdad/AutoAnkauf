@@ -227,7 +227,7 @@ function BewertungPage() {
         title="Kostenlose Fahrzeugbewertung - Bei Verkauf holen wir ab!"
         description="Kostenlose Online-Bewertung für Ihr Auto ✓ Sofortiger Fahrzeugwert ✓ Bei Verkauf holen wir kostenlos ab ✓ Sie bleiben zu Hause. Jetzt Auto bewerten lassen!"
         keywords="fahrzeugbewertung kostenlos, auto bewerten, autowert ermitteln, auto verkaufen mit abholung, gebrauchtwagen bewertung"
-        canonical="https://www.autoankauf-deutschland.de/bewertung"
+        canonical="https://autohd.de/bewertung"
       />
       
       {/* Hero with Form - Green Background Split Layout */}

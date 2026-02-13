@@ -9,9 +9,9 @@ function SEO({
   ogImage,
   ogType = 'website'
 }) {
-  const siteTitle = 'ARZ Automobile';
-  const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
-  const siteUrl = 'https://www.arz-automobile.de'; // Domain anpassen wenn verfügbar
+  const siteTitle = 'AutoHD';
+  const fullTitle = title ? `${title}` : `${siteTitle} - Autoankauf Rheinberg`;
+  const siteUrl = 'https://autohd.de';
 
   return (
     <Helmet>

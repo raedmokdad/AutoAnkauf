@@ -1,10 +1,32 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+  
+  # HTTPS erzwingen (für SEO & Sicherheit)
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # www zu non-www Weiterleitung (für Canonical-Konsistenz)
+  RewriteCond %{HTTP_HOST} ^www\.autohd\.de$ [NC]
+  RewriteRule ^(.*)$ https://autohd.de/$1 [L,R=301]
+  
   RewriteRule ^index\.html$ - [L]
+  
+  # Statische Dateien und Assets direkt ausliefern
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-l
+  
+  # Prüfe ob vorgerenderte HTML-Datei für Route existiert
+  RewriteCond %{REQUEST_URI} !^/assets/
+  RewriteCond %{REQUEST_URI} !^/images/
+  RewriteCond %{REQUEST_URI} !\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot)$
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}/index.html -f
+  RewriteRule ^(.*)$ $1/index.html [L]
+  
+  # Fallback zu Haupt-index.html für SPA-Routing
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
 

@@ -129,6 +129,7 @@ function AutoVerkaufenCheckliste() {
       seoTitle="Auto verkaufen Checkliste - Komplette Anleitung"
       seoDescription="Auto verkaufen Checkliste ✓ Alle Schritte von Vorbereitung bis Übergabe ✓ Unterlagen ✓ Tipps für besten Preis ✓ PDF zum Ausdrucken"
       seoKeywords="auto verkaufen checkliste, autoverkauf vorbereitung, unterlagen autoverkauf, auto verkaufen tipps"
+      canonical="https://autohd.de/ratgeber/auto-verkaufen-checkliste"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Checkliste" }

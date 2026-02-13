@@ -5,10 +5,10 @@ function StructuredData() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "AutomotiveBusiness",
-    "name": "ARZ Delivery & Automobile",
-    "alternateName": "ARZ Automobile",
-    "description": "Seriöser Autoankauf mit kostenloser Abholung - Wir kommen zu Ihnen und kaufen Ihr Auto zum fairen Preis",
-    "url": "https://arz-automobile.de",
+    "name": "AutoHD",
+    "alternateName": "AutoHD Autoankauf Rheinberg",
+    "description": "Seriöser Autoankauf in Rheinberg mit kostenloser Abholung - Wir kommen zu Ihnen und kaufen Ihr Auto zum fairen Preis",
+    "url": "https://autohd.de",
     "telephone": "+49-176-30339020",
     "email": "Arzautomobileservice@gmail.com",
     "address": {
@@ -38,20 +38,31 @@ function StructuredData() {
       }
     ],
     "priceRange": "€€",
-    "areaServed": {
-      "@type": "Country",
-      "name": "Deutschland"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "5000",
-      "bestRating": "5"
-    },
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Rheinberg"
+      },
+      {
+        "@type": "City",
+        "name": "Wesel"
+      },
+      {
+        "@type": "City",
+        "name": "Moers"
+      },
+      {
+        "@type": "City",
+        "name": "Kamp-Lintfort"
+      },
+      {
+        "@type": "State",
+        "name": "Nordrhein-Westfalen"
+      }
+    ],
     "paymentAccepted": "Cash, Transfer",
     "currenciesAccepted": "EUR",
-    "slogan": "Wir kommen zu Ihnen - deutschlandweit!",
-    "foundingDate": "2009",
+    "slogan": "Wir kommen zu Ihnen - Autoankauf am Niederrhein!",
     "founder": {
       "@type": "Person",
       "name": "Hussein Hajj Sleiman"
@@ -64,12 +75,27 @@ function StructuredData() {
     "serviceType": "Autoankauf mit Abholservice",
     "provider": {
       "@type": "AutomotiveBusiness",
-      "name": "ARZ Delivery & Automobile"
+      "name": "AutoHD",
+      "url": "https://autohd.de"
     },
-    "areaServed": {
-      "@type": "Country",
-      "name": "Deutschland"
-    },
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Rheinberg"
+      },
+      {
+        "@type": "City",
+        "name": "Wesel"
+      },
+      {
+        "@type": "City",
+        "name": "Moers"
+      },
+      {
+        "@type": "State",
+        "name": "Nordrhein-Westfalen"
+      }
+    ],
     "offers": {
       "@type": "Offer",
       "priceCurrency": "EUR",

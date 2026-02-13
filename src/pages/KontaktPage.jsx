@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SEO from '../components/SEO';
 import { ClockIcon, CheckIcon, CarIcon } from '../components/Icons';
 import '../styles/shared-green-hero.css';
 import './KontaktPage.css';
@@ -41,6 +42,12 @@ function KontaktPage() {
 
   return (
     <div className="kontakt-page">
+      <SEO
+        title="Kontakt - AutoHD Autoankauf Rheinberg | Jetzt anfragen"
+        description="Kontaktieren Sie AutoHD ✓ Telefon ✓ E-Mail ✓ Persönlich vor Ort in Rheinberg ✓ Schnelle Antwort ✓ Kostenlose Beratung"
+        keywords="kontakt autoankauf, autoankauf rheinberg kontakt, auto verkaufen kontakt, beratung autoankauf"
+        canonical="https://autohd.de/kontakt"
+      />
       <section className="kontakt-hero-green">
         <div className="kontakt-hero-container">
           <div className="hero-badge-green">✓ Schnell erreichbar – persönlich & unkompliziert

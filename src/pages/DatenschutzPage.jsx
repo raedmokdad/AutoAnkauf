@@ -8,6 +8,7 @@ function DatenschutzPage() {
       <SEO 
         title="Datenschutzerklärung - AutoHD Autoankauf Rheinberg"
         description="Datenschutzerklärung von AutoHD - Autoankauf Rheinberg. Informationen zum Schutz Ihrer personenbezogenen Daten."
+        canonical="https://autohd.de/datenschutz"
       />
       
       <div className="datenschutz-section">

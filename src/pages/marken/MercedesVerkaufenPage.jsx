@@ -76,6 +76,7 @@ function MercedesVerkaufenPage() {
       seoTitle="Mercedes verkaufen - Seriöser Mercedes-Ankauf"
       seoDescription="Mercedes-Benz verkaufen zum Bestpreis ✓ Alle Modelle ✓ Kostenlose Abholung ✓ Sofort-Auszahlung ✓ Wir kommen zu Ihnen nach Hause!"
       seoKeywords="mercedes verkaufen, mercedes-benz ankauf, c-klasse verkaufen, e-klasse verkaufen"
+      canonical="https://autohd.de/marken/mercedes-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Mercedes verkaufen" }

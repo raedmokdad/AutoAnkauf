@@ -185,6 +185,7 @@ function FahrzeugbewertungAblauf() {
       seoTitle="Fahrzeugbewertung kostenlos - Auto Wert ermitteln"
       seoDescription="Fahrzeugbewertung erklärt ✓ Kostenlos Auto bewerten ✓ Faktoren die den Wert beeinflussen ✓ Schwacke vs. Online-Bewertung ✓ Jetzt Wert ermitteln"
       seoKeywords="fahrzeugbewertung, auto bewerten kostenlos, fahrzeug wert ermitteln, schwacke liste, gebrauchtwagen bewertung"
+      canonical="https://autohd.de/ratgeber/fahrzeugbewertung-ablauf"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Fahrzeugbewertung" }

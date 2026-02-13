@@ -38,7 +38,7 @@ function AngebotPage() {
         title="Ihr Fahrzeugbewertungsangebot - AutoHD Autoankauf Rheinberg"
         description="Ihr persönliches Fahrzeugbewertungsangebot - Professionell erstellt von unseren Experten"
         keywords="fahrzeugbewertung, auto bewertung, preisangebot"
-        canonical="https://www.autoankauf-deutschland.de/angebot"
+        canonical="https://autohd.de/angebot"
       />
       
       <section className="angebot-hero-section">

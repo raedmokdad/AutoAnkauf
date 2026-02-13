@@ -15,7 +15,7 @@ function BewertungKomplettPage() {
         title="Fahrzeugbewertung ergänzen - Alle Details für eine präzise Bewertung"
         description="Ergänzen Sie Ihre Fahrzeugdaten für eine detaillierte und präzise Bewertung ✓ Kraftstoff ✓ Getriebe ✓ Ausstattung ✓ Fotos. Erhalten Sie ein faires Angebot!"
         keywords="fahrzeugbewertung komplett, auto bewerten detailliert, fahrzeug details, autowert präzise"
-        canonical="https://www.autoankauf-deutschland.de/bewertung-komplett"
+        canonical="https://autohd.de/bewertung-komplett"
       />
       
       {/* Hero Section */}

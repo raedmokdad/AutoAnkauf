@@ -192,6 +192,7 @@ function AutoOhneTuevVerkaufen() {
       seoTitle="Auto ohne TÜV verkaufen - Erlaubt & Preis | ARZ"
       seoDescription="Auto ohne TÜV verkaufen ✓ Ist das erlaubt? ✓ Wie viel Wertverlust? ✓ TÜV vorher machen? ✓ Wir kaufen auch ohne TÜV ✓ Kostenlose Abholung"
       seoKeywords="auto ohne tüv verkaufen, tüv abgelaufen verkauf, auto verkaufen abgelaufener tüv, ohne hauptuntersuchung verkaufen"
+      canonical="https://autohd.de/ratgeber/auto-ohne-tuev-verkaufen"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Auto ohne TÜV" }

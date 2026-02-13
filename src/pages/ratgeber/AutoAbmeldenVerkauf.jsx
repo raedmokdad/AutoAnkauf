@@ -240,6 +240,7 @@ function AutoAbmeldenVerkauf() {
       seoTitle="Auto abmelden beim Verkauf - Anleitung 2024 | ARZ"
       seoDescription="Auto beim Verkauf abmelden ✓ Muss ich abmelden? ✓ Online-Abmeldung ✓ Kosten & Dokumente ✓ Versicherung informieren ✓ Schritt-für-Schritt Anleitung"
       seoKeywords="auto abmelden verkauf, kfz abmelden, auto verkaufen abmelden, online abmelden, zulassungsstelle"
+      canonical="https://autohd.de/ratgeber/auto-abmelden-verkauf"
       breadcrumbs={[
         { label: "Ratgeber", link: "/" },
         { label: "Auto abmelden" }

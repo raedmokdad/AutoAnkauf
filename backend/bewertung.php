@@ -72,7 +72,7 @@ $message .= "1. Fahrzeug professionell bewerten\n";
 $message .= "2. Preisvorschlag erstellen\n";
 $message .= "3. E-Mail an Kunden senden: $email\n";
 $message .= "4. Optional: Angebotslink generieren und mitsenden\n";
-$message .= "   Format: https://www.autoankauf-deutschland.de/angebot?\n";
+$message .= "   Format: https://autohd.de/angebot?\n";
 $message .= "   make=$makeName&model=$modelName&year=$year&price=XXXXX\n\n";
 
 // E-Mail-Header

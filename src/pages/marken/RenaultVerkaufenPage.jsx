@@ -67,6 +67,7 @@ function RenaultVerkaufenPage() {
       seoTitle="Renault verkaufen - Renault-Ankauf deutschlandweit"
       seoDescription="Renault verkaufen zum fairen Preis ✓ Clio, Captur, Kadjar ✓ Kostenlose Abholung ✓ Auch E-Autos"
       seoKeywords="renault verkaufen, renault ankauf, clio verkaufen, captur verkaufen"
+      canonical="https://autohd.de/marken/renault-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Renault verkaufen" }

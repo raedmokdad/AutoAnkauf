@@ -11,6 +11,7 @@ function ContentPage({
   seoTitle,
   seoDescription,
   seoKeywords,
+  canonical,
   breadcrumbs,
   content,
   relatedLinks,
@@ -30,6 +31,7 @@ function ContentPage({
         title={seoTitle || title}
         description={seoDescription}
         keywords={seoKeywords}
+        canonical={canonical}
       />
 
       {/* Hero Section */}

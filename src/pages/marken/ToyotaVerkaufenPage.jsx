@@ -79,6 +79,7 @@ function ToyotaVerkaufenPage() {
       seoTitle="Toyota verkaufen - Toyota-Ankauf deutschlandweit"
       seoDescription="Toyota verkaufen zum Bestpreis ✓ Yaris, RAV4, Prius ✓ Besonders gute Preise für Hybride ✓ Kostenlose Abholung"
       seoKeywords="toyota verkaufen, toyota ankauf, prius verkaufen, rav4 verkaufen, hybrid verkaufen"
+      canonical="https://autohd.de/marken/toyota-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Toyota verkaufen" }

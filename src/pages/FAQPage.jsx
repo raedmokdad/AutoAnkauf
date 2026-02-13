@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 import { LightningIcon, DocumentIcon, CheckIcon } from '../components/Icons';
 import '../styles/shared-green-hero.css';
 import './FAQPage.css';
@@ -129,6 +130,12 @@ function FAQPage() {
 
   return (
     <div className="faq-page">
+      <SEO
+        title="Häufige Fragen (FAQ) - AutoHD Autoankauf Rheinberg"
+        description="Alle Antworten zum Autoankauf bei AutoHD ✓ Ablauf ✓ Bewertung ✓ Bezahlung ✓ Abholung ✓ Unterlagen ✓ Ihre Fragen beantwortet"
+        keywords="faq autoankauf, häufige fragen auto verkaufen, autoankauf fragen, ablauf autoankauf"
+        canonical="https://autohd.de/faq"
+      />
       <section className="faq-hero-green">
         <div className="faq-hero-container">
           

@@ -65,6 +65,7 @@ function SeatVerkaufenPage() {
       seoTitle="Seat verkaufen - Seat-Ankauf deutschlandweit"
       seoDescription="Seat verkaufen zum Bestpreis ✓ Ibiza, Leon, Cupra ✓ Kostenlose Abholung ✓ Faire Preise"
       seoKeywords="seat verkaufen, seat ankauf, leon verkaufen, cupra verkaufen"
+      canonical="https://autohd.de/marken/seat-verkaufen"
       breadcrumbs={[
         { label: "Marken", link: "/" },
         { label: "Seat verkaufen" }
